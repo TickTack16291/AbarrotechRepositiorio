@@ -1,0 +1,154 @@
+﻿<Window x:Class="LoginDeAbarrotech.RegistroEmpleados"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoginDeAbarrotech"
+        mc:Ignorable="d"
+        Title="RegistroEmpleados" Height="680" Width="1300">
+    <Grid>
+        <!-- Fondo -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#1976D2" Offset="0"/>
+                <GradientStop Color="#42A5F5" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!--Contenedor principal -->
+        <Border Background="White" CornerRadius="20" Padding="30" Width="1200" Height="598"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5"/>
+            </Border.Effect>
+
+            <Grid>
+                <!-- Título -->
+                <TextBlock Text="Registro de Empleados" FontSize="22" FontWeight="Bold" 
+                           Foreground="#1565C0" HorizontalAlignment="Center" VerticalAlignment="Top"
+                           Margin="0,0,0,0"/>
+
+                <!-- Campos del formulario -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left"
+                              VerticalAlignment="Center" Width="350" Margin="20,0,0,0">
+                    <StackPanel>
+                        <!-- Nombre -->
+                        <TextBlock Text="Nombre" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_NombreEmpleado" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Dirección -->
+                        <TextBlock Text="Dirección" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_DireccionEmpleado" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Teléfono -->
+                        <TextBlock Text="Teléfono" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_TelefonoEmpleado" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Correo Electrónico -->
+                        <TextBlock Text="Correo Electrónico" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_CorreoEmpleado" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Rol -->
+                        <TextBlock Text="Rol" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_RolEmpleado" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Salario -->
+                        <TextBlock Text="Salario" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_SalarioEmpleado" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Fecha de Contrato -->
+                        <TextBlock Text="Fecha de Contrato" Foreground="#424242" Margin="5,0,0,3"/>
+                        <DatePicker x:Name="dp_FechaContrato" Margin="0,0,0,15" Height="45"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Hora Entrada -->
+                        <TextBlock Text="Hora de Entrada" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_HoraEntrada" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Hora Salida -->
+                        <TextBlock Text="Hora de Salida" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_HoraSalida" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+
+                        <!-- Estado -->
+                        <TextBlock Text="Estado" Foreground="#424242" Margin="5,0,0,3"/>
+                        <ComboBox x:Name="cb_EstadoEmpleado" Margin="0,0,0,15" Height="45" Padding="10"
+                             BorderBrush="#1976D2" BorderThickness="2">
+                            <ComboBoxItem Content="Activo" Tag="1"/>
+                            <ComboBoxItem Content="Inactivo" Tag="0"/>
+                        </ComboBox>
+
+                        <!-- Fecha Fin Contrato -->
+                        <TextBlock Text="Fecha Fin de Contrato" Foreground="#424242" Margin="5,0,0,3"/>
+                        <DatePicker x:Name="dp_FechaFinContrato" Margin="0,0,0,15" Height="45"
+                             BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!--Tabla de empleados-->
+                <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1"
+                        CornerRadius="5" Padding="10" HorizontalAlignment="Right"
+                        VerticalAlignment="Top" Width="700" Height="365" Margin="0,50,20,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="527*"/>
+                            <ColumnDefinition Width="151*"/>
+                        </Grid.ColumnDefinitions>
+                        <!--Titulo-->
+                        <TextBlock Text="Lista de Empleados" FontSize="16" FontWeight="Bold" 
+                                   Foreground="#1565C0" Margin="0,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="678"/>
+
+                        <!-- Datagrid para mostrar los empleados-->
+                        <DataGrid x:Name="dg_Empleados" AutoGenerateColumns="False"
+                                  IsReadOnly="True" HeadersVisibility="Column"
+                                  BorderBrush="#E0E0E0" BorderThickness="1"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  Margin="0,30,0,-49" Grid.ColumnSpan="2" SelectionChanged="dg_Empleados_SelectionChanged">
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding id_empleado}" Width="60"/>
+                                <DataGridTextColumn Header="Nombre" Binding="{Binding nombre_empleado}" Width="150"/>
+                                <DataGridTextColumn Header="Dirección" Binding="{Binding direccion_empleado}" Width="150"/>
+                                <DataGridTextColumn Header="Teléfono" Binding="{Binding telefono_empleado}" Width="100"/>
+                                <DataGridTextColumn Header="Correo" Binding="{Binding correo_electronico_empleado}" Width="150"/>
+                                <DataGridTextColumn Header="Rol" Binding="{Binding rol_empleado}" Width="100"/>
+                                <DataGridTextColumn Header="Salario" Binding="{Binding salario_empleado}" Width="100"/>
+                                <DataGridTextColumn Header="Fecha Contrato" Binding="{Binding fecha_inicio_contrato}" Width="120"/>
+                                <DataGridTextColumn Header="Hora Entrada" Binding="{Binding hora_entrada_empleado}" Width="100"/>
+                                <DataGridTextColumn Header="Hora Salida" Binding="{Binding hora_salida_empleado}" Width="100"/>
+                                <DataGridTextColumn Header="Estado" Binding="{Binding estado_empleado}" Width="80"/>
+                                <DataGridTextColumn Header="Fecha Fin" Binding="{Binding fecha_fin_contrato}" Width="120"/>
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <!-- Botones -->
+                <Button x:Name="btn_Cancelar" Content="Cancelar" Background="#E53935" Foreground="White"
+                        Height="40" Width="120" FontWeight="Bold" 
+                        HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                        Margin="420,0,0,32" Click="btn_Cancelar_Click"/>
+
+                <Button x:Name="btn_Guardar" Content="Guardar" Background="#4CAF50" Foreground="White"
+                        Height="40" Width="120" FontWeight="Bold"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                        Margin="0,0,456,32" Click="btn_Guardar_Click"/>
+
+                <Button x:Name="btn_Modificar" Content="Modificar" Background="#1976D2"  Foreground="White"
+                        Height="40" Width="120" FontWeight="Bold"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                        Margin="0,0,310,32" Click="btn_Modificar_Click"/>
+
+                <Label x:Name="Lbl_mensaje" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="Green" Content="Empleado agregado correctamente" Margin="890,-8,0,0" Width="264" RenderTransformOrigin="0.505,0.579" Height="32" Visibility="Hidden"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

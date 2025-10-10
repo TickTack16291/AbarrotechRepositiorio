@@ -1,0 +1,142 @@
+﻿<Window x:Class="LoginDeAbarrotech.MenuOperaciones"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LoginDeAbarrotech"
+        mc:Ignorable="d"
+       Title="Menu de operaciones" Height="500" Width="800"
+        Background="#F5F5F5" WindowStartupLocation="CenterScreen">
+
+    <!--Nos sirve para poner encabezados a las ventanas-->
+    <DockPanel>
+        
+        <Border Background="#1565C0" DockPanel.Dock="Top" Padding="12">
+            <TextBlock Text="Selecciona la operacion: " FontSize="20" FontWeight="Bold"
+                       Foreground="White" HorizontalAlignment="Center"/>
+        </Border>
+
+        <!--Dockpanel sirve para agrupar elementos se puede ajustar su posicion, color, tamaños-->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" Width="250">
+            <Button x:Name="btn_Empleados" Content="Empleados" Margin="0,8" FontSize="14" FontWeight="SemiBold"
+                    Background="White" Foreground="#1565C0"
+                    BorderBrush="#1565C0" BorderThickness="2"
+                    Padding="8,4" Cursor="Hand" Click="btn_Empleados_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <!-- Boton de proveedores -->
+            <Button x:Name="btn_Proveedores" Content="Proveedores" Margin="0,8" FontSize="14" FontWeight="SemiBold"
+                    Background="White" Foreground="#1565C0"
+                    BorderBrush="#1565C0" BorderThickness="2"
+                    Padding="8,4" Cursor="Hand" Click="btn_Proveedores_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <!--Boton productos-->
+            <Button x:Name="btn_Productos" Content="Productos" Margin="0,8" FontSize="14" FontWeight="SemiBold"
+                    Background="White" Foreground="#1565C0"
+                    BorderBrush="#1565C0" BorderThickness="2"
+                    Padding="8,4" Cursor="Hand" Click="btn_Productos_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <!-- Bcoton compras-->
+            <Button x:Name="btn_Compras" Content="Compras" Margin="0,8" FontSize="14" FontWeight="SemiBold"
+                    Background="White" Foreground="#1565C0"
+                    BorderBrush="#1565C0" BorderThickness="2"
+                    Padding="8,4" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <!-- Boton ventas-->
+            <Button x:Name="btn_Ventas" Content="Ventas" Margin="0,8" FontSize="14" FontWeight="SemiBold"
+                    Background="White" Foreground="#1565C0"
+                    BorderBrush="#1565C0" BorderThickness="2"
+                    Padding="8,4" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <!-- Boton usuarios-->
+            <Button x:Name="btn_Usuarios" Content="Usuarios" Margin="0,8" FontSize="14" FontWeight="SemiBold"
+                    Background="White" Foreground="#1565C0"
+                    BorderBrush="#1565C0" BorderThickness="2"
+                    Padding="8,4" Cursor="Hand" Click="btn_Usuarios_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <!--Boton Salir-->
+            <Button x:Name="btn_Salir" Content="Salir" Margin="0,15,0,0" FontSize="14" FontWeight="SemiBold"
+                    Background="White" Foreground="#D32F2F"
+                    BorderBrush="#D32F2F" BorderThickness="2"
+                    Padding="8,4" Cursor="Hand" Width="150" HorizontalAlignment="Center" Click="btn_Salir_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+    </DockPanel>
+</Window>

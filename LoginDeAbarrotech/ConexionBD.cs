@@ -114,7 +114,7 @@ namespace LoginDeAbarrotech
         }
 
         /// <summary>
-        /// Operaciones de productos en la base de datos
+        /// Operaciones de productos en la base de datos 
         /// </summary>
         public List<Producto> ObtenerProductos()
         {

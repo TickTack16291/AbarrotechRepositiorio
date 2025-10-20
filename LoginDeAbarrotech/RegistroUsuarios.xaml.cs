@@ -80,7 +80,7 @@ namespace LoginDeAbarrotech
                 MostrarMensaje("No puede haber campos vacios");
                 return;
             }
-            // Validar que el ID de empleado sea un número entero
+            // Validar que el ID de empleado sea un número entero 
             if (!int.TryParse(ct_IdEmpleado.Text, out int idEmpleado))
             {
                 MostrarMensaje("El id de empleado debe ser numerico");

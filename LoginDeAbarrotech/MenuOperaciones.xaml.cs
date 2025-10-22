@@ -22,8 +22,29 @@ namespace LoginDeAbarrotech
         {
             InitializeComponent();
         }
+        private bool tieneAcceso(string Usuario)// Ocupo la tabla de inicios de sesion o al menos eso creo jaja
+        {
+            ConexionBD conexion = new ConexionBD();
+            if (conexion.ObtenerRoles(LoginAbarrotech.UsuarioGlobal) == "Administrador"){// Pues reslto que no ocupaba la tabla de inicios de sesion jaja, pero ya funcina eso
+                return true;
+            }
+            return false;
+        }
         private void btn_Salir_Click(object sender, RoutedEventArgs e)
         {
+            // Operaciones necesarias para registrar el inicio de sesion
+            
+            ConexionBD conexion = new ConexionBD();
+
+            string UsuarioIniciado = LoginAbarrotech.UsuarioGlobal;
+
+            int idAux = conexion.ObtenerIdUsuario(UsuarioIniciado);
+            DateTime fechaActual = DateTime.Now;
+
+            int idInicio = conexion.ObtenerIdSesionMasReciente(idAux);
+
+            conexion.RegistrarCierreSesion(idInicio, idAux, fechaActual, 1);
+
             this.Close();
             LoginAbarrotech login = new LoginAbarrotech();
             login.Show();
@@ -49,9 +70,8 @@ namespace LoginDeAbarrotech
         }
         private void btn_Usuarios_Click(object sender, RoutedEventArgs e)
         {
-            RegistroUsuarios registroUsuarios = new RegistroUsuarios();
-            registroUsuarios.Show();
-            this.Hide();
+            // Ya no abrira el registro de usuarios si no una listá para ver los usuarios registrados
+            // Supongo que solo un administrador deberia poder verlos
         }
     }
 }

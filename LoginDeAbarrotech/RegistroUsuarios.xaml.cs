@@ -56,17 +56,15 @@ namespace LoginDeAbarrotech
             {
                 if (
                     u.id_empleado == ingresado.id_empleado &&
-                    u.usuario == ingresado.usuario &&
-                    u.rol_usuario == ingresado.rol_usuario &&
-                    u.contrasena == ingresado.contrasena
+                    u.usuario == ingresado.usuario
                 )
                     return true; // Hay un empleado exactamente igual
             }
             return false; // No hay empleados exactamente iguales
         }
         private void btn_Cancelar_Click(object sender, RoutedEventArgs e) {
-            MenuOperaciones menuOperaciones = new MenuOperaciones();
-            menuOperaciones.Show();
+            LoginAbarrotech login = new LoginAbarrotech();
+            login.Show();
             this.Hide();
         }
         private void btn_Guardar_Click(object sender, RoutedEventArgs e)
@@ -98,6 +96,12 @@ namespace LoginDeAbarrotech
                 ct_Contrasena.Password, 
                 cb_RolUsuario.Text
                 );
+
+            if (conexion.obtenerIdEmpleadoDeUsuarios(idEmpleado))
+            {
+                MostrarMensaje("El empleado ya esta registrado como usuario");
+                return;
+            }
 
             if (ValidarUsuariosRepetidos(nuevoUsuario))
             {

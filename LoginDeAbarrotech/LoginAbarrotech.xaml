@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoginDeAbarrotech"
         mc:Ignorable="d"
-        Title="LoginAbarrotech" Height="600" Width="850"  WindowStartupLocation="CenterScreen">
+        Title="LoginAbarrotech" Height="680" Width="850"  WindowStartupLocation="CenterScreen">
 
     <!-- Grid es el contenedor principal que organiza los elementos -->
-    <Grid x:Name="Login_Abarrotech" Margin="0,0,0,-90">
+    <Grid x:Name="Login_Abarrotech" Margin="0,0,0,-6">
         <!-- Fondo degradado azul -->
         <Grid.Background>
             <!-- 
@@ -139,7 +139,7 @@
 
                 </StackPanel>
                 <Button x:Name="btn_Cerrar" Content="Salir" Background="#E53935" Foreground="White"
-                    Height="31" Width="100" Click="btn_Cerrar_Click">
+                    Height="34" Width="100" Click="btn_Cerrar_Click" RenderTransformOrigin="0.55,2.319">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Template">
@@ -154,6 +154,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
+                <Label x:Name="Lbl_registroUsuario" Foreground="Blue" Content="Registrarse..." HorizontalContentAlignment="Center" MouseLeftButtonDown="Lbl_registroUsuario_MouseLeftButtonDown"/>
 
                 <!-- BotOns pequeño para cerrar -->
             </StackPanel>

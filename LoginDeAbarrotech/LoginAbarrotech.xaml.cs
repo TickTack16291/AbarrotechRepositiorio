@@ -23,6 +23,7 @@ namespace LoginDeAbarrotech
         {
             InitializeComponent();
         }
+        public static string UsuarioGlobal;
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             Lbl_error.Visibility = Visibility.Hidden;
@@ -52,6 +53,13 @@ namespace LoginDeAbarrotech
                 {
                     // Aqui debe abrir un el menu de operciones
 
+                    // Operaciones necesarias para registrar el inicio de sesion
+                    int idAux = conexion.ObtenerIdUsuario(usuarioAux);
+                    DateTime fechaActual= DateTime.Now;
+                    conexion.RegistrarInicioSesion(idAux, fechaActual, 1);
+
+                    LoginAbarrotech.UsuarioGlobal = usuarioAux;
+
                     MenuOperaciones menuoperaciones = new MenuOperaciones();
 
                     menuoperaciones.Show();
@@ -75,6 +83,12 @@ namespace LoginDeAbarrotech
         private void btn_Cerrar_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        private void Lbl_registroUsuario_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            RegistroUsuarios registro = new RegistroUsuarios();
+            registro.Show();
+            this.Hide();
         }
     }
 }

@@ -55,34 +55,6 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-        public bool validar_usuarios_repetidos(string usuario)
-        {
-            using (var conexion = new MySqlConnection(conexionString))
-            {
-                try
-                {
-                    conexion.Open();
-
-                    string sql = "SELECT usuario FROM usuarios";
-                    using (var command = new MySqlCommand(sql, conexion))
-                    using (MySqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string usuarioObtenido = reader.GetString(0);
-                            if (usuario == usuarioObtenido)
-                                return true;
-                        }
-                    }
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al validar el usuario en la base de datos: " + ex.Message);
-                    return false;
-                }
-            }
-        }
         public bool ingresar_usuarios(Usuario usuarioAux)
         {
             using (var conexion = new MySqlConnection(conexionString))
@@ -108,6 +80,34 @@ namespace LoginDeAbarrotech
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error al ingresar el usuario a la base de datos: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool obtenerIdEmpleadoDeUsuarios(int idEmpleado)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    string sql = "SELECT id_empleado FROM usuarios";
+                    using (var command = new MySqlCommand(sql, conexion))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int Id_Empleado_Obtenido = reader.GetInt32(0);
+                            if (idEmpleado == Id_Empleado_Obtenido)
+                                return true;
+                        }
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al validar el usuario en la base de datos: " + ex.Message);
                     return false;
                 }
             }
@@ -602,6 +602,150 @@ namespace LoginDeAbarrotech
                     return false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Limitacion de acceso a los usuarios
+        /// </summary>
+        public string ObtenerRoles(string Usuario)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    string sql = "SELECT rol_usuario FROM usuarios WHERE usuario == @Usuario";
+                    using (var command = new MySqlCommand(sql, conexion))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string rol_usuario_obtenido = reader.GetString(0);
+                            return rol_usuario_obtenido;
+                        }
+                    }
+                    return "";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al validar el usuario en la base de datos: " + ex.Message);
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Registro de inicios y cierres de sesion
+        /// </summary>
+        public bool RegistrarInicioSesion(int idUsuario, DateTime fechaHora, int numeroCaja)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+                    string sql = @"INSERT INTO inicios_sesion (id_usuario, fecha_hora_inicio_sesion, numero_caja)
+                           VALUES (@id_usuario, @fecha_hora_inicio_sesion, @numero_caja);";
+                    using (var command = new MySqlCommand(sql, conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
+                        command.Parameters.AddWithValue("@fecha_hora_inicio_sesion", fechaHora);
+                        command.Parameters.AddWithValue("@numero_caja", numeroCaja);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar inicio de sesión: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool RegistrarCierreSesion(int idInicioSesion, int idUsuario, DateTime fechaHora, int numeroCaja)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+                    string sql = @"INSERT INTO cierres_sesion (id_inicio_sesion ,id_usuario, fecha_hora_cierre_sesion, caja)
+                           VALUES (@id_inicio_sesion, @id_usuario, @fecha_hora_cierre_sesion, @caja);";
+                    using (var command = new MySqlCommand(sql, conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_inicio_sesion", idInicioSesion);
+                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
+                        command.Parameters.AddWithValue("@fecha_hora_cierre_sesion", fechaHora);
+                        command.Parameters.AddWithValue("@caja", numeroCaja);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar cierre de sesión: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public int ObtenerIdUsuario(string Usuario)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+                    string sql = "SELECT id_usuario FROM usuarios WHERE usuario = @Usuario";
+                    using (var command = new MySqlCommand(sql, conexion))
+                    {
+                        command.Parameters.AddWithValue("@usuario", Usuario);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                return reader.GetInt32(0);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener id_usuario: " + ex.Message);
+                }
+            }
+            return 0;
+        }
+        public int ObtenerIdSesionMasReciente(int idUsuario)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+                    string sql = @"SELECT id_inicio_sesion 
+                           FROM inicios_sesion 
+                           WHERE id_usuario = @id_usuario 
+                           ORDER BY fecha_hora_inicio_sesion DESC 
+                           LIMIT 1";
+                    // El DESC es para que ordene las fechas en orden decendente
+                    // y el LIMIT 1 es para que solo muestre un registo en el resultado de la consulta
+                    using (var command = new MySqlCommand(sql, conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                return reader.GetInt32(0);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener el id de inicio de sesión más reciente: " + ex.Message);
+                }
+            }
+            return 0;
         }
     }
 }

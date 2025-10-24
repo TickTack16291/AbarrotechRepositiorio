@@ -54,7 +54,7 @@ namespace LoginDeAbarrotech
         public void CargarProveedores()
         {
             ConexionBD conexion = new ConexionBD();
-            var provedores = conexion.ObtenerProveedores();
+            var provedores = conexion.ObtenerProveedores();// Cambiar jaja
             dg_Proveedores.ItemsSource = provedores;
         }
         public bool ValidarProveedoresRepetidos(Proveedor Ingresado)

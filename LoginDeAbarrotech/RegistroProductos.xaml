@@ -15,131 +15,165 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <!--Contenedor principal -->
+        <!-- Contenedor principal -->
         <Border Background="White" CornerRadius="20" Padding="30" Width="1200" Height="598"
                 HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5"/>
             </Border.Effect>
 
+            <!-- Layout principal: Título, Formulario, Tabla, Botones -->
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Título -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Formulario -->
+                    <RowDefinition Height="*"/>
+                    <!-- Tabla -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Botones -->
+                </Grid.RowDefinitions>
+
                 <!-- Título -->
-                <TextBlock Text="Registro de Productos" FontSize="22" FontWeight="Bold" 
-                           Foreground="#1565C0" HorizontalAlignment="Center" VerticalAlignment="Top"
-                           Margin="0,0,0,0"/>
+                <Grid Grid.Row="0">
+                    <TextBlock Text="Registro de Productos" FontSize="22" FontWeight="Bold" 
+                               Foreground="#1565C0" HorizontalAlignment="Center" />
+                    <Label x:Name="Lbl_mensaje"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Foreground="Green"
+                           Content="Producto agregado correctamente"
+                           Visibility="Hidden"/>
+                </Grid>
 
-                <!-- Campos del formulario -->
+                <!-- Formulario (sin ScrollViewer) -->
+                <Grid Grid.Row="1" Margin="0,20,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left"
-                              VerticalAlignment="Center" Width="350" Margin="20,0,0,0">
-                    <StackPanel>
-
-
-                        <!-- Nombre -->
+                    <!-- Fila 1 -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0,10,10">
                         <TextBlock Text="Nombre" Foreground="#424242" Margin="5,0,0,3"/>
-                        <TextBox x:Name="ct_Nombre" Margin="0,0,0,15" Height="45" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2"/>
+                        <TextBox x:Name="ct_Nombre" Height="45" Padding="10"
+                                 BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
 
-                        <!-- Cantidad -->
+                    <!-- Marca entre Nombre y Categoría -->
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,10,10">
+                        <TextBlock Text="Marca" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_Marca" Height="45" Padding="10"
+                                 BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
+
+                    <!-- Categoría como ComboBox -->
+                    <StackPanel Grid.Row="0" Grid.Column="2" Margin="10,0,10,10">
                         <TextBlock Text="Categoria" Foreground="#424242" Margin="5,0,0,3"/>
-                        <TextBox x:Name="ct_Categoria" Margin="0,0,0,15" Height="45" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2"/>
+                        <ComboBox x:Name="cb_Categoria" Height="45" Padding="10"
+                                  BorderBrush="#1976D2" BorderThickness="2">
+                            <!-- Opcional: agrega items de categoría aquí o desde código -->
+                        </ComboBox>
+                    </StackPanel>
 
-                        <!-- Precio de Venta -->
-                        <TextBlock Text="Precio de Venta" Foreground="#424242" Margin="5,0,0,3"/>
-                        <TextBox x:Name="ct_PrecioVenta" Margin="0,0,0,15" Height="45" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2"/>
-
-                        <!-- Precio de Compra -->
+                    <StackPanel Grid.Row="0" Grid.Column="3" Margin="10,0,10,10">
                         <TextBlock Text="Precio de Compra" Foreground="#424242" Margin="5,0,0,3"/>
-                        <TextBox x:Name="ct_PrecioCompra" Margin="0,0,0,15" Height="45" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2"/>
+                        <TextBox x:Name="ct_PrecioCompra" Height="45" Padding="10"
+                                 BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
 
-                        <!-- Presentación -->
+                    <!-- Fila 2 -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,0,10,0">
                         <TextBlock Text="Presentación" Foreground="#424242" Margin="5,0,0,3"/>
-                        <TextBox x:Name="ct_Presentacion" Margin="0,0,0,15" Height="45" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2"/>
+                        <TextBox x:Name="ct_Presentacion" Height="45" Padding="10"
+                                 BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
 
-                        <!-- Unidad de Medida (ComboBox) -->
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,10,0">
                         <TextBlock Text="Unidad de Medida" Foreground="#424242" Margin="5,0,0,3"/>
-                        <ComboBox x:Name="cb_UnidadMedida" Margin="0,0,0,15" Height="45" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2">
+                        <ComboBox x:Name="cb_UnidadMedida" Height="45" Padding="10"
+                                  BorderBrush="#1976D2" BorderThickness="2">
                             <ComboBoxItem Content="Kg"/>
                             <ComboBoxItem Content="Gr"/>
                             <ComboBoxItem Content="L"/>
                             <ComboBoxItem Content="Ml"/>
                         </ComboBox>
+                    </StackPanel>
 
-                        <!-- Marca -->
-                        <TextBlock Text="Marca" Foreground="#424242" Margin="5,0,0,3"/>
-                        <TextBox x:Name="ct_Marca" Margin="0,0,0,15" Height="45" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2"/>
-
-                        <!-- ID de Proveedor -->
-                        <TextBlock Text="Id de provedor" Foreground="#424242" Margin="5,0,0,3"/>
-                        <ComboBox x:Name="cb_IdProvedor" Margin="0,0,0,15" Height="45" Padding="10"
-                            BorderBrush="#1976D2" BorderThickness="2">
-                            <!-- Hay que rellenar con los IDs de los provedores obtenidos de la base de datos-->
+                    <!-- Intercambio: Proveedor en Columna 2 -->
+                    <StackPanel Grid.Row="1" Grid.Column="2" Margin="10,0,10,0">
+                        <TextBlock Text="Proveedor" Foreground="#424242" Margin="5,0,0,3"/>
+                        <ComboBox x:Name="cb_nombreProvedor" Height="45" Padding="10"
+                                  BorderBrush="#1976D2" BorderThickness="2">
+                            <!-- Se rellena desde código con los nombres de proveedores -->
                         </ComboBox>
                     </StackPanel>
-                </ScrollViewer>
 
-                <!--Tabla de productos-->
-                <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1"
-                        CornerRadius="5" Padding="10" HorizontalAlignment="Right"
-                        VerticalAlignment="Top" Width="700" Height="365" Margin="0,50,20,0">
+                    <!-- Intercambio: Precio de Venta en Columna 3 -->
+                    <StackPanel Grid.Row="1" Grid.Column="3" Margin="10,0,10,0">
+                        <TextBlock Text="Precio de Venta" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_PrecioVenta" Height="45" Padding="10"
+                                 BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Tabla de productos -->
+                <Border Grid.Row="2"
+                        Background="White" BorderBrush="#E0E0E0" BorderThickness="1"
+                        CornerRadius="5" Padding="10">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="527*"/>
-                            <ColumnDefinition Width="151*"/>
-                        </Grid.ColumnDefinitions>
-                        <!--Titulo-->
                         <TextBlock Text="Lista de Productos" FontSize="16" FontWeight="Bold" 
-                                   Foreground="#1565C0" Margin="0,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="678"/>
+                                   Foreground="#1565C0" Margin="0,0,0,8" VerticalAlignment="Top"/>
 
-                        <!-- Datagrid para mostrar los productos-->
                         <DataGrid x:Name="dg_Productos" AutoGenerateColumns="False"
                                   IsReadOnly="True" HeadersVisibility="Column"
                                   BorderBrush="#E0E0E0" BorderThickness="1"
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  Margin="0,30,0,-49" Grid.ColumnSpan="2" SelectionChanged="dg_Productos_SelectionChanged">
-
+                                  Margin="0,30,0,0"
+                                  SelectionChanged="dg_Productos_SelectionChanged">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding id_producto}" Width="40"/>
-                                <DataGridTextColumn Header="Nombre" Binding="{Binding nombre_producto}" Width="200"/>
-                                <DataGridTextColumn Header="Marca" Binding="{Binding marca_producto}" Width="120"/>
-                                <DataGridTextColumn Header="Presentacion" Binding="{Binding presentacion_producto}" Width="120"/>
+                                <DataGridTextColumn Header="Nombre" Binding="{Binding nombre_producto}" Width="250"/>
+                                <DataGridTextColumn Header="Marca" Binding="{Binding marca_producto}" Width="100"/>
                                 <DataGridTextColumn Header="Categoria" Binding="{Binding categoria_producto}" Width="100"/>
-                                <DataGridTextColumn Header="Estado" Binding="{Binding estado_producto}" Width="100"/>
+                                <DataGridTextColumn Header="Presentacion" Binding="{Binding presentacion_producto}" Width="100"/>
+                                <DataGridTextColumn Header="Unidad de medida" Binding="{Binding unidad_medida_producto}" Width="120"/>
+                                <DataGridTextColumn Header="Precio de compra" Binding="{Binding precio_compra_producto}" Width="120"/>
+                                <DataGridTextColumn Header="Precio de venta" Binding="{Binding categoria_producto}" Width="100"/>
+                                <DataGridTextColumn Header="Estado" Binding="{Binding estado_producto}" Width="80"/>
+                                <DataGridTextColumn Header="Proveedor" Binding="{Binding id_proveedor_producto}" Width="100"/>
                             </DataGrid.Columns>
-
                         </DataGrid>
                     </Grid>
                 </Border>
 
                 <!-- Botones -->
-                <Button x:Name="btn_Cancelar" Content="Cancelar" Background="#E53935" Foreground="White"
-                        Height="40" Width="120" FontWeight="Bold" 
-                        HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                        Margin="420,0,0,32" Click="btn_Cancelar_Click"/>
+                <Grid Grid.Row="3" Margin="0,15,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
+                    <Button x:Name="btn_Cancelar" Content="Cancelar" Background="#E53935" Foreground="White"
+                            Height="40" Width="120" FontWeight="Bold" 
+                            HorizontalAlignment="Left" Grid.Column="0"
+                            Click="btn_Cancelar_Click"/>
 
-                <Button x:Name="btn_Guardar" Content="Guardar" Background="#4CAF50" Foreground="White"
-                        Height="40" Width="120" FontWeight="Bold"
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="0,0,456,32" Click="btn_Guardar_Click"/>
-
-                <Button x:Name="btn_Modificar" Content="Modificar" Background="#1976D2"  Foreground="White"
-                        Height="40" Width="120" FontWeight="Bold"
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="0,0,310,32" Click="btn_Modificar_Click"/>
-
-                <Button x:Name="btn_Estado" Content="Habilitar/Inhabilitar" Background="#FFC40C"  Foreground="White"
-                        Height="40" Width="120" FontWeight="Bold"
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="0,0,165,32" Click="btn_Estado_Click"/>
-
-                <Label x:Name="Lbl_mensaje" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="Green" Content="Producto agregado correctamente" Margin="890,-8,0,0" Width="264" RenderTransformOrigin="0.505,0.579" Height="32" Visibility="Hidden"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" >
+                        <Button x:Name="btn_Guardar" Content="Guardar" Background="#4CAF50" Foreground="White"
+                                Height="40" Width="120" FontWeight="Bold" Margin="0,0,10,0"
+                                Click="btn_Guardar_Click"/>
+                        <Button x:Name="btn_Modificar" Content="Modificar" Background="#1976D2" Foreground="White"
+                                Height="40" Width="120" FontWeight="Bold"
+                                Click="btn_Modificar_Click"/>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Border>
     </Grid>

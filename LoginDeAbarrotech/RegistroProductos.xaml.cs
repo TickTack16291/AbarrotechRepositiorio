@@ -23,7 +23,7 @@ namespace LoginDeAbarrotech
         {
             InitializeComponent();
             CargarProductos();
-            CargarIDsProvedores();
+            CargarNombresProvedores();
         }
         public void MostrarMensaje(string mensaje)
         {
@@ -46,7 +46,7 @@ namespace LoginDeAbarrotech
         public void VaciasCasillas() {
             ct_Nombre.Text = string.Empty;
             ct_Marca.Text = string.Empty;
-            ct_Categoria.Text = string.Empty;
+            cb_Categoria.Text = string.Empty;
             ct_Presentacion.Text = string.Empty;
             cb_UnidadMedida.Text = string.Empty;
             ct_PrecioCompra.Text = string.Empty;
@@ -58,13 +58,13 @@ namespace LoginDeAbarrotech
             var productos = conexion.ObtenerProductos();
             dg_Productos.ItemsSource = productos;
         }
-        public void CargarIDsProvedores()
+        public void CargarNombresProvedores()
         {
             ConexionBD conexion = new ConexionBD();
-            var Ps = conexion.ObtenerIDsProveedores();
-            cb_IdProvedor.Items.Clear();
+            var Ps = conexion.ObtenerNombresProveedores();
+            cb_nombreProvedor.Items.Clear();
             foreach (var P in Ps) {
-                cb_IdProvedor.Items.Add(P);
+                cb_nombreProvedor.Items.Add(P);
             }
         }
         public bool ValidarProductosRepetidos(Producto Ingresado)
@@ -89,7 +89,7 @@ namespace LoginDeAbarrotech
             // Verificamos que ningún campo esté vacío
             if (string.IsNullOrWhiteSpace(ct_Nombre.Text) ||
                 string.IsNullOrWhiteSpace(ct_Marca.Text) ||
-                string.IsNullOrWhiteSpace(ct_Categoria.Text) ||
+                string.IsNullOrWhiteSpace(cb_Categoria.Text) ||
                 string.IsNullOrWhiteSpace(ct_Presentacion.Text) ||
                 string.IsNullOrWhiteSpace(cb_UnidadMedida.Text) ||
                 string.IsNullOrWhiteSpace(ct_PrecioCompra.Text) ||
@@ -113,6 +113,11 @@ namespace LoginDeAbarrotech
             }
 
             // Crear el objeto Producto con los datos del formulario
+
+            ConexionBD conexion = new ConexionBD();
+
+            int idProAux = conexion.ObtenerIdProveedor(cb_nombreProvedor.Text);
+
             Producto producto = new Producto(0,
                 ct_Nombre.Text,
                 ct_Marca.Text,
@@ -121,16 +126,14 @@ namespace LoginDeAbarrotech
                 precioVenta,// La variable que se deberia haber guardado
                 precioCompra,//x2
                 1, // estado
-                ct_Categoria.Text,
-                0// Hay que modificarlo para que igual muestre el nombre del provedor para saber cual es cual
+                cb_Categoria.Text,
+                idProAux
             );
 
             if (ValidarProductosRepetidos(producto)){
                 MostrarMensaje("No se permiten los productos repetidos");
                 return;
             }
-
-            ConexionBD conexion = new ConexionBD();
 
             if (conexion.AgregarProducto(producto))
             {
@@ -153,7 +156,7 @@ namespace LoginDeAbarrotech
                 // Verificamos que ningún campo esté vacío
                 if (string.IsNullOrWhiteSpace(ct_Nombre.Text) ||
                     string.IsNullOrWhiteSpace(ct_Marca.Text) ||
-                    string.IsNullOrWhiteSpace(ct_Categoria.Text) ||
+                    string.IsNullOrWhiteSpace(cb_Categoria.Text) ||
                     string.IsNullOrWhiteSpace(ct_Presentacion.Text) ||
                     string.IsNullOrWhiteSpace(cb_UnidadMedida.Text) ||
                     string.IsNullOrWhiteSpace(ct_PrecioCompra.Text) ||
@@ -175,6 +178,11 @@ namespace LoginDeAbarrotech
                 }
 
                 // Usar el ID del producto seleccionado
+
+                ConexionBD conexion = new ConexionBD();
+
+                int idProAux = conexion.ObtenerIdProveedor(cb_nombreProvedor.Text);
+
                 Producto productoModificado = new Producto(
                     productoSeleccionado.id_producto,
                     ct_Nombre.Text,
@@ -184,8 +192,8 @@ namespace LoginDeAbarrotech
                     precioVenta,
                     precioCompra,
                     productoSeleccionado.estado_producto, // Mantener el estado original
-                    ct_Categoria.Text,
-                    productoSeleccionado.id_proveedor_producto // Por ahora son null
+                    cb_Categoria.Text,
+                    idProAux
                 );
 
                 if (ValidarProductosRepetidos(productoModificado))
@@ -193,8 +201,6 @@ namespace LoginDeAbarrotech
                     MostrarMensaje("No se permiten los productos repetidos");
                     return;
                 }
-
-                ConexionBD conexion = new ConexionBD();
 
                 if (conexion.ModificarProducto(productoModificado))
                 {
@@ -225,34 +231,12 @@ namespace LoginDeAbarrotech
             {
                 ct_Nombre.Text = producto.nombre_producto;
                 ct_Marca.Text = producto.marca_producto;
-                ct_Categoria.Text = producto.categoria_producto;
+                cb_Categoria.Text = producto.categoria_producto;
                 ct_Presentacion.Text = producto.presentacion_producto;
                 cb_UnidadMedida.Text = producto.unidad_medida_producto.ToString();
                 ct_PrecioCompra.Text = producto.precio_compra_producto.ToString();
                 ct_PrecioVenta.Text = producto.precio_venta_producto.ToString();
-                cb_IdProvedor.Text = producto.id_proveedor_producto.ToString();
-            }
-        }
-        private void btn_Estado_Click(object sender, RoutedEventArgs e)
-        {
-            if (dg_Productos.SelectedItem is Producto productoSeleccionado)
-            {
-                int nuevoEstado = productoSeleccionado.estado_producto == 1 ? 0 : 1;
-                ConexionBD conexion = new ConexionBD();
-
-                if (conexion.CambiarEstadoProducto(productoSeleccionado.id_producto, nuevoEstado))
-                {
-                    MostrarMensaje(nuevoEstado == 1 ? "Producto habilitado" : "Producto inhabilitado");
-                    CargarProductos();
-                }
-                else
-                {
-                    MostrarMensaje("No se pudo cambiar el estado del producto");
-                }
-            }
-            else
-            {
-                MostrarMensaje("Seleccione un producto de la lista para cambiar su estado");
+                cb_nombreProvedor.Text = producto.id_proveedor_producto.ToString();
             }
         }
     }

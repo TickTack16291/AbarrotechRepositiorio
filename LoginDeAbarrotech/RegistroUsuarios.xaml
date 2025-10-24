@@ -38,8 +38,13 @@
                     <TextBlock Text="Rol de Usuario" Foreground="#424242" Margin="5,0,0,3"/>
                     <ComboBox x:Name="cb_RolUsuario" Margin="0,0,0,15" Height="35" Padding="10"
                               BorderBrush="#1976D2" BorderThickness="2">
+                        <ComboBoxItem Content="Gerente"/>
                         <ComboBoxItem Content="Administrador"/>
                         <ComboBoxItem Content="Vendedor"/>
+                        <ComboBoxItem Content="Reponedor"/>
+                        <ComboBoxItem Content="Encargado de inventario"/>
+                        <ComboBoxItem Content="Limpieza"/>
+                        <ComboBoxItem Content="Seguridad"/>
                     </ComboBox>
                 </StackPanel>
 

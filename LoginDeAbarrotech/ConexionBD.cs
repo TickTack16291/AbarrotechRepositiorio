@@ -168,9 +168,9 @@ namespace LoginDeAbarrotech
                     Conexion.Open();
 
                     string sql = @"INSERT INTO `productos` (`nombre_producto`, `marca_producto`, `presentacion_producto`, `unidad_medida_producto`,
-                                  `estado_producto` ,`precio_venta_producto`, `precio_compra_producto`, `categoria_producto`) 
+                                  `estado_producto` ,`precio_venta_producto`, `precio_compra_producto`, `categoria_producto`, `id_proveedor_producto`) 
                                    VALUES(@nombre_producto, @marca_producto, @presentacion_producto, @unidad_medida_producto, @estado_producto,
-                                   @precio_venta_producto, @precio_compra_producto, @categoria_producto);";
+                                   @precio_venta_producto, @precio_compra_producto, @categoria_producto, @id_proveedor_producto);";
 
                     using (var command = new MySqlCommand(sql, Conexion))
                     {
@@ -184,7 +184,7 @@ namespace LoginDeAbarrotech
                         command.Parameters.AddWithValue("@precio_venta_producto", nuevoProducto.precio_venta_producto);
                         command.Parameters.AddWithValue("@precio_compra_producto", nuevoProducto.precio_compra_producto);
                         command.Parameters.AddWithValue("@categoria_producto", nuevoProducto.categoria_producto);
-                        //command.Parameters.AddWithValue("@id_proveedor_producto", nuevoProducto.idProveedor); // No tenemos la tabla de provedores y el campo puede ser null
+                        command.Parameters.AddWithValue("@id_proveedor_producto", nuevoProducto.id_proveedor_producto); // No tenemos la tabla de provedores y el campo puede ser null
 
                         int result = command.ExecuteNonQuery();
                         return result > 0; // Retorna true si se insertó correctamente
@@ -204,7 +204,7 @@ namespace LoginDeAbarrotech
                 try
                 {
                     Conexion.Open();
-                    // El id no se actualiza y omitimos el id del provedor por ahora
+                    // El id no se actualiza
                     string sql = @"UPDATE productos SET
                             nombre_producto = @nombre_producto,
                             marca_producto = @marca_producto,
@@ -212,7 +212,8 @@ namespace LoginDeAbarrotech
                             unidad_medida_producto = @unidad_medida_producto,
                             precio_venta_producto = @precio_venta_producto,
                             precio_compra_producto = @precio_compra_producto,
-                            categoria_producto = @categoria_producto
+                            categoria_producto = @categoria_producto,
+                            id_proveedor_producto = @id_proveedor_producto
                         WHERE id_producto = @id_producto";
 
                     using (var command = new MySqlCommand(sql, Conexion))
@@ -226,7 +227,7 @@ namespace LoginDeAbarrotech
                         command.Parameters.AddWithValue("@precio_compra_producto", productoActualizado.precio_compra_producto);
                         //command.Parameters.AddWithValue("@estado_producto", productoActualizado.estado_producto);
                         command.Parameters.AddWithValue("@categoria_producto", productoActualizado.categoria_producto);
-                        //command.Parameters.AddWithValue("@id_proveedor_producto", productoActualizado.id_proveedor_producto);
+                        command.Parameters.AddWithValue("@id_proveedor_producto", productoActualizado.id_proveedor_producto);
 
                         int result = command.ExecuteNonQuery();
                         return result > 0;
@@ -239,56 +240,60 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-        public bool CambiarEstadoProducto(int idProducto, int nuevoEstado)
+
+        /// <summary>
+        /// Es una funcion que sirve para la interfaz de produto
+        /// </summary>
+        public List<string> ObtenerNombresProveedores() {
+            List<string> nombres = new List<string>();
+
+            using (var Conexion = new MySqlConnection(conexionString)) {
+                try {
+                    Conexion.Open();
+                    string sql = "SELECT nombre_proveedor FROM proveedores WHERE estado_proveedor = 'A'";
+
+                    using (var comando = new MySqlCommand(sql, Conexion))
+                    using (var reader = comando.ExecuteReader()) {
+                        while (reader.Read()) {
+                            string nom = reader.GetString("nombre_proveedor");
+                            nombres.Add(nom);
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                    MessageBox.Show($"Error al obtener nombres de proveedores: {ex.Message}");
+                }
+            }
+
+            return nombres;
+        }
+        public int ObtenerIdProveedor(string proveedor)
         {
+            int id = 0;
+
             using (var Conexion = new MySqlConnection(conexionString))
             {
                 try
                 {
                     Conexion.Open();
-                    string sql = @"UPDATE productos SET estado_producto = @estado_producto WHERE id_producto = @id_producto";
-                    using (var command = new MySqlCommand(sql, Conexion))
-                    {
-                        command.Parameters.AddWithValue("@estado_producto", nuevoEstado);
-                        command.Parameters.AddWithValue("@id_producto", idProducto);
+                    string sql = "SELECT id_proveedor FROM proveedores WHERE nombre_proveedor = @proveedor";
 
-                        int result = command.ExecuteNonQuery();
-                        return result > 0;
+                    using (var comando = new MySqlCommand(sql, Conexion))
+                    using (var reader = comando.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            id = reader.GetInt32("id_proveedor");
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al cambiar el estado del producto: " + ex.Message);
-                    return false;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Es una funcion que sirve para la interfaz de produto
-        /// </summary>
-        public List<long> ObtenerIDsProveedores() {
-            List<long> ids = new List<long>();
-
-            using (var Conexion = new MySqlConnection(conexionString)) {
-                try {
-                    Conexion.Open();
-                    string sql = "SELECT id_proveedor FROM proveedores WHERE estado_proveedor = 1";
-
-                    using (var comando = new MySqlCommand(sql, Conexion))
-                    using (var reader = comando.ExecuteReader()) {
-                        while (reader.Read()) {
-                            long id = reader.GetInt64("id_proveedor");
-                            ids.Add(id);
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    MessageBox.Show($"Error al obtener IDs de proveedores: {ex.Message}");
+                    MessageBox.Show($"Error al obtener el id del proveedor: {ex.Message}");
                 }
             }
 
-            return ids;
+            return id;
         }
 
         /// <summary>

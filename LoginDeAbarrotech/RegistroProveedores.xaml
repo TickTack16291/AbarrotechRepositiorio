@@ -113,10 +113,10 @@
                                   SelectionChanged="dg_Proveedores_SelectionChanged">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding id_proveedor}" Width="40"/>
-                                <DataGridTextColumn Header="Nombre" Binding="{Binding nombre_proveedor}" Width="180"/>
-                                <DataGridTextColumn Header="Responsable" Binding="{Binding responsable_proveedor}" Width="150"/>
-                                <DataGridTextColumn Header="Teléfono" Binding="{Binding telefono_proveedor}" Width="100"/>
-                                <DataGridTextColumn Header="Email" Binding="{Binding email_proveedor}" Width="150"/>
+                                <DataGridTextColumn Header="Nombre" Binding="{Binding nombre_proveedor}" Width="300"/>
+                                <DataGridTextColumn Header="Responsable" Binding="{Binding responsable_proveedor}" Width="300"/>
+                                <DataGridTextColumn Header="Teléfono" Binding="{Binding telefono_proveedor}" Width="180"/>
+                                <DataGridTextColumn Header="Email" Binding="{Binding email_proveedor}" Width="230"/>
                                 <DataGridTextColumn Header="Estado" Binding="{Binding estado_proveedor}" Width="80"/>
                             </DataGrid.Columns>
                         </DataGrid>

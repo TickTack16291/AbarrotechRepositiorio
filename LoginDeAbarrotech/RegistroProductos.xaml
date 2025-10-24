@@ -46,7 +46,6 @@
                            Visibility="Hidden"/>
                 </Grid>
 
-                <!-- Formulario (sin ScrollViewer) -->
                 <Grid Grid.Row="1" Margin="0,20,0,10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -59,26 +58,28 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Fila 1 -->
                     <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0,10,10">
                         <TextBlock Text="Nombre" Foreground="#424242" Margin="5,0,0,3"/>
                         <TextBox x:Name="ct_Nombre" Height="45" Padding="10"
                                  BorderBrush="#1976D2" BorderThickness="2"/>
                     </StackPanel>
 
-                    <!-- Marca entre Nombre y Categoría -->
                     <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,10,10">
                         <TextBlock Text="Marca" Foreground="#424242" Margin="5,0,0,3"/>
                         <TextBox x:Name="ct_Marca" Height="45" Padding="10"
                                  BorderBrush="#1976D2" BorderThickness="2"/>
                     </StackPanel>
 
-                    <!-- Categoría como ComboBox -->
                     <StackPanel Grid.Row="0" Grid.Column="2" Margin="10,0,10,10">
                         <TextBlock Text="Categoria" Foreground="#424242" Margin="5,0,0,3"/>
                         <ComboBox x:Name="cb_Categoria" Height="45" Padding="10"
                                   BorderBrush="#1976D2" BorderThickness="2">
-                            <!-- Opcional: agrega items de categoría aquí o desde código -->
+                            <ComboBoxItem Content="Bebidas"/>
+                            <ComboBoxItem Content="Lacteos"/>
+                            <ComboBoxItem Content="Botana"/>
+                            <ComboBoxItem Content="Enlatados"/>
+                            <ComboBoxItem Content="Dulceria"/>
+                            <ComboBoxItem Content="Panaderia"/>
                         </ComboBox>
                     </StackPanel>
 
@@ -88,7 +89,6 @@
                                  BorderBrush="#1976D2" BorderThickness="2"/>
                     </StackPanel>
 
-                    <!-- Fila 2 -->
                     <StackPanel Grid.Row="1" Grid.Column="0" Margin="10,0,10,0">
                         <TextBlock Text="Presentación" Foreground="#424242" Margin="5,0,0,3"/>
                         <TextBox x:Name="ct_Presentacion" Height="45" Padding="10"
@@ -106,16 +106,14 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- Intercambio: Proveedor en Columna 2 -->
                     <StackPanel Grid.Row="1" Grid.Column="2" Margin="10,0,10,0">
                         <TextBlock Text="Proveedor" Foreground="#424242" Margin="5,0,0,3"/>
                         <ComboBox x:Name="cb_nombreProvedor" Height="45" Padding="10"
                                   BorderBrush="#1976D2" BorderThickness="2">
-                            <!-- Se rellena desde código con los nombres de proveedores -->
+                            <!-- Se rellena con una funcion de la base de datos -->
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- Intercambio: Precio de Venta en Columna 3 -->
                     <StackPanel Grid.Row="1" Grid.Column="3" Margin="10,0,10,0">
                         <TextBlock Text="Precio de Venta" Foreground="#424242" Margin="5,0,0,3"/>
                         <TextBox x:Name="ct_PrecioVenta" Height="45" Padding="10"
@@ -145,7 +143,7 @@
                                 <DataGridTextColumn Header="Presentacion" Binding="{Binding presentacion_producto}" Width="100"/>
                                 <DataGridTextColumn Header="Unidad de medida" Binding="{Binding unidad_medida_producto}" Width="120"/>
                                 <DataGridTextColumn Header="Precio de compra" Binding="{Binding precio_compra_producto}" Width="120"/>
-                                <DataGridTextColumn Header="Precio de venta" Binding="{Binding categoria_producto}" Width="100"/>
+                                <DataGridTextColumn Header="Precio de venta" Binding="{Binding precio_venta_producto}" Width="100"/>
                                 <DataGridTextColumn Header="Estado" Binding="{Binding estado_producto}" Width="80"/>
                                 <DataGridTextColumn Header="Proveedor" Binding="{Binding id_proveedor_producto}" Width="100"/>
                             </DataGrid.Columns>

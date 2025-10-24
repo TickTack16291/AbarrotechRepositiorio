@@ -10,12 +10,12 @@
 
     <!--Nos sirve para poner encabezados a las ventanas-->
     <DockPanel>
-        
+
         <Border Background="#1565C0" DockPanel.Dock="Top" Padding="12">
             <TextBlock Text="Selecciona la operacion: " FontSize="20" FontWeight="Bold"
                        Foreground="White" HorizontalAlignment="Center"/>
         </Border>
-
+        
         <!--Dockpanel sirve para agrupar elementos se puede ajustar su posicion, color, tamaños-->
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" Width="250">
             <Button x:Name="btn_Empleados" Content="Empleados" Margin="0,8" FontSize="14" FontWeight="SemiBold"

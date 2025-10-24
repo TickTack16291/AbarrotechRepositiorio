@@ -236,7 +236,7 @@ namespace LoginDeAbarrotech
                 cb_UnidadMedida.Text = producto.unidad_medida_producto.ToString();
                 ct_PrecioCompra.Text = producto.precio_compra_producto.ToString();
                 ct_PrecioVenta.Text = producto.precio_venta_producto.ToString();
-                cb_nombreProvedor.Text = producto.id_proveedor_producto.ToString();
+                cb_nombreProvedor.Text = producto.id_proveedor_producto.ToString();// No lo rellena, tengo que hacer unas funciones para que con el id obtenga el nombre
             }
         }
     }

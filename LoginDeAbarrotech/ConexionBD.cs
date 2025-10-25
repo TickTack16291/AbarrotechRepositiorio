@@ -248,7 +248,7 @@ namespace LoginDeAbarrotech
             using (var Conexion = new MySqlConnection(conexionString)) {
                 try {
                     Conexion.Open();
-                    string sql = "SELECT nombre_proveedor FROM proveedores WHERE estado_proveedor = 'A'";
+                    string sql = "SELECT nombre_proveedor FROM proveedores WHERE estado_proveedor = 'Activo'";
 
                     using (var comando = new MySqlCommand(sql, Conexion))
                     using (var reader = comando.ExecuteReader()) {
@@ -416,7 +416,6 @@ namespace LoginDeAbarrotech
 
                     using (var command = new MySqlCommand(sql, Conexion))
                     {
-                        command.Parameters.AddWithValue("@id_proveedor", proveedorActualizado.id_proveedor);
                         command.Parameters.AddWithValue("@nombre_proveedor", proveedorActualizado.nombre_proveedor);
                         command.Parameters.AddWithValue("@responsable_proveedor", proveedorActualizado.responsable_proveedor);
                         command.Parameters.AddWithValue("@direccion_proveedor", proveedorActualizado.direccion_proveedor);

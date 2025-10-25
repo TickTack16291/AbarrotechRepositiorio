@@ -198,11 +198,11 @@ namespace LoginDeAbarrotech
                     idProAux
                 );
 
-                if (ValidarProductosRepetidos(productoModificado))
-                {
-                    MostrarMensaje("No se permiten los productos repetidos");
-                    return;
-                }
+                //if (ValidarProductosRepetidos(productoModificado))
+                //{
+                //    MostrarMensaje("No se permiten los productos repetidos");
+                //    return;
+                //}
 
                 if (conexion.ModificarProducto(productoModificado))
                 {

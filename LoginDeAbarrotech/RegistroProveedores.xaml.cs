@@ -64,15 +64,13 @@ namespace LoginDeAbarrotech
             foreach (var p in proveedores)
             {
                 if (
-                    p.email_proveedor == Ingresado.email_proveedor &&
                     p.nombre_proveedor == Ingresado.nombre_proveedor &&
-                    p.telefono_proveedor == Ingresado.telefono_proveedor &&
-                    p.direccion_proveedor == Ingresado.direccion_proveedor &&
-                    p.responsable_proveedor == Ingresado.responsable_proveedor
+                    p.email_proveedor == Ingresado.email_proveedor &&
+                    p.telefono_proveedor == Ingresado.telefono_proveedor
                 )
-                    return true; // Hay un proveedor exactamente igual
+                    return true; // Hay un proveedor con algunos datos iguales
             }
-            return false; // No hay proveedores exactamente iguales
+            return false; // No hay proveedores iguales
         }
         private void dg_Proveedores_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (dg_Proveedores.SelectedItem is Proveedor proveedor)
@@ -82,7 +80,8 @@ namespace LoginDeAbarrotech
                 ct_DireccionProveedor.Text = proveedor.direccion_proveedor;
                 ct_TelefonoProveedor.Text = proveedor.telefono_proveedor.ToString();
                 ct_EmailProveedor.Text = proveedor.email_proveedor;
-                cb_EstadoProveedor.Text = proveedor.estado_proveedor.ToString();
+                //cb_EstadoProveedor.Text = proveedor.estado_proveedor;
+                cb_EstadoProveedor.SelectedValue = proveedor.estado_proveedor;
             }
         }
         private void btn_Cancelar_Click(object sender, RoutedEventArgs e) {
@@ -105,13 +104,18 @@ namespace LoginDeAbarrotech
             }
 
             // Validar que los precios sean números
-            if (!int.TryParse(ct_TelefonoProveedor.Text, out int telefonoProveedor))// Intenta convertir el texto a int, si funciona el valor se guarda en la variable
+            if (!long.TryParse(ct_TelefonoProveedor.Text, out long telefonoProveedor))// Intenta convertir el texto a int, si funciona el valor se guarda en la variable
             {
                 MostrarMensaje("El telefono debe ser un número válido.");
                 return;
             }
 
-            bool.TryParse(cb_EstadoProveedor.SelectedValue?.ToString(), out bool auxEstado);
+            long longitud = telefonoProveedor.ToString().Length;
+
+            if (longitud != 10)
+            {
+               MostrarMensaje("El telefono debe tener 10 digitos.");
+            }
 
             // Crear el objeto Producto con los datos del formulario
             Proveedor proveedor = new Proveedor(
@@ -126,7 +130,7 @@ namespace LoginDeAbarrotech
 
             if (ValidarProveedoresRepetidos(proveedor))
             {
-                MostrarMensaje("No se permiten los productos repetidos");
+                MostrarMensaje("No se permiten los proveedores repetidos");
                 return;
             }
 
@@ -161,9 +165,17 @@ namespace LoginDeAbarrotech
             }
 
             // Validar que los precios sean números
-            if (!int.TryParse(ct_TelefonoProveedor.Text, out int telefonoProveedor))// Intenta convertir el texto a flotante, si funciona el valor se guarda en la variable
+            if (!long.TryParse(ct_TelefonoProveedor.Text, out long telefonoProveedor))// Intenta convertir el texto a flotante, si funciona el valor se guarda en la variable
             {
                 MostrarMensaje("El telefono debe ser un número válido.");
+                return;
+            }
+
+            long longitud = telefonoProveedor.ToString().Length;
+
+            if (longitud != 10)
+            {
+                MostrarMensaje("El telefono debe tener 10 digitos.");
                 return;
             }
 
@@ -197,7 +209,7 @@ namespace LoginDeAbarrotech
             else
             {
                 // Muestra si no se agrego correctamente el proveedor
-                MostrarMensaje("No se pudo agregar el proveedor");
+                MostrarMensaje("No se pudo modificar el proveedor");
             }
         }
     }

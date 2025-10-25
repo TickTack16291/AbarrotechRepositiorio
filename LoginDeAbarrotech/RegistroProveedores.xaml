@@ -95,8 +95,8 @@
                         <TextBlock Text="Estado" Foreground="#424242" Margin="5,0,0,3"/>
                         <ComboBox x:Name="cb_EstadoProveedor" Height="45" Padding="10"
                                   BorderBrush="#1976D2" BorderThickness="2">
-                            <ComboBoxItem Content="Activo" Tag="1"/>
-                            <ComboBoxItem Content="Inactivo" Tag="0"/>
+                            <ComboBoxItem Content="Activo"/>
+                            <ComboBoxItem Content="Inactivo"/>
                         </ComboBox>
                     </StackPanel>
                 </Grid>

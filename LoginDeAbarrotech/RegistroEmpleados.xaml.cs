@@ -69,22 +69,13 @@ namespace LoginDeAbarrotech
             foreach (var e in empleados)
             {
                 if (
-                    e.rol_empleado == ingresado.rol_empleado &&
                     e.nombre_empleado == ingresado.nombre_empleado &&
-                    e.estado_empleado == ingresado.estado_empleado &&
-                    e.salario_empleado == ingresado.salario_empleado &&
                     e.telefono_empleado == ingresado.telefono_empleado &&
-                    e.fecha_fin_contrato == ingresado.fecha_fin_contrato &&
-                    e.direccion_empleado == ingresado.direccion_empleado &&
-                    e.hora_salida_empleado == ingresado.hora_salida_empleado &&
-                    e.hora_entrada_empleado == ingresado.hora_entrada_empleado &&
-                    e.fecha_inicio_contrato == ingresado.fecha_inicio_contrato &&
                     e.correo_electronico_empleado == ingresado.correo_electronico_empleado
-
                 )
-                    return true; // Hay un empleado exactamente igual
+                    return true; // Hay un empleado igual
             }
-            return false; // No hay empleados exactamente iguales
+            return false; // No hay empleados iguales
         }
         private void dg_Empleados_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -192,8 +183,10 @@ namespace LoginDeAbarrotech
         }
         private void btn_Modificar_Click(object sender, RoutedEventArgs e)
         {
-            // Verificamos que ningún campo esté vacío
-            if (string.IsNullOrWhiteSpace(ct_NombreEmpleado.Text) ||
+            if (dg_Empleados.SelectedItem is Empleado empleadoSeleccionado)
+            {
+                // Verificamos que ningún campo esté vacío
+                if (string.IsNullOrWhiteSpace(ct_NombreEmpleado.Text) ||
                 string.IsNullOrWhiteSpace(ct_RolEmpleado.Text) ||
                 string.IsNullOrWhiteSpace(ct_DireccionEmpleado.Text) ||
                 string.IsNullOrWhiteSpace(ct_CorreoEmpleado.Text) ||
@@ -204,71 +197,72 @@ namespace LoginDeAbarrotech
                 string.IsNullOrWhiteSpace(ct_HoraSalida.Text) ||
                 dp_FechaContrato.SelectedDate == null ||
                 dp_FechaFinContrato.SelectedDate == null)
-            {
-                // Se muestra si hay campos vacios
-                MostrarMensaje("No puede haber campos vacios");
-                return;
-            }
-            // Validar que el teléfono sea un número válido
-            if (!long.TryParse(ct_TelefonoEmpleado.Text, out long telefonoEmpleado))
-            {
-                MostrarMensaje("El teléfono debe ser un número válido.");
-                return;
-            }
-            // Validar que el salario sea un número válido
-            if (!float.TryParse(ct_SalarioEmpleado.Text, out float salarioEmpleado))
-            {
-                MostrarMensaje("El salario debe ser un número válido.");
-                return;
-            }
-            // Validar que las horas sean válidas
-            if (!TimeSpan.TryParse(ct_HoraEntrada.Text, out TimeSpan horaEntrada))
-            {
-                MostrarMensaje("La hora de entrada debe ser una hora válida.");
-                return;
-            }
-            if (!TimeSpan.TryParse(ct_HoraSalida.Text, out TimeSpan horaSalida))
-            {
-                MostrarMensaje("La hora de salida debe ser una hora válida.");
-                return;
-            }
+                {
+                    // Se muestra si hay campos vacios
+                    MostrarMensaje("No puede haber campos vacios");
+                    return;
+                }
+                // Validar que el teléfono sea un número válido
+                if (!long.TryParse(ct_TelefonoEmpleado.Text, out long telefonoEmpleado))
+                {
+                    MostrarMensaje("El teléfono debe ser un número válido.");
+                    return;
+                }
+                // Validar que el salario sea un número válido
+                if (!float.TryParse(ct_SalarioEmpleado.Text, out float salarioEmpleado))
+                {
+                    MostrarMensaje("El salario debe ser un número válido.");
+                    return;
+                }
+                // Validar que las horas sean válidas
+                if (!TimeSpan.TryParse(ct_HoraEntrada.Text, out TimeSpan horaEntrada))
+                {
+                    MostrarMensaje("La hora de entrada debe ser una hora válida.");
+                    return;
+                }
+                if (!TimeSpan.TryParse(ct_HoraSalida.Text, out TimeSpan horaSalida))
+                {
+                    MostrarMensaje("La hora de salida debe ser una hora válida.");
+                    return;
+                }
 
-            // Crear el objeto Empleado con los datos del formulario
-            Empleado empleadoModificado = new Empleado(
-                0,
-                ct_NombreEmpleado.Text,
-                ct_DireccionEmpleado.Text,
-                telefonoEmpleado,
-                ct_CorreoEmpleado.Text,
-                ct_RolEmpleado.Text,
-                salarioEmpleado,
-                dp_FechaContrato.SelectedDate.Value,
-                horaEntrada,
-                horaSalida,
-                cb_EstadoEmpleado.Text,
-                dp_FechaFinContrato.SelectedDate.Value
-            );
+                // Crear el objeto Empleado con los datos del formulario
+                Empleado empleadoModificado = new Empleado(
+                    empleadoSeleccionado.id_empleado,
+                    ct_NombreEmpleado.Text,
+                    ct_DireccionEmpleado.Text,
+                    telefonoEmpleado,
+                    ct_CorreoEmpleado.Text,
+                    ct_RolEmpleado.Text,
+                    salarioEmpleado,
+                    dp_FechaContrato.SelectedDate.Value,
+                    horaEntrada,
+                    horaSalida,
+                    cb_EstadoEmpleado.Text,
+                    dp_FechaFinContrato.SelectedDate.Value
+                );
 
-            if (ValidarEmpleadosRepetidos(empleadoModificado))
-            {
-                MostrarMensaje("No se permiten empleados repetidos");
-                return;
-            }
+                //if (ValidarEmpleadosRepetidos(empleadoModificado))
+                //{
+                //    MostrarMensaje("No se permiten empleados repetidos");
+                //    return;
+                //}
 
-            ConexionBD conexion = new ConexionBD();
+                ConexionBD conexion = new ConexionBD();
 
-            if (conexion.ModificarEmpleado(empleadoModificado))
-            {
-                // Muestra si se modificó correctamente el empleado
-                MostrarMensaje("Empleado modificado correctamente");
-                VaciasCasillas();
-                ct_NombreEmpleado.Focus();
-                CargarEmpleados();
-            }
-            else
-            {
-                // Muestra si no se modificó correctamente el empleado
-                MostrarMensaje("No se pudo modificar el empleado");
+                if (conexion.ModificarEmpleado(empleadoModificado))
+                {
+                    // Muestra si se modificó correctamente el empleado
+                    MostrarMensaje("Empleado modificado correctamente");
+                    VaciasCasillas();
+                    ct_NombreEmpleado.Focus();
+                    CargarEmpleados();
+                }
+                else
+                {
+                    // Muestra si no se modificó correctamente el empleado
+                    MostrarMensaje("No se pudo modificar el empleado");
+                }
             }
         }
     }

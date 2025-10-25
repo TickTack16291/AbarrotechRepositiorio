@@ -22,6 +22,7 @@ namespace LoginDeAbarrotech
         public LoginAbarrotech()
         {
             InitializeComponent();
+            txtUsuario.Focus();
         }
         public static string UsuarioGlobal;
         private void btnLogin_Click(object sender, RoutedEventArgs e)

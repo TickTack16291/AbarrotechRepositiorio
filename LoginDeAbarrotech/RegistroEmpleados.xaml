@@ -184,15 +184,57 @@
                     <Button x:Name="btn_Cancelar" Content="Cancelar" Background="#E53935" Foreground="White"
                             Height="40" Width="120" FontWeight="Bold" 
                             HorizontalAlignment="Left" Grid.Column="0"
-                            Click="btn_Cancelar_Click"/>
+                            Click="btn_Cancelar_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" >
                         <Button x:Name="btn_Guardar" Content="Guardar" Background="#4CAF50" Foreground="White"
                                 Height="40" Width="120" FontWeight="Bold" Margin="0,0,10,0"
-                                Click="btn_Guardar_Click"/>
+                                Click="btn_Guardar_Click">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                         <Button x:Name="btn_Modificar" Content="Modificar" Background="#1976D2" Foreground="White"
                                 Height="40" Width="120" FontWeight="Bold"
-                                Click="btn_Modificar_Click"/>
+                                Click="btn_Modificar_Click">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Grid>

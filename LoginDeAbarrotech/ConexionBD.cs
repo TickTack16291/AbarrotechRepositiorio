@@ -126,9 +126,7 @@ namespace LoginDeAbarrotech
                 {
                     Conexion.Open();
 
-                    string sql = @"SELECT id_producto, nombre_producto, marca_producto, presentacion_producto, unidad_medida_producto, 
-                                  precio_compra_producto, precio_venta_producto, estado_producto, categoria_producto, id_proveedor_producto
-                           FROM productos";
+                    string sql = @"SELECT * FROM productos";
                     using (var command = new MySqlCommand(sql, Conexion))
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
@@ -140,8 +138,8 @@ namespace LoginDeAbarrotech
                                 reader.GetString(2),      // marca_producto
                                 reader.GetString(3),      // presentacion_producto
                                 reader.GetString(4),      // unidad_medida_producto
-                                reader.GetFloat(5),       // precio_compra_producto
-                                reader.GetFloat(6),       // precio_venta_producto
+                                reader.GetFloat(5),       // precio_venta_producto
+                                reader.GetFloat(6),       // precio_compra_producto
                                 reader.GetInt32(7),       // estado_producto
                                 reader.GetString(8),      // categoria_producto
                                 reader.GetInt32(9)        // id_proveedor_producto
@@ -269,31 +267,61 @@ namespace LoginDeAbarrotech
         }
         public int ObtenerIdProveedor(string proveedor)
         {
-            int id = 0;
-
             using (var Conexion = new MySqlConnection(conexionString))
             {
                 try
                 {
                     Conexion.Open();
-                    string sql = "SELECT id_proveedor FROM proveedores WHERE nombre_proveedor = @proveedor";
+                    string sql = "SELECT id_proveedor FROM proveedores WHERE nombre_proveedor = @proveedor LIMIT 1";
 
                     using (var comando = new MySqlCommand(sql, Conexion))
-                    using (var reader = comando.ExecuteReader())
                     {
-                        while (reader.Read())
+                        comando.Parameters.AddWithValue("@proveedor", proveedor);
+                        using (var reader = comando.ExecuteReader())
                         {
-                            id = reader.GetInt32("id_proveedor");
+                            if (reader.Read())
+                            {
+                                return reader.GetInt32("id_proveedor");
+                            }
                         }
                     }
+                    return 0; // No encontrado
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error al obtener el id del proveedor: {ex.Message}");
+                    return 0; // Indicar error
                 }
             }
+        }
+        public string ObtenerNombreProveedor(int id)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = "SELECT nombre_proveedor FROM proveedores WHERE id_proveedor = @id LIMIT 1";
 
-            return id;
+                    using (var comando = new MySqlCommand(sql, Conexion))
+                    {
+                        comando.Parameters.AddWithValue("@id", id);
+                        using (var reader = comando.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return reader.GetString("nombre_proveedor");
+                            }
+                        }
+                    }
+                    return ""; // No encontrado
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener el id del proveedor: {ex.Message}");
+                    return ""; // Indicar error
+                }
+            }
         }
 
         /// <summary>

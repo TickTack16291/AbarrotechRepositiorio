@@ -100,7 +100,8 @@
                 <!--Botones-->
                 <StackPanel Orientation="Vertical" Margin="0,0,0,10">
                     <Button x:Name="btnLogin" Content="Ingresar" Background="#1976D2" Foreground="White"
-                        Height="40" FontWeight="Bold" Click="btnLogin_Click">
+                        Height="40" FontWeight="Bold" Click="btnLogin_Click" IsDefault="True">
+                        <!-- EL IsDefault = "True" es para que el evento del boton "Ingresar" tambien se active con el "enter"-->
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">

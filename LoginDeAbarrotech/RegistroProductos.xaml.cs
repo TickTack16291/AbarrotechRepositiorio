@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+
 
 namespace LoginDeAbarrotech
 {
@@ -29,7 +31,7 @@ namespace LoginDeAbarrotech
         {
             Lbl_mensaje.Foreground = Brushes.Green;
 
-            if (mensaje != "Producto agregado correctamente" || mensaje != "Producto modificado correctamente" || mensaje != "Producto habilitado" || mensaje != "Producto inhabilitado")
+            if (mensaje != "Producto agregado correctamente" || mensaje != "Producto modificado correctamente")
                 Lbl_mensaje.Foreground = Brushes.Red;
 
             Lbl_mensaje.Content = mensaje;
@@ -51,7 +53,8 @@ namespace LoginDeAbarrotech
             cb_UnidadMedida.Text = string.Empty;
             ct_PrecioCompra.Text = string.Empty;
             ct_PrecioVenta.Text = string.Empty;
-            
+            cb_Categoria.Text= string.Empty;
+
         }
         public void CargarProductos() {
             ConexionBD conexion = new ConexionBD();
@@ -77,8 +80,7 @@ namespace LoginDeAbarrotech
                     p.nombre_producto == Ingresado.nombre_producto &&
                     p.marca_producto == Ingresado.marca_producto &&
                     p.presentacion_producto == Ingresado.presentacion_producto &&
-                    p.unidad_medida_producto == Ingresado.unidad_medida_producto &&
-                    p.categoria_producto == Ingresado.categoria_producto
+                    p.unidad_medida_producto == Ingresado.unidad_medida_producto
                 )
                     return true; // Hay un producto exactamente igual
             }
@@ -227,8 +229,13 @@ namespace LoginDeAbarrotech
         }
         private void dg_Productos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ConexionBD conexion = new ConexionBD();
+
+
             if (dg_Productos.SelectedItem is Producto producto)
             {
+                string proAux = conexion.ObtenerNombreProveedor(producto.id_proveedor_producto);
+
                 ct_Nombre.Text = producto.nombre_producto;
                 ct_Marca.Text = producto.marca_producto;
                 cb_Categoria.Text = producto.categoria_producto;
@@ -236,7 +243,7 @@ namespace LoginDeAbarrotech
                 cb_UnidadMedida.Text = producto.unidad_medida_producto.ToString();
                 ct_PrecioCompra.Text = producto.precio_compra_producto.ToString();
                 ct_PrecioVenta.Text = producto.precio_venta_producto.ToString();
-                cb_nombreProvedor.Text = producto.id_proveedor_producto.ToString();// No lo rellena, tengo que hacer unas funciones para que con el id obtenga el nombre
+                cb_nombreProvedor.Text = proAux;
             }
         }
     }

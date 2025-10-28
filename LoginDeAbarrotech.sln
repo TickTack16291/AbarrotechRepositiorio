@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36408.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abarrotech", "LoginDeAbarrotech\Abarrotech.csproj", "{445DC945-EE19-4E3D-A5CC-7C762C590B47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abarrotech", "LoginDeAbarrotech\Abarrotech.csproj", "{445DC945-EE19-4E3D-A5CC-7C762C590B47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -105,11 +105,11 @@
                         <TextBlock Text="Unidad de Medida" Foreground="#424242" Margin="5,0,0,3"/>
                         <ComboBox x:Name="cb_UnidadMedida" Height="45" Padding="10"
                                   BorderBrush="#1976D2" BorderThickness="2">
-                            <ComboBoxItem Content="Kg"/>
-                            <ComboBoxItem Content="Gr"/>
-                            <ComboBoxItem Content="L"/>
-                            <ComboBoxItem Content="Ml"/>
-                            <ComboBoxItem Content="Pz"/>
+                            <ComboBoxItem Content="kg"/>
+                            <ComboBoxItem Content="g"/>
+                            <ComboBoxItem Content="l"/>
+                            <ComboBoxItem Content="ml"/>
+                            <ComboBoxItem Content="pz"/>
                         </ComboBox>
                     </StackPanel>
 

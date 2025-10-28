@@ -80,8 +80,7 @@ namespace LoginDeAbarrotech
                 ct_DireccionProveedor.Text = proveedor.direccion_proveedor;
                 ct_TelefonoProveedor.Text = proveedor.telefono_proveedor.ToString();
                 ct_EmailProveedor.Text = proveedor.email_proveedor;
-                //cb_EstadoProveedor.Text = proveedor.estado_proveedor;
-                cb_EstadoProveedor.SelectedValue = proveedor.estado_proveedor;
+                cb_EstadoProveedor.Text = proveedor.estado_proveedor;
             }
         }
         private void btn_Cancelar_Click(object sender, RoutedEventArgs e) {
@@ -190,11 +189,11 @@ namespace LoginDeAbarrotech
                 cb_EstadoProveedor.Text
                 );
 
-            if (ValidarProveedoresRepetidos(proveedorModificado))
-            {
-                MostrarMensaje("No se permiten los proveedores repetidos");
-                return;
-            }
+            //if (ValidarProveedoresRepetidos(proveedorModificado))
+            //{
+            //    MostrarMensaje("No se permiten los proveedores repetidos");
+            //    return;
+            //}
 
             ConexionBD conexion = new ConexionBD();
 

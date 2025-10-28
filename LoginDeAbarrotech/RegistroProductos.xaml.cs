@@ -102,15 +102,35 @@ namespace LoginDeAbarrotech
                 return;
             }
 
-            // Validar que los precios sean números
+            // Validar que los precios sean números y positivos
             if (!float.TryParse(ct_PrecioVenta.Text, out float precioVenta))// Intenta convertir el texto a flotante, si funciona el valor se guarda en la variable
             {
-                MostrarMensaje("El precio de venta debe ser un número válido.");
+                MostrarMensaje("El precio de venta debe ser numerico.");
+                return;
+            }
+            if (precioVenta < 0)
+            {
+                MostrarMensaje("El precio de venta debe ser un número positivo");
                 return;
             }
             if (!float.TryParse(ct_PrecioCompra.Text, out float precioCompra))// Lo mismo que el de arriba
             {
-                MostrarMensaje("El precio de compra debe ser un número válido");
+                MostrarMensaje("El precio de compra debe ser númerico");
+                return;
+            }
+            if (precioCompra < 0)
+            {
+                MostrarMensaje("El precio de compra debe ser un número positivo");
+                return;
+            }
+            if (!int.TryParse(ct_Presentacion.Text, out int presentacion))// Lo mismo que el de arriba
+            {
+                MostrarMensaje("La presentacion debe ser un númerica");
+                return;
+            }
+            if (presentacion < 0)
+            {
+                MostrarMensaje("La presentacion debe ser un número positivo");
                 return;
             }
 
@@ -123,7 +143,7 @@ namespace LoginDeAbarrotech
             Producto producto = new Producto(0,
                 ct_Nombre.Text,
                 ct_Marca.Text,
-                ct_Presentacion.Text,
+                presentacion,
                 cb_UnidadMedida.Text,
                 precioVenta,// La variable que se deberia haber guardado
                 precioCompra,//x2
@@ -168,14 +188,35 @@ namespace LoginDeAbarrotech
                     return;
                 }
 
-                if (!float.TryParse(ct_PrecioVenta.Text, out float precioVenta))
+                // Validar que los precios sean números y positivos
+            if (!float.TryParse(ct_PrecioVenta.Text, out float precioVenta))// Intenta convertir el texto a flotante, si funciona el valor se guarda en la variable
                 {
-                    MostrarMensaje("El precio de venta debe ser un número válido.");
+                    MostrarMensaje("El precio de venta debe ser numerico.");
                     return;
                 }
-                if (!float.TryParse(ct_PrecioCompra.Text, out float precioCompra))
+                if (precioVenta < 0)
                 {
-                    MostrarMensaje("El precio de compra debe ser un número válido");
+                    MostrarMensaje("El precio de venta debe ser un número positivo");
+                    return;
+                }
+            if (!float.TryParse(ct_PrecioCompra.Text, out float precioCompra))// Lo mismo que el de arriba
+                {
+                    MostrarMensaje("El precio de compra debe ser númerico");
+                    return;
+                }
+                if (precioCompra < 0)
+                {
+                    MostrarMensaje("El precio de compra debe ser un número positivo");
+                    return;
+                }
+            if (!int.TryParse(ct_Presentacion.Text, out int presentacion))// Lo mismo que el de arriba
+                {
+                    MostrarMensaje("La presentacion debe ser un númerica");
+                    return;
+                }
+                if (presentacion < 0)
+                {
+                    MostrarMensaje("La presentacion debe ser un número positivo");
                     return;
                 }
 
@@ -189,7 +230,7 @@ namespace LoginDeAbarrotech
                     productoSeleccionado.id_producto,
                     ct_Nombre.Text,
                     ct_Marca.Text,
-                    ct_Presentacion.Text,
+                    presentacion,
                     cb_UnidadMedida.Text,
                     precioVenta,
                     precioCompra,
@@ -239,7 +280,7 @@ namespace LoginDeAbarrotech
                 ct_Nombre.Text = producto.nombre_producto;
                 ct_Marca.Text = producto.marca_producto;
                 cb_Categoria.Text = producto.categoria_producto;
-                ct_Presentacion.Text = producto.presentacion_producto;
+                ct_Presentacion.Text = producto.presentacion_producto.ToString();
                 cb_UnidadMedida.Text = producto.unidad_medida_producto.ToString();
                 ct_PrecioCompra.Text = producto.precio_compra_producto.ToString();
                 ct_PrecioVenta.Text = producto.precio_venta_producto.ToString();

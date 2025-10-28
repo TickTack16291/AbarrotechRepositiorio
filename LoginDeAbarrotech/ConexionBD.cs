@@ -136,7 +136,7 @@ namespace LoginDeAbarrotech
                                 reader.GetInt32(0),       // id_producto
                                 reader.GetString(1),      // nombre_producto
                                 reader.GetString(2),      // marca_producto
-                                reader.GetString(3),      // presentacion_producto
+                                reader.GetInt32(3),      // presentacion_producto
                                 reader.GetString(4),      // unidad_medida_producto
                                 reader.GetFloat(5),       // precio_venta_producto
                                 reader.GetFloat(6),       // precio_compra_producto
@@ -248,7 +248,7 @@ namespace LoginDeAbarrotech
             using (var Conexion = new MySqlConnection(conexionString)) {
                 try {
                     Conexion.Open();
-                    string sql = "SELECT nombre_proveedor FROM proveedores WHERE estado_proveedor = 'Activo'";
+                    string sql = "SELECT nombre_proveedor FROM proveedores";
 
                     using (var comando = new MySqlCommand(sql, Conexion))
                     using (var reader = comando.ExecuteReader()) {

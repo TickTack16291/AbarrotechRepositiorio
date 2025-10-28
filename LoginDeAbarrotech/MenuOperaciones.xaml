@@ -5,138 +5,545 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoginDeAbarrotech"
         mc:Ignorable="d"
-       Title="Menu de operaciones" Height="500" Width="800"
-        Background="#F5F5F5" WindowStartupLocation="CenterScreen">
+        Title="Abarrotech - Sistema de Gestión" Height="700" Width="1200"
+        Background="#F5F5F5" WindowStartupLocation="CenterScreen" 
+        MinHeight="600" MinWidth="1000">
 
-    <!--Nos sirve para poner encabezados a las ventanas-->
-    <DockPanel>
+    <Window.Resources>
+        <!-- Estilo para botones del menú lateral -->
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#0D47A1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <Border Background="#1565C0" DockPanel.Dock="Top" Padding="12">
-            <TextBlock Text="Selecciona la operacion: " FontSize="20" FontWeight="Bold"
-                       Foreground="White" HorizontalAlignment="Center"/>
+        <!-- Estilo para tarjetas de información -->
+        <Style x:Key="InfoCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="2" BlurRadius="8" Color="#40000000"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Definir columnas para el layout -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="SidebarColumn" Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Menú lateral -->
+        <Border x:Name="SidebarBorder" Grid.Column="0" Background="#1565C0">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="3" BlurRadius="10" Color="#40000000"/>
+            </Border.Effect>
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header del menú -->
+                <StackPanel Grid.Row="0" Margin="0,20,0,30">
+                    <!-- Botón toggle del menú -->
+                    <Button x:Name="btn_ToggleMenu" 
+                            Content="☰" 
+                            FontSize="18" 
+                            Foreground="White" 
+                            Background="Transparent" 
+                            BorderThickness="0" 
+                            HorizontalAlignment="Right" 
+                            Margin="0,0,15,0" 
+                            Padding="10"
+                            Cursor="Hand"
+                            Click="btn_ToggleMenu_Click"/>
+                    
+                    <TextBlock Text="ABARROTECH" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="White" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,10,0,0"/>
+                    
+                    <TextBlock x:Name="txt_WelcomeUser" 
+                               Text="Bienvenido, Usuario" 
+                               FontSize="12" 
+                               Foreground="#E3F2FD" 
+                               HorizontalAlignment="Center" 
+                               Margin="0,5,0,0"/>
+                </StackPanel>
+
+                <!-- Botones del menú -->
+                <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                    <Button x:Name="btn_Dashboard" Content="📊 Dashboard" Style="{StaticResource MenuButtonStyle}" Click="btn_Dashboard_Click"/>
+                    <Button x:Name="btn_Empleados" Content="👥 Empleados" Style="{StaticResource MenuButtonStyle}" Click="btn_Empleados_Click"/>
+                    <Button x:Name="btn_Proveedores" Content="🏢 Proveedores" Style="{StaticResource MenuButtonStyle}" Click="btn_Proveedores_Click"/>
+                    <Button x:Name="btn_Productos" Content="📦 Productos" Style="{StaticResource MenuButtonStyle}" Click="btn_Productos_Click"/>
+                    <Button x:Name="btn_Compras" Content="🛒 Compras" Style="{StaticResource MenuButtonStyle}" Click="btn_Compras_Click"/>
+                    <Button x:Name="btn_Ventas" Content="💰 Ventas" Style="{StaticResource MenuButtonStyle}" Click="btn_Ventas_Click"/>
+                    <Button x:Name="btn_Usuarios" Content="👤 Usuarios" Style="{StaticResource MenuButtonStyle}" Click="btn_Usuarios_Click"/>
+                </StackPanel>
+
+                <!-- Botón de salir -->
+                <Button x:Name="btn_Salir" 
+                        Grid.Row="2"
+                        Content="🚪 Cerrar Sesión" 
+                        Style="{StaticResource MenuButtonStyle}" 
+                        Background="#D32F2F" 
+                        Margin="15,0,15,20"
+                        Click="btn_Salir_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                                    CornerRadius="6"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#B71C1C"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
         </Border>
 
-        <!--Dockpanel sirve para agrupar elementos se puede ajustar su posicion, color, tamaños-->
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20" Width="250">
-            <Button x:Name="btn_Empleados" Content="Empleados" Margin="0,8" FontSize="14" FontWeight="SemiBold"
-                    Background="White" Foreground="#1565C0"
-                    BorderBrush="#1565C0" BorderThickness="2"
-                    Padding="8,4" Cursor="Hand" Click="btn_Empleados_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <!-- Boton de proveedores -->
-            <Button x:Name="btn_Proveedores" Content="Proveedores" Margin="0,8" FontSize="14" FontWeight="SemiBold"
-                    Background="White" Foreground="#1565C0"
-                    BorderBrush="#1565C0" BorderThickness="2"
-                    Padding="8,4" Cursor="Hand" Click="btn_Proveedores_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <!--Boton productos-->
-            <Button x:Name="btn_Productos" Content="Productos" Margin="0,8" FontSize="14" FontWeight="SemiBold"
-                    Background="White" Foreground="#1565C0"
-                    BorderBrush="#1565C0" BorderThickness="2"
-                    Padding="8,4" Cursor="Hand" Click="btn_Productos_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <!-- Bcoton compras-->
-            <Button x:Name="btn_Compras" Content="Compras" Margin="0,8" FontSize="14" FontWeight="SemiBold"
-                    Background="White" Foreground="#1565C0"
-                    BorderBrush="#1565C0" BorderThickness="2"
-                    Padding="8,4" Cursor="Hand">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <!-- Boton ventas-->
-            <Button x:Name="btn_Ventas" Content="Ventas" Margin="0,8" FontSize="14" FontWeight="SemiBold"
-                    Background="White" Foreground="#1565C0"
-                    BorderBrush="#1565C0" BorderThickness="2"
-                    Padding="8,4" Cursor="Hand">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <!-- Boton usuarios-->
-            <Button x:Name="btn_Usuarios" Content="Usuarios" Margin="0,8" FontSize="14" FontWeight="SemiBold"
-                    Background="White" Foreground="#1565C0"
-                    BorderBrush="#1565C0" BorderThickness="2"
-                    Padding="8,4" Cursor="Hand" Click="btn_Usuarios_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+        <!-- Área principal de contenido -->
+        <Grid Grid.Column="1" Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <!--Boton Salir-->
-            <Button x:Name="btn_Salir" Content="Salir" Margin="0,15,0,0" FontSize="14" FontWeight="SemiBold"
-                    Background="White" Foreground="#D32F2F"
-                    BorderBrush="#D32F2F" BorderThickness="2"
-                    Padding="8,4" Cursor="Hand" Width="150" HorizontalAlignment="Center" Click="btn_Salir_Click">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-        </StackPanel>
-    </DockPanel>
+            <!-- Header principal -->
+            <Border Grid.Row="0" Background="White" Padding="30,20">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="1" BlurRadius="5" Color="#20000000"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0">
+                        <TextBlock x:Name="txt_PageTitle" 
+                                   Text="Dashboard Principal" 
+                                   FontSize="24" 
+                                   FontWeight="Bold" 
+                                   Foreground="#1565C0"/>
+                        <TextBlock x:Name="txt_PageSubtitle" 
+                                   Text="Resumen general del sistema" 
+                                   FontSize="14" 
+                                   Foreground="#666666" 
+                                   Margin="0,5,0,0"/>
+                    </StackPanel>
+                    
+                    <TextBlock Grid.Column="1" 
+                               Text="{Binding Source={x:Static sys:DateTime.Now}, StringFormat='dd/MM/yyyy HH:mm'}" 
+                               FontSize="14" 
+                               Foreground="#666666" 
+                               VerticalAlignment="Center"
+                               xmlns:sys="clr-namespace:System;assembly=mscorlib"/>
+                </Grid>
+            </Border>
+
+            <!-- Contenido principal -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
+                <StackPanel x:Name="MainContent">
+                    
+                    <!-- Dashboard inicial -->
+                    <Grid x:Name="DashboardContent">
+                        <!-- Tarjetas de estadísticas -->
+                        <Grid Margin="0,20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            
+                            <!-- Primera fila de tarjetas -->
+                            <UniformGrid Grid.Row="0" Columns="3" Margin="0,0,0,20">
+                                <!-- Tarjeta Empleados -->
+                                <Border Style="{StaticResource InfoCardStyle}">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="Empleados Activos" 
+                                                           FontSize="14" 
+                                                           FontWeight="Medium" 
+                                                           Foreground="#666666"/>
+                                                <TextBlock x:Name="txt_EmpleadosCount" 
+                                                           Text="0" 
+                                                           FontSize="32" 
+                                                           FontWeight="Bold" 
+                                                           Foreground="#1565C0" 
+                                                           Margin="0,5,0,0"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" 
+                                                       Text="👥" 
+                                                       FontSize="32" 
+                                                       VerticalAlignment="Center" 
+                                                       Opacity="0.7"/>
+                                        </Grid>
+                                        <TextBlock Text="Personal registrado en el sistema" 
+                                                   FontSize="12" 
+                                                   Foreground="#999999" 
+                                                   Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Tarjeta Productos -->
+                                <Border Style="{StaticResource InfoCardStyle}">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="Productos" 
+                                                           FontSize="14" 
+                                                           FontWeight="Medium" 
+                                                           Foreground="#666666"/>
+                                                <TextBlock x:Name="txt_ProductosCount" 
+                                                           Text="0" 
+                                                           FontSize="32" 
+                                                           FontWeight="Bold" 
+                                                           Foreground="#4CAF50" 
+                                                           Margin="0,5,0,0"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" 
+                                                       Text="📦" 
+                                                       FontSize="32" 
+                                                       VerticalAlignment="Center" 
+                                                       Opacity="0.7"/>
+                                        </Grid>
+                                        <TextBlock Text="Artículos en inventario" 
+                                                   FontSize="12" 
+                                                   Foreground="#999999" 
+                                                   Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Tarjeta Proveedores -->
+                                <Border Style="{StaticResource InfoCardStyle}">
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="Proveedores" 
+                                                           FontSize="14" 
+                                                           FontWeight="Medium" 
+                                                           Foreground="#666666"/>
+                                                <TextBlock x:Name="txt_ProveedoresCount" 
+                                                           Text="0" 
+                                                           FontSize="32" 
+                                                           FontWeight="Bold" 
+                                                           Foreground="#FF9800" 
+                                                           Margin="0,5,0,0"/>
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" 
+                                                       Text="🏢" 
+                                                       FontSize="32" 
+                                                       VerticalAlignment="Center" 
+                                                       Opacity="0.7"/>
+                                        </Grid>
+                                        <TextBlock Text="Proveedores activos" 
+                                                   FontSize="12" 
+                                                   Foreground="#999999" 
+                                                   Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+
+                            <!-- Segunda fila - Información adicional -->
+                            <Grid Grid.Row="1" Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Panel de accesos rápidos -->
+                                <Border Grid.Column="0" Style="{StaticResource InfoCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Accesos Rápidos" 
+                                                   FontSize="18" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#1565C0" 
+                                                   Margin="0,0,0,15"/>
+                                        
+                                        <UniformGrid Columns="2" Margin="0">
+                                            <Button Content="Agregar Empleado" 
+                                                    Margin="5" 
+                                                    Padding="15,10" 
+                                                    Background="#E3F2FD" 
+                                                    Foreground="#1565C0" 
+                                                    BorderBrush="#1565C0" 
+                                                    BorderThickness="1" 
+                                                    FontWeight="Medium"
+                                                    Cursor="Hand"
+                                                    Click="btn_Empleados_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" 
+                                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                CornerRadius="6" 
+                                                                Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#BBDEFB"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            
+                                            <Button Content="Gestionar Productos" 
+                                                    Margin="5" 
+                                                    Padding="15,10" 
+                                                    Background="#E8F5E8" 
+                                                    Foreground="#4CAF50" 
+                                                    BorderBrush="#4CAF50" 
+                                                    BorderThickness="1" 
+                                                    FontWeight="Medium"
+                                                    Cursor="Hand"
+                                                    Click="btn_Productos_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" 
+                                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                CornerRadius="6" 
+                                                                Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#C8E6C9"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            
+                                            <Button Content="Ver Proveedores" 
+                                                    Margin="5" 
+                                                    Padding="15,10" 
+                                                    Background="#FFF3E0" 
+                                                    Foreground="#FF9800" 
+                                                    BorderBrush="#FF9800" 
+                                                    BorderThickness="1" 
+                                                    FontWeight="Medium"
+                                                    Cursor="Hand"
+                                                    Click="btn_Proveedores_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" 
+                                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                CornerRadius="6" 
+                                                                Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#FFE0B2"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            
+                                            <Button Content="Gestionar Usuarios" 
+                                                    Margin="5" 
+                                                    Padding="15,10" 
+                                                    Background="#F3E5F5" 
+                                                    Foreground="#9C27B0" 
+                                                    BorderBrush="#9C27B0" 
+                                                    BorderThickness="1" 
+                                                    FontWeight="Medium"
+                                                    Cursor="Hand"
+                                                    Click="btn_Usuarios_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" 
+                                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                                                CornerRadius="6" 
+                                                                Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#E1BEE7"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </UniformGrid>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Panel de información del usuario -->
+                                <Border Grid.Column="1" Style="{StaticResource InfoCardStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Información de Sesión" 
+                                                   FontSize="16" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#1565C0" 
+                                                   Margin="0,0,0,15"/>
+                                        
+                                        <StackPanel>
+                                            <TextBlock Text="Usuario actual:" 
+                                                       FontSize="12" 
+                                                       FontWeight="Medium" 
+                                                       Foreground="#666666"/>
+                                            <TextBlock x:Name="txt_CurrentUser" 
+                                                       Text="Usuario" 
+                                                       FontSize="14" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="#333333" 
+                                                       Margin="0,2,0,10"/>
+                                            
+                                            <TextBlock Text="Rol:" 
+                                                       FontSize="12" 
+                                                       FontWeight="Medium" 
+                                                       Foreground="#666666"/>
+                                            <TextBlock x:Name="txt_UserRole" 
+                                                       Text="Sin especificar" 
+                                                       FontSize="14" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="#333333" 
+                                                       Margin="0,2,0,10"/>
+                                            
+                                            <TextBlock Text="Última conexión:" 
+                                                       FontSize="12" 
+                                                       FontWeight="Medium" 
+                                                       Foreground="#666666"/>
+                                            <TextBlock x:Name="txt_LastLogin" 
+                                                       Text="Ahora" 
+                                                       FontSize="14" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="#333333" 
+                                                       Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <!-- Tercera fila - Actividad reciente -->
+                            <Border Grid.Row="2" Style="{StaticResource InfoCardStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Estado del Sistema" 
+                                               FontSize="18" 
+                                               FontWeight="Bold" 
+                                               Foreground="#1565C0" 
+                                               Margin="0,0,0,15"/>
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                                            <TextBlock Text="Base de Datos" 
+                                                       FontSize="14" 
+                                                       FontWeight="Medium" 
+                                                       Foreground="#666666"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                                <Ellipse x:Name="dbStatusIndicator" 
+                                                         Width="10" 
+                                                         Height="10" 
+                                                         Fill="#4CAF50" 
+                                                         Margin="0,0,8,0"/>
+                                                <TextBlock x:Name="txt_DbStatus" 
+                                                           Text="Conectada" 
+                                                           FontSize="12" 
+                                                           Foreground="#333333"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        
+                                        <StackPanel Grid.Column="1" Margin="0,0,20,0">
+                                            <TextBlock Text="Sistema" 
+                                                       FontSize="14" 
+                                                       FontWeight="Medium" 
+                                                       Foreground="#666666"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                                <Ellipse Width="10" 
+                                                         Height="10" 
+                                                         Fill="#4CAF50" 
+                                                         Margin="0,0,8,0"/>
+                                                <TextBlock Text="Operativo" 
+                                                           FontSize="12" 
+                                                           Foreground="#333333"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        
+                                        <StackPanel Grid.Column="2">
+                                            <TextBlock Text="Usuarios Conectados" 
+                                                       FontSize="14" 
+                                                       FontWeight="Medium" 
+                                                       Foreground="#666666"/>
+                                            <TextBlock x:Name="txt_ConnectedUsers" 
+                                                       Text="1" 
+                                                       FontSize="20" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="#1565C0" 
+                                                       Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
 </Window>

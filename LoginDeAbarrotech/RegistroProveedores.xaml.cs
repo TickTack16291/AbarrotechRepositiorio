@@ -19,6 +19,8 @@ namespace LoginDeAbarrotech
     /// </summary>
     public partial class RegistroProveedores : Window
     {
+        public int idProvAux = 0;
+        
         public RegistroProveedores()
         {
             InitializeComponent();
@@ -75,6 +77,8 @@ namespace LoginDeAbarrotech
         private void dg_Proveedores_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (dg_Proveedores.SelectedItem is Proveedor proveedor)
             {
+                idProvAux = proveedor.id_proveedor;
+
                 ct_NombreProveedor.Text = proveedor.nombre_proveedor;
                 ct_ResponsableProveedor.Text = proveedor.responsable_proveedor;
                 ct_DireccionProveedor.Text = proveedor.direccion_proveedor;
@@ -180,7 +184,7 @@ namespace LoginDeAbarrotech
 
             // Crear el objeto Producto con los datos del formulario
             Proveedor proveedorModificado = new Proveedor(
-                0,
+                idProvAux,
                 ct_NombreProveedor.Text,
                 ct_ResponsableProveedor.Text,
                 ct_DireccionProveedor.Text,

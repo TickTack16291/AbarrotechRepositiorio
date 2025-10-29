@@ -87,7 +87,9 @@ namespace LoginDeAbarrotech
                 ct_TelefonoEmpleado.Text = empleado.telefono_empleado.ToString();
                 ct_CorreoEmpleado.Text = empleado.correo_electronico_empleado;
                 ct_SalarioEmpleado.Text = empleado.salario_empleado.ToString();
-                cb_EstadoEmpleado.SelectedValue = empleado.estado_empleado.ToString();
+
+                cb_EstadoEmpleado.Text = empleado.estado_empleado;
+                
                 ct_HoraEntrada.Text = empleado.hora_entrada_empleado.ToString(@"hh\:mm");
                 ct_HoraSalida.Text = empleado.hora_salida_empleado.ToString(@"hh\:mm");
                 dp_FechaContrato.SelectedDate = empleado.fecha_inicio_contrato;

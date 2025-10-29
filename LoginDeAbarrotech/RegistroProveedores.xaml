@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoginDeAbarrotech"
         mc:Ignorable="d"
-        Title="RegistroProveedores" Height="680" Width="1300">
+        Title="RegistroProveedores" Height="680" Width="1300" WindowStartupLocation="CenterScreen">
     <Grid>
         <!-- Fondo -->
         <Grid.Background>

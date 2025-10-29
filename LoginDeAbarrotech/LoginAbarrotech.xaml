@@ -155,8 +155,6 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Label x:Name="Lbl_registroUsuario" Foreground="Blue" Content="Registrarse..." HorizontalContentAlignment="Center" MouseLeftButtonDown="Lbl_registroUsuario_MouseLeftButtonDown"/>
-
                 <!-- BotOns pequeño para cerrar -->
             </StackPanel>
         </Border>

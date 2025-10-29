@@ -36,7 +36,7 @@ namespace LoginDeAbarrotech
             txt_CurrentUser.Text = LoginAbarrotech.UsuarioGlobal;
             
             // Obtener y mostrar el rol del usuario
-            string userRole = conexion.ObtenerRoles(LoginAbarrotech.UsuarioGlobal);
+            string userRole = conexion.ObtenerRolDeUsuario(LoginAbarrotech.UsuarioGlobal);
             txt_UserRole.Text = string.IsNullOrEmpty(userRole) ? "Sin especificar" : userRole;
             
             // Configurar fecha y hora actual
@@ -157,11 +157,8 @@ namespace LoginDeAbarrotech
         private bool tieneAcceso(string Usuario)
         {
             ConexionBD conexion = new ConexionBD();
-            if (conexion.ObtenerRoles(LoginAbarrotech.UsuarioGlobal) == "Administrador")
-            {
-                return true;
-            }
-            return false;
+            string aux = conexion.ObtenerRolDeUsuario(LoginAbarrotech.UsuarioGlobal);
+            return(aux == "Administrador" || aux == "Gerente");
         }
 
         private void btn_Salir_Click(object sender, RoutedEventArgs e)

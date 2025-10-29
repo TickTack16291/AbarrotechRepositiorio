@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using Mysqlx.Crud;
+using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -416,6 +417,8 @@ namespace LoginDeAbarrotech
 
                     using (var command = new MySqlCommand(sql, Conexion))
                     {
+                        command.Parameters.AddWithValue("@id_proveedor", proveedorActualizado.id_proveedor);
+
                         command.Parameters.AddWithValue("@nombre_proveedor", proveedorActualizado.nombre_proveedor);
                         command.Parameters.AddWithValue("@responsable_proveedor", proveedorActualizado.responsable_proveedor);
                         command.Parameters.AddWithValue("@direccion_proveedor", proveedorActualizado.direccion_proveedor);
@@ -635,11 +638,7 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-
-        /// <summary>
-        /// Limitacion de acceso a los usuarios
-        /// </summary>
-        public string ObtenerRoles(string Usuario)
+        public bool validarIdEmpleado(int idEmpleado)
         {
             using (var conexion = new MySqlConnection(conexionString))
             {
@@ -647,21 +646,90 @@ namespace LoginDeAbarrotech
                 {
                     conexion.Open();
 
-                    string sql = "SELECT rol_usuario FROM usuarios WHERE usuario == @Usuario";
+                    string sql = "SELECT id_empleado FROM empleados";
                     using (var command = new MySqlCommand(sql, conexion))
                     using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            string rol_usuario_obtenido = reader.GetString(0);
-                            return rol_usuario_obtenido;
+                            int IdObtenido = reader.GetInt32(0);
+                            if (IdObtenido == idEmpleado)
+                                return true;
+                        }
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al validar el id del empleado: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Limitacion de acceso a los usuarios
+        /// </summary>
+        public string ObtenerRolDeUsuario(string Usuario)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    string sql = "SELECT rol_usuario FROM usuarios WHERE usuario = @Usuario";
+
+                    using (var command = new MySqlCommand(sql, conexion))
+                    {
+                        command.Parameters.AddWithValue("@Usuario", Usuario);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string rol_usuario_obtenido = reader.GetString(0);
+                                return rol_usuario_obtenido;
+                            }
                         }
                     }
                     return "";
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al validar el usuario en la base de datos: " + ex.Message);
+                    MessageBox.Show("Error al obtener el rol del usuario: " + ex.Message);
+                    return "";
+                }
+            }
+        }
+        public string ObtenerRolDeEmpleado(int IdEmpleado)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    string sql = "SELECT rol_empleado FROM empleados WHERE id_empleado = @IdEmpleado";
+
+                    using (var command = new MySqlCommand(sql, conexion))
+                    {
+                        command.Parameters.AddWithValue("@IdEmpleado", IdEmpleado);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string rol_empleado_obtenido = reader.GetString(0);
+                                return rol_empleado_obtenido;
+                            }
+                        }
+                    }
+                    return "";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener el rol del empleado: " + ex.Message);
                     return "";
                 }
             }
@@ -691,7 +759,8 @@ namespace LoginDeAbarrotech
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al registrar inicio de sesión: " + ex.Message);
+                    //MessageBox.Show("Error al registrar inicio de sesión: " + ex.Message);
+                    // Luego lo arreglo
                     return false;
                 }
             }

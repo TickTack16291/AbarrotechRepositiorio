@@ -5,61 +5,152 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoginDeAbarrotech"
         mc:Ignorable="d"
-        Title="RegistroUsuarios" Height="552" Width="500">
-    <Grid Margin="0,0,0,-6">
-        <Border Background="White" CornerRadius="20" Padding="30" Width="400" Height="476"
+        Title="RegistroUsuarios" Height="680" Width="1300" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <!-- Fondo -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#1976D2" Offset="0"/>
+                <GradientStop Color="#42A5F5" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Contenedor principal -->
+        <Border Background="White" CornerRadius="20" Padding="30" Width="1200" Height="598"
                 HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5"/>
             </Border.Effect>
-            <Grid>
-                <!-- Título -->
-                <TextBlock Text="Registro de Usuarios" FontSize="22" FontWeight="Bold" 
-                           Foreground="#1565C0" HorizontalAlignment="Center" VerticalAlignment="Top"
-                           Margin="0,0,0,0"/>
 
-                <StackPanel Margin="0,40,0,0">
+            <!-- Layout principal: Título, Formulario, Tabla, Botones -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Título -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Formulario -->
+                    <RowDefinition Height="*"/>
+                    <!-- Tabla -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Botones -->
+                </Grid.RowDefinitions>
+
+                <!-- Título -->
+                <Grid Grid.Row="0">
+                    <TextBlock Text="Registro de Usuarios" FontSize="22" FontWeight="Bold" 
+                               Foreground="#1565C0" HorizontalAlignment="Center" />
+                    <Label x:Name="Lbl_mensaje"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Foreground="Green"
+                           Content=""
+                           Visibility="Hidden"/>
+                </Grid>
+
+                <!-- Formulario -->
+                <Grid Grid.Row="1" Margin="0,20,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
                     <!-- ID Empleado -->
-                    <TextBlock Text="ID Empleado" Foreground="#424242" Margin="5,0,0,3"/>
-                    <TextBox x:Name="ct_IdEmpleado" Margin="0,0,0,15" Height="43" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2"/>
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0,10,10">
+                        <TextBlock Text="ID Empleado" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_IdEmpleado" Height="45" Padding="10"
+                                 BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
 
                     <!-- Usuario -->
-                    <TextBlock Text="Usuario" Foreground="#424242" Margin="5,0,0,3"/>
-                    <TextBox x:Name="ct_Usuario" Margin="0,0,0,15" Height="40" Padding="10"
-                             BorderBrush="#1976D2" BorderThickness="2"/>
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,10,10">
+                        <TextBlock Text="Usuario" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBox x:Name="ct_Usuario" Height="45" Padding="10"
+                                 BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
 
                     <!-- Contraseña -->
-                    <TextBlock Text="Contraseña" Foreground="#424242" Margin="5,0,0,3"/>
-                    <PasswordBox x:Name="ct_Contrasena" Margin="0,0,0,15" Height="40" Padding="10"
-                                 BorderBrush="#1976D2" BorderThickness="2"/>
+                    <StackPanel Grid.Row="0" Grid.Column="2" Margin="10,0,10,10">
+                        <TextBlock Text="Contraseña" Foreground="#424242" Margin="5,0,0,3"/>
+                        <PasswordBox x:Name="ct_Contrasena" Height="45" Padding="10"
+                                     BorderBrush="#1976D2" BorderThickness="2"/>
+                    </StackPanel>
 
-                    <!-- Rol de Usuario -->
-                    <TextBlock Text="Rol de Usuario" Foreground="#424242" Margin="5,0,0,3"/>
-                    <ComboBox x:Name="cb_RolUsuario" Margin="0,0,0,15" Height="35" Padding="10"
-                              BorderBrush="#1976D2" BorderThickness="2">
-                        <ComboBoxItem Content="Gerente"/>
-                        <ComboBoxItem Content="Administrador"/>
-                        <ComboBoxItem Content="Vendedor"/>
-                        <ComboBoxItem Content="Reponedor"/>
-                        <ComboBoxItem Content="Encargado de inventario"/>
-                        <ComboBoxItem Content="Limpieza"/>
-                        <ComboBoxItem Content="Seguridad"/>
-                    </ComboBox>
-                </StackPanel>
+                </Grid>
+
+                <!-- Tabla de usuarios -->
+                <Border Grid.Row="2"
+                        Background="White" BorderBrush="#E0E0E0" BorderThickness="1"
+                        CornerRadius="5" Padding="10">
+                    <Grid>
+                        <TextBlock Text="Lista de Usuarios" FontSize="16" FontWeight="Bold" 
+                                   Foreground="#1565C0" Margin="0,0,0,8" VerticalAlignment="Top"/>
+
+                        <DataGrid x:Name="dg_Usuarios" AutoGenerateColumns="False"
+                                  IsReadOnly="True" HeadersVisibility="Column"
+                                  BorderBrush="#E0E0E0" BorderThickness="1"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  Margin="0,30,0,0"
+                                  SelectionChanged="dg_Usuarios_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding id_usuario}" Width="60"/>
+                                <DataGridTextColumn Header="ID Empleado" Binding="{Binding id_empleado}" Width="120"/>
+                                <DataGridTextColumn Header="Usuario" Binding="{Binding usuario}" Width="200"/>
+                                <DataGridTextColumn Header="Rol" Binding="{Binding rol_usuario}" Width="150"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
 
                 <!-- Botones -->
-                <Button x:Name="btn_Cancelar" Content="Cancelar" Background="#E53935" Foreground="White"
-                        Height="35" Width="120" FontWeight="Bold" 
-                        HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                        Margin="25,0,0,0" Click="btn_Cancelar_Click"/>
+                <Grid Grid.Row="3" Margin="0,15,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <Button x:Name="btn_Guardar" Content="Guardar" Background="#4CAF50" Foreground="White"
-                        Height="35" Width="120" FontWeight="Bold"
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                        Margin="0,0,23,0" Click="btn_Guardar_Click"/>
+                    <Button x:Name="btn_Cancelar" Content="Cancelar" Background="#E53935" Foreground="White"
+                            Height="40" Width="120" FontWeight="Bold" 
+                            HorizontalAlignment="Left" Grid.Column="0"
+                            Click="btn_Cancelar_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
-                <Label x:Name="Lbl_mensaje" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Green" Content="" Margin="0,328,0,0" Width="264" Height="32" Visibility="Hidden"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="btn_Guardar" Content="Guardar" Background="#4CAF50" Foreground="White"
+                                Height="40" Width="120" FontWeight="Bold" Margin="0,0,10,0"
+                                Click="btn_Guardar_Click">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Border>
     </Grid>

@@ -22,6 +22,13 @@ namespace LoginDeAbarrotech
         public RegistroUsuarios()
         {
             InitializeComponent();
+            CargarProductos();
+        }
+        public void CargarProductos()
+        {
+            ConexionBD conexion = new ConexionBD();
+            var usuarios = conexion.ObtenerUsuarios();
+            dg_Usuarios.ItemsSource = usuarios;
         }
         public void MostrarMensaje(string mensaje)
         {
@@ -46,7 +53,6 @@ namespace LoginDeAbarrotech
             ct_IdEmpleado.Text = string.Empty;
             ct_Usuario.Text = string.Empty;
             ct_Contrasena.Password = string.Empty;
-            cb_RolUsuario.Text = string.Empty;
         }
         public bool ValidarUsuariosRepetidos(Usuario ingresado)
         {
@@ -63,8 +69,8 @@ namespace LoginDeAbarrotech
             return false; // No hay empleados exactamente iguales
         }
         private void btn_Cancelar_Click(object sender, RoutedEventArgs e) {
-            LoginAbarrotech login = new LoginAbarrotech();
-            login.Show();
+            MenuOperaciones menuOperaciones = new MenuOperaciones();
+            menuOperaciones.Show();
             this.Hide();
         }
         private void btn_Guardar_Click(object sender, RoutedEventArgs e)
@@ -72,8 +78,7 @@ namespace LoginDeAbarrotech
             // Validar que los campos no estén vacíos
             if (string.IsNullOrWhiteSpace(ct_IdEmpleado.Text) ||
                 string.IsNullOrWhiteSpace(ct_Usuario.Text) ||
-                string.IsNullOrWhiteSpace(ct_Contrasena.Password) ||
-                cb_RolUsuario.SelectedItem == null)
+                string.IsNullOrWhiteSpace(ct_Contrasena.Password))
             {
                 MostrarMensaje("No puede haber campos vacios");
                 return;
@@ -88,14 +93,16 @@ namespace LoginDeAbarrotech
             // Verificar si el usuario ya existe
             ConexionBD conexion = new ConexionBD();
 
+            string rolAux = conexion.ObtenerRolDeEmpleado(idEmpleado);
+
             // Crear objeto Usuario
             Usuario nuevoUsuario = new Usuario(
                 0, 
-                idEmpleado, 
-                ct_Usuario.Text, 
+                idEmpleado,
+                ct_Usuario.Text,
                 ct_Contrasena.Password, 
-                cb_RolUsuario.Text
-                );
+                rolAux
+             );
 
             if (conexion.obtenerIdEmpleadoDeUsuarios(idEmpleado))
             {
@@ -109,17 +116,35 @@ namespace LoginDeAbarrotech
                 return;
             }
 
+            if (!conexion.validarIdEmpleado(idEmpleado))
+            {
+                MostrarMensaje("El id de empledado ingresado no corresponde a ningun empleado");
+                return;
+            }
+
             // Intentar insertar en la base de datos
             if (conexion.ingresar_usuarios(nuevoUsuario))
             {
                 MostrarMensaje("Usuario agregardo a la base de datos");
-                MenuOperaciones menuOperaciones = new MenuOperaciones();
-                menuOperaciones.Show();
-                this.Hide();
             }
             else
             {
                 MostrarMensaje("No se puedo agregar el usuario a la base de datos");
+            }
+        }
+        private void dg_Usuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ConexionBD conexion = new ConexionBD();
+
+            if (dg_Usuarios.SelectedItem is Usuario usuario)
+            {
+                ct_IdEmpleado.Text = usuario.id_empleado.ToString();
+                ct_Usuario.Text = usuario.usuario;
+                ct_Contrasena.Password = usuario.contrasena;
+
+                ct_IdEmpleado.IsEnabled = false;
+                ct_Usuario.IsEnabled = false;
+                ct_Contrasena.IsEnabled = false;
             }
         }
     }

@@ -85,11 +85,5 @@ namespace LoginDeAbarrotech
         {
             this.Close();
         }
-        private void Lbl_registroUsuario_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            RegistroUsuarios registro = new RegistroUsuarios();
-            registro.Show();
-            this.Hide();
-        }
     }
 }

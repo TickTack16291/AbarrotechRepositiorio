@@ -56,12 +56,16 @@
     <Grid>
         <!-- Definir columnas para el layout -->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="SidebarColumn" Width="250"/>
+            <ColumnDefinition x:Name="SidebarColumn" Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Menú lateral -->
-        <Border x:Name="SidebarBorder" Grid.Column="0" Background="#1565C0">
+        <Border x:Name="SidebarBorder"
+                Grid.Column="0"
+                Background="#1565C0"
+                Width="250"
+                HorizontalAlignment="Left">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="3" BlurRadius="10" Color="#40000000"/>
             </Border.Effect>

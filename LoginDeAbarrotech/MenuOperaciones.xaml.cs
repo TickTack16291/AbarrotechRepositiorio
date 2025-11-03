@@ -28,7 +28,6 @@ namespace LoginDeAbarrotech
             conexion = new ConexionBD();
             InitializeMenu();
         }
-
         private void InitializeMenu()
         {
             // Configurar información del usuario
@@ -45,7 +44,6 @@ namespace LoginDeAbarrotech
             // Cargar estadísticas del dashboard
             LoadDashboardData();
         }
-
         private void LoadDashboardData()
         {
             try
@@ -74,12 +72,10 @@ namespace LoginDeAbarrotech
                 MessageBox.Show("Error al cargar datos del dashboard: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
         private void btn_ToggleMenu_Click(object sender, RoutedEventArgs e)
         {
             ToggleMenuCollapse();
         }
-
         private void ToggleMenuCollapse()
         {
             var animation = new DoubleAnimation();
@@ -140,20 +136,17 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-
         private void UpdatePageTitle(string title, string subtitle)
         {
             txt_PageTitle.Text = title;
             txt_PageSubtitle.Text = subtitle;
         }
-
         private void btn_Dashboard_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Dashboard Principal", "Resumen general del sistema");
             DashboardContent.Visibility = Visibility.Visible;
             LoadDashboardData();
         }
-
         private bool tieneAcceso(string Usuario)
         {
             ConexionBD conexion = new ConexionBD();
@@ -161,6 +154,7 @@ namespace LoginDeAbarrotech
             return(aux == "Administrador" || aux == "Gerente");
         }
 
+        // Botones
         private void btn_Salir_Click(object sender, RoutedEventArgs e)
         {
             // Operaciones necesarias para registrar el cierre de sesión
@@ -182,7 +176,6 @@ namespace LoginDeAbarrotech
             LoginAbarrotech login = new LoginAbarrotech();
             login.Show();
         }
-
         private void btn_Productos_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Gestión de Productos", "Administrar inventario y catálogo");
@@ -191,7 +184,6 @@ namespace LoginDeAbarrotech
             registroProductos.Show();
             this.Hide();
         }
-
         private void btn_Proveedores_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Gestión de Proveedores", "Administrar información de proveedores");
@@ -199,7 +191,6 @@ namespace LoginDeAbarrotech
             registroProveedores.Show();
             this.Hide();
         }
-
         private void btn_Empleados_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Gestión de Empleados", "Administrar personal de la empresa");
@@ -207,7 +198,6 @@ namespace LoginDeAbarrotech
             registroEmpleados.Show();
             this.Hide();
         }
-
         private void btn_Usuarios_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Gestión de Usuarios", "Administrar usuarios del sistema");
@@ -224,13 +214,11 @@ namespace LoginDeAbarrotech
                                "Acceso Denegado", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
         private void btn_Compras_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Gestión de Compras", "Administrar compras y pedidos");
             MessageBox.Show("Funcionalidad de Compras en desarrollo", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
         private void btn_Ventas_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Gestión de Ventas", "Administrar ventas y facturación");

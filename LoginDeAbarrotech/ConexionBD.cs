@@ -759,7 +759,7 @@ namespace LoginDeAbarrotech
                 catch (Exception ex)
                 {
                     //MessageBox.Show("Error al registrar inicio de sesión: " + ex.Message);
-                    // Luego lo arreglo
+                    // Luego lo arreglo jaja, es por el indice en la tabla de inicios de sesion
                     return false;
                 }
             }
@@ -846,6 +846,202 @@ namespace LoginDeAbarrotech
                 }
             }
             return 0;
+        }
+
+        /// <summary>
+        /// Operaciones de transacciones y detalles
+        /// </summary>
+        public bool RealizarVenta(long idUsuario, DateTime fechaVenta, float totalVenta, string formaPagoVenta, int caja)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"INSERT INTO `ventas`
+                           (`id_usuario`, `fecha_venta`, `total_venta`, `forma_pago_venta`, `caja`)
+                           VALUES
+                           (@id_usuario, @fecha_venta, @total_venta, @forma_pago_venta, @caja);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
+                        command.Parameters.AddWithValue("@fecha_venta", fechaVenta);
+                        command.Parameters.AddWithValue("@total_venta", totalVenta);
+                        command.Parameters.AddWithValue("@forma_pago_venta", formaPagoVenta);
+                        command.Parameters.AddWithValue("@caja", caja);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0; // True si se registró la venta
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error en la venta: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool RealizarCompra(long idUsuario, DateTime fechaCompra, float totalCompra, string formaPagoCompra, int caja)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"INSERT INTO `compras`
+                           (`id_usuario`, `fecha_compra`, `total_compra`, `forma_pago_compra`, `caja`)
+                           VALUES
+                           (@id_usuario, @fecha_compra, @total_compra, @forma_pago_compras, @caja);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
+                        command.Parameters.AddWithValue("@fecha_compra", fechaCompra);
+                        command.Parameters.AddWithValue("@total_compra", totalCompra);
+                        command.Parameters.AddWithValue("@forma_pago_compra", formaPagoCompra);
+                        command.Parameters.AddWithValue("@caja", caja);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0; // True si se registró la venta
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error en la venta: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool RealizarTransaccion(long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long idVenta, long idCompra)// Revisar nulos
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"INSERT INTO `transacciones`
+                           (`id_inventario`, `id_inicio_sesion`, `tipo_movimiento_transaccion`, `cantidad_modificada_transaccion`, `fecha_registro_salida_transaccion`, `id_venta`, `id_compra`)
+                           VALUES
+                           (@id_inventario, @id_inicio_sesion, @tipo_movimiento_transaccion, @cantidad_modificada_transaccion, @fecha_registro_salida_transaccion, @id_venta, @id_compra);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_inventario", idInventario);
+                        command.Parameters.AddWithValue("@id_inicio_sesion", idInicioSesion);
+                        command.Parameters.AddWithValue("@tipo_movimiento_transaccion", tipoTransacción);
+                        command.Parameters.AddWithValue("@cantidad_modificada_transaccion", cantidadModificada);
+                        command.Parameters.AddWithValue("@fecha_registro_salida_transaccion", fechaRegistro);
+                        command.Parameters.AddWithValue("@id_venta", idVenta);// Debemos considerar dejar uno nulo cuando hagamos las transacciones
+                        command.Parameters.AddWithValue("@id_compra", idCompra);// ...
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0; // True si se registró la transacción
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar la transacción: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool AgregarDetalleVenta(long idVenta, long idProducto, float cantidadVenta, float precioVenta)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"INSERT INTO `detalle_ventas`
+                           (`id_venta`, `id_producto`, `cantidad_venta`, `precio_venta`)
+                           VALUES
+                           (@id_venta, @id_producto, @cantidad_venta, @precio_venta);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_venta", idVenta);
+                        command.Parameters.AddWithValue("@id_producto", idProducto);
+                        command.Parameters.AddWithValue("@cantidad_venta", cantidadVenta);
+                        command.Parameters.AddWithValue("@precio_venta", precioVenta);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar el detalle de venta: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool AgregarDetalleCompra(long idCompra, long idProducto, float cantidadCompra, float precioVenta)// En la bd dice precioVenta
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"INSERT INTO `detalle_compras`
+                           (`id_compra`, `id_producto`, `cantidad_compra`, `precio_venta`)
+                           VALUES
+                           (@id_compra, @id_producto, @cantidad_compra, @precio_venta);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_compra", idCompra);
+                        command.Parameters.AddWithValue("@id_producto", idProducto);
+                        command.Parameters.AddWithValue("@cantidad_compra", cantidadCompra);
+                        command.Parameters.AddWithValue("@precio_venta", precioVenta);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar el detalle de compra: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool AgregarInventario(long idProducto, string codigoBarras, int cantidad, string ubicacion, DateTime fechaElaboracion, DateTime fechaCaducidad)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = @"INSERT INTO `inventario`
+                           (`id_producto`, `codigo_barras_inventario`, `cantidad_inventario`, `ubicacion_inventario`, `fecha_elaboracion`, `fecha_caducidad`)
+                           VALUES
+                           (@id_producto, @codigo_barras_inventario, @cantidad_inventario, @ubicacion_inventario, @fecha_elaboracion, @fecha_caducidad);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_producto", idProducto);
+                        command.Parameters.AddWithValue("@codigo_barras_inventario", codigoBarras);
+                        command.Parameters.AddWithValue("@cantidad_inventario", cantidad);
+                        command.Parameters.AddWithValue("@ubicacion_inventario", ubicacion);
+                        command.Parameters.AddWithValue("@fecha_elaboracion", fechaElaboracion);
+                        command.Parameters.AddWithValue("@fecha_caducidad", fechaCaducidad);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar inventario: " + ex.Message);
+                    return false;
+                }
+            }
         }
     }
 }

@@ -83,7 +83,9 @@ namespace LoginDeAbarrotech
         }
         private void btn_Cerrar_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            //this.Close();
+            Application.Current.Shutdown();// se supone que asegura que siempre se termine la ejecucion del programa, ya que aveces
+                                           // con el puro "this.close()" la ejecucion seguia aunque ya no se veia ninguna interfa
         }
     }
 }

@@ -4,6 +4,7 @@ using Org.BouncyCastle.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Reflection.PortableExecutable;
 using System.Windows;
 
 
@@ -141,7 +142,7 @@ namespace LoginDeAbarrotech
                                 reader.GetString(4),      // unidad_medida_producto
                                 reader.GetFloat(5),       // precio_venta_producto
                                 reader.GetFloat(6),       // precio_compra_producto
-                                reader.GetInt32(7),       // estado_producto
+                                reader.GetString(7),       // estado_producto
                                 reader.GetString(8),      // categoria_producto
                                 reader.GetInt32(9)        // id_proveedor_producto
                             );
@@ -173,17 +174,18 @@ namespace LoginDeAbarrotech
 
                     using (var command = new MySqlCommand(sql, Conexion))
                     {
+                        string estado = "Activo";
                         // Agregamos parámetros para evitar una inyecion de SQL
                         //command.Parameters.AddWithValue("@Id_Producto", nuevoProducto.idProducto); // Es autoincrementable
                         command.Parameters.AddWithValue("@nombre_producto", nuevoProducto.nombre_producto);
                         command.Parameters.AddWithValue("@marca_producto", nuevoProducto.marca_producto);
                         command.Parameters.AddWithValue("@presentacion_producto", nuevoProducto.presentacion_producto);
                         command.Parameters.AddWithValue("@unidad_medida_producto", nuevoProducto.unidad_medida_producto);
-                        command.Parameters.AddWithValue("@estado_producto", 1); // Se colocara por defecto 1
+                        command.Parameters.AddWithValue("@estado_producto", estado); // Se colocara por defecto "Activo"
                         command.Parameters.AddWithValue("@precio_venta_producto", nuevoProducto.precio_venta_producto);
                         command.Parameters.AddWithValue("@precio_compra_producto", nuevoProducto.precio_compra_producto);
                         command.Parameters.AddWithValue("@categoria_producto", nuevoProducto.categoria_producto);
-                        command.Parameters.AddWithValue("@id_proveedor_producto", nuevoProducto.id_proveedor_producto); // No tenemos la tabla de provedores y el campo puede ser null
+                        command.Parameters.AddWithValue("@id_proveedor_producto", nuevoProducto.id_proveedor_producto);
 
                         int result = command.ExecuteNonQuery();
                         return result > 0; // Retorna true si se insertó correctamente
@@ -849,7 +851,7 @@ namespace LoginDeAbarrotech
         }
 
         /// <summary>
-        /// Operaciones de transacciones y detalles
+        /// Operaciones de ventas
         /// </summary>
         public bool RealizarVenta(long idUsuario, DateTime fechaVenta, float totalVenta, string formaPagoVenta, int caja)
         {
@@ -879,72 +881,6 @@ namespace LoginDeAbarrotech
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error en la venta: " + ex.Message);
-                    return false;
-                }
-            }
-        }
-        public bool RealizarCompra(long idUsuario, DateTime fechaCompra, float totalCompra, string formaPagoCompra, int caja)
-        {
-            using (var Conexion = new MySqlConnection(conexionString))
-            {
-                try
-                {
-                    Conexion.Open();
-
-                    string sql = @"INSERT INTO `compras`
-                           (`id_usuario`, `fecha_compra`, `total_compra`, `forma_pago_compra`, `caja`)
-                           VALUES
-                           (@id_usuario, @fecha_compra, @total_compra, @forma_pago_compras, @caja);";
-
-                    using (var command = new MySqlCommand(sql, Conexion))
-                    {
-                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
-                        command.Parameters.AddWithValue("@fecha_compra", fechaCompra);
-                        command.Parameters.AddWithValue("@total_compra", totalCompra);
-                        command.Parameters.AddWithValue("@forma_pago_compra", formaPagoCompra);
-                        command.Parameters.AddWithValue("@caja", caja);
-
-                        int result = command.ExecuteNonQuery();
-                        return result > 0; // True si se registró la venta
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error en la venta: " + ex.Message);
-                    return false;
-                }
-            }
-        }
-        public bool RealizarTransaccion(long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long idVenta, long idCompra)// Revisar nulos
-        {
-            using (var Conexion = new MySqlConnection(conexionString))
-            {
-                try
-                {
-                    Conexion.Open();
-
-                    string sql = @"INSERT INTO `transacciones`
-                           (`id_inventario`, `id_inicio_sesion`, `tipo_movimiento_transaccion`, `cantidad_modificada_transaccion`, `fecha_registro_salida_transaccion`, `id_venta`, `id_compra`)
-                           VALUES
-                           (@id_inventario, @id_inicio_sesion, @tipo_movimiento_transaccion, @cantidad_modificada_transaccion, @fecha_registro_salida_transaccion, @id_venta, @id_compra);";
-
-                    using (var command = new MySqlCommand(sql, Conexion))
-                    {
-                        command.Parameters.AddWithValue("@id_inventario", idInventario);
-                        command.Parameters.AddWithValue("@id_inicio_sesion", idInicioSesion);
-                        command.Parameters.AddWithValue("@tipo_movimiento_transaccion", tipoTransacción);
-                        command.Parameters.AddWithValue("@cantidad_modificada_transaccion", cantidadModificada);
-                        command.Parameters.AddWithValue("@fecha_registro_salida_transaccion", fechaRegistro);
-                        command.Parameters.AddWithValue("@id_venta", idVenta);// Debemos considerar dejar uno nulo cuando hagamos las transacciones
-                        command.Parameters.AddWithValue("@id_compra", idCompra);// ...
-
-                        int result = command.ExecuteNonQuery();
-                        return result > 0; // True si se registró la transacción
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al registrar la transacción: " + ex.Message);
                     return false;
                 }
             }
@@ -980,6 +916,82 @@ namespace LoginDeAbarrotech
                 }
             }
         }
+        public List<Producto> ObtenerProductosDisponibles()
+        {
+            List<Producto> listaProductos = new List<Producto>();
+
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"SELECT * FROM productos WHERE estado_producto = 'Activo'";
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Producto productoAux = new Producto(
+                                reader.GetInt32(0),       // id_producto
+                                reader.GetString(1),      // nombre_producto
+                                reader.GetString(2),      // marca_producto
+                                reader.GetInt32(3),      // presentacion_producto
+                                reader.GetString(4),      // unidad_medida_producto
+                                reader.GetFloat(5),       // precio_venta_producto
+                                reader.GetFloat(6),       // precio_compra_producto
+                                reader.GetString(7),       // estado_producto
+                                reader.GetString(8),      // categoria_producto
+                                reader.GetInt32(9)        // id_proveedor_producto
+                            );
+
+    listaProductos.Add(productoAux);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar a la base de datos: " + ex.Message);
+                }
+            }
+
+            return listaProductos;
+        }
+        /// <summary>
+        /// Operaciones de compras
+        /// </summary>
+        public bool RealizarCompra(long idUsuario, DateTime fechaCompra, float totalCompra, string formaPagoCompra, int caja)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"INSERT INTO `compras`
+                           (`id_usuario`, `fecha_compra`, `total_compra`, `forma_pago_compra`, `caja`)
+                           VALUES
+                           (@id_usuario, @fecha_compra, @total_compra, @forma_pago_compras, @caja);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
+                        command.Parameters.AddWithValue("@fecha_compra", fechaCompra);
+                        command.Parameters.AddWithValue("@total_compra", totalCompra);
+                        command.Parameters.AddWithValue("@forma_pago_compra", formaPagoCompra);
+                        command.Parameters.AddWithValue("@caja", caja);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0; // True si se registró la venta
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error en la venta: " + ex.Message);
+                    return false;
+                }
+            }
+        }
         public bool AgregarDetalleCompra(long idCompra, long idProducto, float cantidadCompra, float precioVenta)// En la bd dice precioVenta
         {
             using (var Conexion = new MySqlConnection(conexionString))
@@ -1007,6 +1019,43 @@ namespace LoginDeAbarrotech
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error al registrar el detalle de compra: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        /// <summary>
+        /// Operaciones de transacciones e inventario
+        /// </summary>
+        public bool RealizarTransaccion(long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long idVenta, long idCompra)// Revisar nulos
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"INSERT INTO `transacciones`
+                           (`id_inventario`, `id_inicio_sesion`, `tipo_movimiento_transaccion`, `cantidad_modificada_transaccion`, `fecha_registro_salida_transaccion`, `id_venta`, `id_compra`)
+                           VALUES
+                           (@id_inventario, @id_inicio_sesion, @tipo_movimiento_transaccion, @cantidad_modificada_transaccion, @fecha_registro_salida_transaccion, @id_venta, @id_compra);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_inventario", idInventario);
+                        command.Parameters.AddWithValue("@id_inicio_sesion", idInicioSesion);
+                        command.Parameters.AddWithValue("@tipo_movimiento_transaccion", tipoTransacción);
+                        command.Parameters.AddWithValue("@cantidad_modificada_transaccion", cantidadModificada);
+                        command.Parameters.AddWithValue("@fecha_registro_salida_transaccion", fechaRegistro);
+                        command.Parameters.AddWithValue("@id_venta", idVenta);// Debemos considerar dejar uno nulo cuando hagamos las transacciones
+                        command.Parameters.AddWithValue("@id_compra", idCompra);// ...
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0; // True si se registró la transacción
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar la transacción: " + ex.Message);
                     return false;
                 }
             }

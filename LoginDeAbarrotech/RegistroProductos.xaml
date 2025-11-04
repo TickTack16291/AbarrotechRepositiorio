@@ -75,6 +75,8 @@
                         <TextBlock Text="Categoria" Foreground="#424242" Margin="5,0,0,3"/>
                         <ComboBox x:Name="cb_Categoria" Height="45" Padding="10"
                                   BorderBrush="#1976D2" BorderThickness="2">
+                            <!-- categorias, erick queria que se pudieran agregar desde la interfaz, pero me dio flojera jaja -->
+                            <!-- talvez despues, si si lo hago debo checar la interfaz de ventas -->
                             <ComboBoxItem Content="Bebidas"/>
                             <ComboBoxItem Content="Lácteos"/>
                             <ComboBoxItem Content="Botanas"/>

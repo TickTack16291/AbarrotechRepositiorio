@@ -96,7 +96,7 @@
 
                     <TextBlock Text="Categoría:" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="#424242"/>
                     <ComboBox x:Name="cb_categorias" Grid.Column="1" Height="38" Padding="10"
-                              BorderBrush="#1976D2" BorderThickness="2" SelectedIndex="0">
+                              BorderBrush="#1976D2" BorderThickness="2" SelectedIndex="0" Grid.ColumnSpan="2" Margin="0,0,20,0" VerticalAlignment="Top" SelectionChanged="cb_categorias_SelectionChanged">
                         <ComboBoxItem Content="Todas" IsSelected="True"/>
                         <!-- categorias, erick queria que se pudieran agregar desde la interfaz, pero me dio flojera jaja -->
                         <!-- talvez despues -->
@@ -118,7 +118,7 @@
                              ToolTip="Buscar por nombre (coincidencia parcial)"
                              Style="{StaticResource RoundedSearchTextBox}"/>
                     <Button x:Name="btn_filtrar" Grid.Column="4" Content="Buscar"
-                            Height="32" Width="96" Foreground="White" Background="#1976D2">
+                            Height="32" Width="96" Foreground="White" Background="#1976D2" Margin="0,3,0,0" VerticalAlignment="Top" Click="btn_filtrar_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">
@@ -133,8 +133,7 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button x:Name="btl_LimpiarFiltro" Grid.Column="6" Content="Limpiar"
-                            Height="32" Width="96" Foreground="White" Background="#1565C0">
+                    <Button x:Name="btl_LimpiarFiltro" Grid.Column="6" Content="Limpiar" Width="96" Foreground="White" Background="#1565C0" Margin="0,3,0,0" Height="32" VerticalAlignment="Top" Click="btl_LimpiarFiltro_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">
@@ -165,50 +164,24 @@
                         <Grid>
                             <TextBlock Text="Productos disponibles" FontSize="16" FontWeight="Bold"
                                        Foreground="#1565C0" Margin="0,0,0,8" VerticalAlignment="Top"/>
-                            <ListView x:Name="dg_ProductosDisponibles" Margin="0,30,0,0"
-                                      SelectionMode="Single"
-                                      ScrollViewer.CanContentScroll="True"
-                                      VirtualizingStackPanel.IsVirtualizing="True"
-                                      VirtualizingStackPanel.ScrollUnit="Item">
-                                <ListView.View>
-                                    <GridView AllowsColumnReorder="False">
-                                        <GridViewColumn Header="id" Width="50" DisplayMemberBinding="{Binding id_producto}" />
-                                        <GridViewColumn Header="Nombre" Width="240" DisplayMemberBinding="{Binding nombre_producto}" />
-                                        <GridViewColumn Header="Categoría" Width="150" DisplayMemberBinding="{Binding categoria_producto}" />
-                                        <GridViewColumn Header="Precio" Width="100" DisplayMemberBinding="{Binding precio_venta_producto}">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Precio, StringFormat={}{0:C}}"
-                                                               TextAlignment="Right"/>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Stock" Width="90" DisplayMemberBinding="{Binding Stock}" />
-                                        <GridViewColumn Header="Acciones" Width="130">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Button Content="Agregar" x:Name="AddToSelectedButton"
-                                                            Height="30" Width="100" Foreground="White" Background="#1976D2">
-                                                        <Button.Style>
-                                                            <Style TargetType="{x:Type Button}">
-                                                                <Setter Property="Template">
-                                                                    <Setter.Value>
-                                                                        <ControlTemplate TargetType="{x:Type Button}">
-                                                                            <Border CornerRadius="8" Background="{TemplateBinding Background}">
-                                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                                            </Border>
-                                                                        </ControlTemplate>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </Style>
-                                                        </Button.Style>
-                                                    </Button>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
+
+                            <DataGrid x:Name="dg_ProductosDisponibles" Margin="0,30,0,0"
+                                      AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column"
+                                      BorderBrush="#E0E0E0" BorderThickness="1"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
+                                    <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
+                                    <DataGridTextColumn Header="Categoría" Width="100" Binding="{Binding categoria_producto}"/>
+                                    <DataGridTextColumn Header="Precio" Width="80">
+                                        <DataGridTextColumn.Binding>
+                                            <Binding Path="precio_venta_producto" StringFormat="C2"/>
+                                        </DataGridTextColumn.Binding>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Header="Stock" Width="80" Binding="{Binding Stock}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </Grid>
                     </Border>
 
@@ -221,73 +194,51 @@
                         <Grid>
                             <TextBlock Text="Productos seleccionados para la venta" FontSize="16" FontWeight="Bold"
                                        Foreground="#1565C0" Margin="0,0,0,8" VerticalAlignment="Top"/>
-                            <ListView x:Name="dg_ProductosSeleecionados" Margin="0,30,0,0"
-                                      SelectionMode="Single"
-                                      ScrollViewer.CanContentScroll="True"
-                                      VirtualizingStackPanel.IsVirtualizing="True"
-                                      VirtualizingStackPanel.ScrollUnit="Item">
-                                <ListView.View>
-                                    <GridView AllowsColumnReorder="False">
-                                        <GridViewColumn Header="id" Width="50" DisplayMemberBinding="{Binding id_producto}" />
-                                        <GridViewColumn Header="Nombre" Width="240" DisplayMemberBinding="{Binding nombre_productp}" />
-                                        <GridViewColumn Header="Categoría" Width="150" DisplayMemberBinding="{Binding categoria_producto}" />
-                                        <GridViewColumn Header="Precio" Width="100" DisplayMemberBinding="{Binding precio_venta_producto}">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="Cant.:" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                                        <ComboBox Width="80" x:Name="QuantityComboBox" SelectedIndex="0"
-                                                                  BorderBrush="#1976D2" BorderThickness="2">
-                                                            <ComboBoxItem Content="1" IsSelected="True"/>
-                                                            <ComboBoxItem Content="2"/>
-                                                            <ComboBoxItem Content="3"/>
-                                                            <ComboBoxItem Content="4"/>
-                                                            <ComboBoxItem Content="5"/>
-                                                            <ComboBoxItem Content="6"/>
-                                                            <ComboBoxItem Content="7"/>
-                                                            <ComboBoxItem Content="8"/>
-                                                            <ComboBoxItem Content="9"/>
-                                                            <ComboBoxItem Content="10"/>
-                                                            <ComboBoxItem Content="11"/>
-                                                            <ComboBoxItem Content="12"/>
-                                                            <ComboBoxItem Content="13"/>
-                                                            <ComboBoxItem Content="14"/>
-                                                            <ComboBoxItem Content="15"/>
-                                                            <ComboBoxItem Content="16"/>
-                                                            <ComboBoxItem Content="17"/>
-                                                            <ComboBoxItem Content="18"/>
-                                                            <ComboBoxItem Content="19"/>
-                                                            <ComboBoxItem Content="20"/>
-                                                        </ComboBox>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Acciones" Width="130">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Button Content="Eliminar" x:Name="RemoveFromSelectedButton"
-                                                            Height="30" Width="100" Foreground="White" Background="#E53935">
-                                                        <Button.Style>
-                                                            <Style TargetType="{x:Type Button}">
-                                                                <Setter Property="Template">
-                                                                    <Setter.Value>
-                                                                        <ControlTemplate TargetType="{x:Type Button}">
-                                                                            <Border CornerRadius="8" Background="{TemplateBinding Background}">
-                                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                                            </Border>
-                                                                        </ControlTemplate>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </Style>
-                                                        </Button.Style>
-                                                    </Button>
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
+
+                            <DataGrid x:Name="dg_ProductosSeleecionados" Margin="0,30,0,0"
+                                      AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column"
+                                      BorderBrush="#E0E0E0" BorderThickness="1"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
+                                    <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_productp}"/>
+                                    <DataGridTextColumn Header="Categoría" Width="100" Binding="{Binding categoria_producto}"/>
+                                    <DataGridTemplateColumn Header="Precio / Cant." Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding precio_venta_producto, StringFormat=C2}" Width="90" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="Cant.:" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                                                    <ComboBox Width="80" x:Name="QuantityComboBox" SelectedIndex="0"
+                                                              BorderBrush="#1976D2" BorderThickness="2">
+                                                        <ComboBoxItem Content="1" IsSelected="True"/>
+                                                        <ComboBoxItem Content="2"/>
+                                                        <ComboBoxItem Content="3"/>
+                                                        <ComboBoxItem Content="4"/>
+                                                        <ComboBoxItem Content="5"/>
+                                                        <ComboBoxItem Content="6"/>
+                                                        <ComboBoxItem Content="7"/>
+                                                        <ComboBoxItem Content="8"/>
+                                                        <ComboBoxItem Content="9"/>
+                                                        <ComboBoxItem Content="10"/>
+                                                        <ComboBoxItem Content="11"/>
+                                                        <ComboBoxItem Content="12"/>
+                                                        <ComboBoxItem Content="13"/>
+                                                        <ComboBoxItem Content="14"/>
+                                                        <ComboBoxItem Content="15"/>
+                                                        <ComboBoxItem Content="16"/>
+                                                        <ComboBoxItem Content="17"/>
+                                                        <ComboBoxItem Content="18"/>
+                                                        <ComboBoxItem Content="19"/>
+                                                        <ComboBoxItem Content="20"/>
+                                                    </ComboBox>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
                         </Grid>
                     </Border>
                 </Grid>

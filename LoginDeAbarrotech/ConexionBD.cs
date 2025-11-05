@@ -957,6 +957,73 @@ namespace LoginDeAbarrotech
 
             return listaProductos;
         }
+        public List<Producto> ObtenerProductosPorCategoria(string Categoria, string busqueda = null)
+        {
+            List<Producto> listaProductos = new List<Producto>();
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    //  Filtra por categoría exacta (@Categoria)
+                    //  Solo productos Activo
+                    //  Si @Patron es NULL, NO aplica filtro por nombre (se omite).
+                    //  Si NO es NULL, aplica un LIKE con LOWER(nombre_producto) para coincidir sin distinguir mayúsculas/minúsculas.
+                    string sql = @"
+                            SELECT * FROM productos WHERE categoria_producto = @Categoria 
+                            AND estado_producto = 'Activo'
+                            AND (@Patron IS NULL OR LOWER(nombre_producto) LIKE @Patron)";
+                            // LiKE es para busquedas parciales, puedes colocar el unicio, final o un conjunto de letras para que haga esta busqueda 
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@Categoria", Categoria);
+
+                        // Construye el patrón de búsqueda si hay texto:
+                        // Trim quita espacios al inicio/fin
+                        // ToLower para comparar en minúsculas (acompañado por LOWER en SQL)
+                        // %...% para coincidencia parcial en cualquier posición
+                        string patron = string.IsNullOrWhiteSpace(busqueda)
+                            ? null
+                            : $"%{busqueda.Trim().ToLower()}%";
+
+                        // Si no hay texto, se manda NULL => el predicado (@Patron IS NULL OR ...) se cumple y se omite el filtro
+                        if (patron is null)
+                            command.Parameters.AddWithValue("@Patron", DBNull.Value);
+                        else
+                            command.Parameters.AddWithValue("@Patron", patron);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Producto productoAux = new Producto(
+                                    reader.GetInt32(0),       // id_producto
+                                    reader.GetString(1),      // nombre_producto
+                                    reader.GetString(2),      // marca_producto
+                                    reader.GetInt32(3),       // presentacion_producto
+                                    reader.GetString(4),      // unidad_medida_producto
+                                    reader.GetFloat(5),       // precio_venta_producto
+                                    reader.GetFloat(6),       // precio_compra_producto
+                                    reader.GetString(7),      // estado_producto
+                                    reader.GetString(8),      // categoria_producto
+                                    reader.GetInt32(9)        // id_proveedor_producto
+                                );
+
+                                listaProductos.Add(productoAux);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar a la base de datos: " + ex.Message);
+                }
+            }
+            return listaProductos;
+        }
+
         /// <summary>
         /// Operaciones de compras
         /// </summary>

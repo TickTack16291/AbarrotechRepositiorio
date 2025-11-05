@@ -30,11 +30,37 @@ namespace LoginDeAbarrotech
             var producto = conexion.ObtenerProductosDisponibles();
             dg_ProductosDisponibles.ItemsSource = producto;
         }
+        public void CargarProductosPorCategoria(string aux1, string aux2)
+        {
+            ConexionBD conexion = new ConexionBD();
+            var producto = conexion.ObtenerProductosPorCategoria(aux1, aux2);
+            dg_ProductosDisponibles.ItemsSource = producto;
+        }
         private void btn_cancelar_Click_1(object sender, RoutedEventArgs e)
         {
             MenuOperaciones menuOperaciones = new MenuOperaciones();
             menuOperaciones.Show();
             this.Hide();
+        }
+        private void btl_LimpiarFiltro_Click(object sender, RoutedEventArgs e)
+        {
+            txt_busqueda.Text = string.Empty;
+            cb_categorias.Text = "Todas";
+            CargarProductosDisponibles();
+        }
+        private void btn_filtrar_Click(object sender, RoutedEventArgs e)
+        {
+            if(cb_categorias.Text == "Todas")
+            {
+                CargarProductosDisponibles();
+            } else
+            {
+                CargarProductosPorCategoria(cb_categorias.Text, txt_busqueda.Text);
+            }
+        }
+        private void cb_categorias_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Da un error que no entiendo, lastima es un buen detalle jaja
         }
     }
 }

@@ -169,12 +169,12 @@
                                       AutoGenerateColumns="False" IsReadOnly="True"
                                       HeadersVisibility="Column"
                                       BorderBrush="#E0E0E0" BorderThickness="1"
-                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="dg_ProductosDisponibles_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
                                     <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
                                     <DataGridTextColumn Header="Categoría" Width="100" Binding="{Binding categoria_producto}"/>
-                                    <DataGridTextColumn Header="Precio" Width="80">
+                                    <DataGridTextColumn Header="Precio" Width="85">
                                         <DataGridTextColumn.Binding>
                                             <Binding Path="precio_venta_producto" StringFormat="C2"/>
                                         </DataGridTextColumn.Binding>
@@ -202,10 +202,10 @@
                                       ScrollViewer.VerticalScrollBarVisibility="Auto">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
-                                    <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_productp}"/>
+                                    <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
                                     <DataGridTextColumn Header="Categoría" Width="100" Binding="{Binding categoria_producto}"/>
-                                    <DataGridTemplateColumn Header="Precio / Cant." Width="80">
-                                        <DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn Header="Precio." Width="80">
+                                            <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding precio_venta_producto, StringFormat=C2}" Width="90" VerticalAlignment="Center"/>

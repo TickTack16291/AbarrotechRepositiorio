@@ -62,5 +62,17 @@ namespace LoginDeAbarrotech
         {
             // Da un error que no entiendo, lastima es un buen detalle jaja
         }
+        
+        List<Producto> productosSeleccionados = new List<Producto>();
+        private void dg_ProductosDisponibles_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Producto prseleccionado = dg_ProductosDisponibles.SelectedItem as Producto;
+
+            if (prseleccionado != null)
+            {
+                productosSeleccionados.Add(prseleccionado);
+                dg_ProductosSeleecionados.Items.Add(prseleccionado);
+            }
+        }
     }
 }

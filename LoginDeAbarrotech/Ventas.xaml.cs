@@ -36,6 +36,12 @@ namespace LoginDeAbarrotech
             var producto = conexion.ObtenerProductosPorCategoria(aux1, aux2);
             dg_ProductosDisponibles.ItemsSource = producto;
         }
+        public void CargarProductosPorCoincidencia(string aux1)
+        {
+            ConexionBD conexion = new ConexionBD();
+            var producto = conexion.ObtenerProductosPorCoincidencia(aux1);
+            dg_ProductosDisponibles.ItemsSource = producto;
+        }
         private void btn_cancelar_Click_1(object sender, RoutedEventArgs e)
         {
             MenuOperaciones menuOperaciones = new MenuOperaciones();
@@ -52,7 +58,7 @@ namespace LoginDeAbarrotech
         {
             if(cb_categorias.Text == "Todas")
             {
-                CargarProductosDisponibles();
+                CargarProductosPorCoincidencia(txt_busqueda.Text);
             } else
             {
                 CargarProductosPorCategoria(cb_categorias.Text, txt_busqueda.Text);
@@ -63,16 +69,48 @@ namespace LoginDeAbarrotech
             // Da un error que no entiendo, lastima es un buen detalle jaja
         }
         
-        List<Producto> productosSeleccionados = new List<Producto>();
+        internal class ProductoSeleccionado : Producto
+        {
+            public int cantidad { get; set; } = 0;
+        }
+        float total = 0.0f;
+        List<ProductoSeleccionado> productosSeleccionados = new List<ProductoSeleccionado>();
         private void dg_ProductosDisponibles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Producto prseleccionado = dg_ProductosDisponibles.SelectedItem as Producto;
+            var prseleccionado = dg_ProductosDisponibles.SelectedItem as Producto;
+            if (prseleccionado == null) return;
 
-            if (prseleccionado != null)
+            // Busca si ya se habia seleccionado ese producto
+            // Se recorre la lista hasta encontrar la primer coincidencia o puede no encontrarla en dico caso devuelve un valor nulo
+            var existente = productosSeleccionados.FirstOrDefault(p => p.id_producto == prseleccionado.id_producto);// Expresion lamda que toma p que es un
+                                                                                                                    // producto seleccionado y lo usa para
+                                                                                                                    // comparar y devolver un valor boleano
+
+            if (existente == null)
             {
-                productosSeleccionados.Add(prseleccionado);
-                dg_ProductosSeleecionados.Items.Add(prseleccionado);
+                var prAux = new ProductoSeleccionado
+                {
+                    id_producto = prseleccionado.id_producto,
+                    nombre_producto = prseleccionado.nombre_producto,
+                    categoria_producto = prseleccionado.categoria_producto,
+                    precio_venta_producto = prseleccionado.precio_venta_producto,
+                    cantidad = 1
+                };
+
+                productosSeleccionados.Add(prAux);
+                dg_ProductosSeleecionados.Items.Add(prAux);
+
+                total += prAux.precio_venta_producto;
             }
+            else
+            {
+                existente.cantidad++;
+                total += existente.precio_venta_producto;
+            }
+
+            Txt_TotalVenta.Text = total.ToString();
+            dg_ProductosSeleecionados.Items.Refresh();// Es para forzar que se actualize la tabla
+            dg_ProductosDisponibles.SelectedItem = null;
         }
     }
 }

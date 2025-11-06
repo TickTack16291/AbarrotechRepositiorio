@@ -237,7 +237,7 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="Cant." Width="80"/>
+                                    <DataGridTextColumn Header="Cant." Width="80" Binding="{Binding cantidad}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>

@@ -179,7 +179,7 @@
                                             <Binding Path="precio_venta_producto" StringFormat="C2"/>
                                         </DataGridTextColumn.Binding>
                                     </DataGridTextColumn>
-                                    <DataGridTextColumn Header="Stock" Width="80" Binding="{Binding Stock}"/>
+                                    <DataGridTextColumn Header="Stock" Width="80"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>
@@ -237,6 +237,7 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Cant." Width="80"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>

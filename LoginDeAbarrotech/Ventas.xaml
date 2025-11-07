@@ -279,7 +279,7 @@
                         </Border>
 
                         <Button x:Name="btn_RealizarVenta" Content="Realizar venta" Background="#4CAF50" Foreground="White"
-                                Height="40" Width="160" FontWeight="Bold">
+                                Height="40" Width="160" FontWeight="Bold" Click="btn_RealizarVenta_Click">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
                                     <Setter Property="Template">

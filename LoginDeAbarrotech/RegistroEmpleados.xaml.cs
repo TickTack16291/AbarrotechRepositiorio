@@ -127,6 +127,14 @@ namespace LoginDeAbarrotech
                 MostrarMensaje("El teléfono debe ser un número válido.");
                 return;
             }
+
+            long longitud = telefonoEmpleado.ToString().Length;
+
+            if (longitud != 10)
+            {
+                MostrarMensaje("El telefono debe tener 10 digitos.");
+                return;
+            }
             // Validar que el salario sea un número válido
             if (!float.TryParse(ct_SalarioEmpleado.Text, out float salarioEmpleado))
             {
@@ -210,6 +218,15 @@ namespace LoginDeAbarrotech
                     MostrarMensaje("El teléfono debe ser un número válido.");
                     return;
                 }
+
+                long longitud = telefonoEmpleado.ToString().Length;
+
+                if (longitud != 10)
+                {
+                    MostrarMensaje("El telefono debe tener 10 digitos.");
+                    return;
+                }
+
                 // Validar que el salario sea un número válido
                 if (!float.TryParse(ct_SalarioEmpleado.Text, out float salarioEmpleado))
                 {

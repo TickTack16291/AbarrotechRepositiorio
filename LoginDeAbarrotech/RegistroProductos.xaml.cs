@@ -123,6 +123,12 @@ namespace LoginDeAbarrotech
                 MostrarMensaje("El precio de compra debe ser un número positivo");
                 return;
             }
+            // Validacion de que el precio de venta no sea menor o igual al valor de compra
+            if(precioVenta <= precioCompra)
+            {
+                MostrarMensaje("El precio de venta no puede ser menor o igual al precio de compra");
+                return;
+            }
             if (!int.TryParse(ct_Presentacion.Text, out int presentacion))// Lo mismo que el de arriba
             {
                 MostrarMensaje("La presentacion debe ser un númerica");

@@ -43,7 +43,6 @@
                            HorizontalAlignment="Right" VerticalAlignment="Center"
                            Foreground="Green"
                            Content="Producto agregado correctamente"
-                           
                            Visibility="Hidden"/>
                 </Grid>
 

@@ -22,9 +22,9 @@ namespace LoginDeAbarrotech
         public RegistroUsuarios()
         {
             InitializeComponent();
-            CargarProductos();
+            CargarUsuarios();
         }
-        public void CargarProductos()
+        public void CargarUsuarios()
         {
             ConexionBD conexion = new ConexionBD();
             var usuarios = conexion.ObtenerUsuarios();
@@ -90,6 +90,12 @@ namespace LoginDeAbarrotech
                 return;
             }
 
+            if(ct_Contrasena.Password != ct_ConfirmarContrasena.Password)
+            {
+                MostrarMensaje("Las contraseñas deben ser iguales");
+                return;
+            }
+
             // Verificar si el usuario ya existe
             ConexionBD conexion = new ConexionBD();
 
@@ -103,29 +109,26 @@ namespace LoginDeAbarrotech
                 ct_Contrasena.Password, 
                 rolAux
              );
-
             if (conexion.obtenerIdEmpleadoDeUsuarios(idEmpleado))
             {
                 MostrarMensaje("El empleado ya esta registrado como usuario");
                 return;
             }
-
             if (ValidarUsuariosRepetidos(nuevoUsuario))
             {
                 MostrarMensaje("El usuario ya existe en la base de datos");
                 return;
             }
-
             if (!conexion.validarIdEmpleado(idEmpleado))
             {
                 MostrarMensaje("El id de empledado ingresado no corresponde a ningun empleado");
                 return;
             }
-
             // Intentar insertar en la base de datos
             if (conexion.ingresar_usuarios(nuevoUsuario))
             {
                 MostrarMensaje("Usuario agregardo a la base de datos");
+                CargarUsuarios();
             }
             else
             {

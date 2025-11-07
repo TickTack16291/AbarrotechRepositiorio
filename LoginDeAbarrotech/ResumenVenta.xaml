@@ -127,7 +127,7 @@
                                   ItemsSource="{Binding MetodosPago}"
                                   SelectedItem="{Binding MetodoPagoSeleccionado}"
                                   MinWidth="160"
-                                  BorderBrush="#1976D2" BorderThickness="2" Margin="0,16,70,19" Grid.ColumnSpan="2" SelectionChanged="ComboBox_SelectionChanged" Grid.RowSpan="2"/>
+                                  BorderBrush="#1976D2" BorderThickness="2" Margin="0,16,70,19" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
 
                         <TextBlock Text="Caja:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Foreground="#424242"/>
 

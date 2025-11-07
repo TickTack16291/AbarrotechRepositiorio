@@ -118,6 +118,7 @@ namespace LoginDeAbarrotech
             if (longitud != 10)
             {
                MostrarMensaje("El telefono debe tener 10 digitos.");
+               return;
             }
 
             // Crear el objeto Producto con los datos del formulario

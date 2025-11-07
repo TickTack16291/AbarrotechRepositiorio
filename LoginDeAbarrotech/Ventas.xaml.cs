@@ -116,12 +116,16 @@ namespace LoginDeAbarrotech
         }
         private void btn_RealizarVenta_Click(object sender, RoutedEventArgs e)
         {
-            ConexionBD conexion = new ConexionBD();
-            long idAux = conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal);
-            conexion.RealizarVenta(idAux, DateTime.Now, total, "Efectivo", 1);
-            // Habria que hacer una ventana en donde selecciones el metodo de pago ademas de que te deberia dar un resumen de la venta
-            // Usuario que realiza la venta - Fecha actual - Total - Metodo de pago - numero de caja
-            // Aparte deberia la llevar Cant. de productos
+            //ConexionBD conexion = new ConexionBD();
+            //long idAux = conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal);
+            //conexion.RealizarVenta(idAux, DateTime.Now, total, "Efectivo", 1);
+            //// Habria que hacer una ventana en donde selecciones el metodo de pago ademas de que te deberia dar un resumen de la venta
+            //// Usuario que realiza la venta - Fecha actual - Total - Metodo de pago - numero de caja
+            //// Aparte deberia la llevar Cant. de productos
+            
+            ResumenVenta resumenVenta = new ResumenVenta();
+            resumenVenta.ShowDialog();
+            
         }
     }
 }

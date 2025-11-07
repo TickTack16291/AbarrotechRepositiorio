@@ -217,7 +217,10 @@ namespace LoginDeAbarrotech
         private void btn_Compras_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Gestión de Compras", "Administrar compras y pedidos");
-            MessageBox.Show("Funcionalidad de Compras en desarrollo", "Información", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            Compras compras = new Compras();
+            compras.Show();
+            this.Hide();
         }
         private void btn_Ventas_Click(object sender, RoutedEventArgs e)
         {

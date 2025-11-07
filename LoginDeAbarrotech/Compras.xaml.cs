@@ -23,5 +23,27 @@ namespace LoginDeAbarrotech
         {
             InitializeComponent();
         }
+        private void btn_cancelar_Click_1(object sender, RoutedEventArgs e)
+        {
+            MenuOperaciones menuOperaciones = new MenuOperaciones();
+            menuOperaciones.Show();
+            this.Hide();
+        }
+        private void btn_filtrar_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void btl_LimpiarFiltro_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void btn_RealizarCompra_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void dg_ProductosDisponibles_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

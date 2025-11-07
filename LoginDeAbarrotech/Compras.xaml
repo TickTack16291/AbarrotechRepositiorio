@@ -5,8 +5,279 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LoginDeAbarrotech"
         mc:Ignorable="d"
-        Title="Compras" Height="450" Width="800">
+        Title="Compras" Height="680" Width="1300" WindowStartupLocation="CenterScreen">
+
+    <!-- Estilo para redondear la caja de búsqueda (igual al de Ventas) -->
+    <Window.Resources>
+        <Style x:Key="RoundedSearchTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#1976D2"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#1565C0"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#1565C0"/>
+                                <Setter TargetName="Bd" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="0" BlurRadius="6" Color="#401565C0"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+        <!-- Fondo -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#1976D2" Offset="0"/>
+                <GradientStop Color="#42A5F5" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Contenedor principal -->
+        <Border Background="White" CornerRadius="20" Padding="30" Width="1200" Height="598"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5"/>
+            </Border.Effect>
+
+            <!-- Layout principal -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Título -->
+                <Grid Grid.Row="0">
+                    <TextBlock Text="Compras" FontSize="22" FontWeight="Bold"
+                               Foreground="#1565C0" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <!-- Filtros -->
+                <Grid Grid.Row="1" Margin="0,20,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Proveedor:" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="#424242"/>
+                    <ComboBox x:Name="cb_proveedores" Grid.Column="1" Height="38" Padding="10"
+                              BorderBrush="#1976D2" BorderThickness="2" Grid.ColumnSpan="2" Margin="0,0,20,0" VerticalAlignment="Top"/>
+
+                    <TextBox x:Name="txt_busqueda" Grid.Column="3" Height="38"
+                             BorderBrush="#1976D2" BorderThickness="2"
+                             ToolTip="Buscar por nombre (coincidencia parcial)"
+                             Style="{StaticResource RoundedSearchTextBox}"/>
+                    <Button x:Name="btn_filtrar" Grid.Column="4" Content="Buscar"
+                            Height="32" Width="96" Foreground="White" Background="#1976D2" Margin="0,3,0,0" VerticalAlignment="Top" Click="btn_filtrar_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button x:Name="btl_LimpiarFiltro" Grid.Column="6" Content="Limpiar" Width="96" Foreground="White" Background="#1565C0" Margin="0,3,0,0" Height="32" VerticalAlignment="Top" Click="btl_LimpiarFiltro_Click">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+
+                <!-- Listas principales -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Productos disponibles -->
+                    <Border Grid.Column="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="1"
+                            CornerRadius="5" Padding="10">
+                        <Grid>
+                            <TextBlock Text="Productos disponibles" FontSize="16" FontWeight="Bold"
+                                       Foreground="#1565C0" Margin="0,0,0,8" VerticalAlignment="Top"/>
+
+                            <DataGrid x:Name="dg_ProductosDisponibles" Margin="0,30,0,0"
+                                      AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column"
+                                      BorderBrush="#E0E0E0" BorderThickness="1"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="dg_ProductosDisponibles_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
+                                    <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
+                                    <DataGridTextColumn Header="ProveedorId" Width="100" Binding="{Binding id_proveedor_producto}"/>
+                                    <DataGridTextColumn Header="Precio compra" Width="110">
+                                        <DataGridTextColumn.Binding>
+                                            <Binding Path="precio_compra_producto" StringFormat="C2"/>
+                                        </DataGridTextColumn.Binding>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn Header="Stock" Width="80"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Separador -->
+                    <Border Grid.Column="1" Background="Transparent"/>
+
+                    <!-- Productos seleccionados -->
+                    <Border Grid.Column="2" Background="White" BorderBrush="#E0E0E0" BorderThickness="1"
+                            CornerRadius="5" Padding="10">
+                        <Grid>
+                            <TextBlock Text="Productos seleccionados para la compra" FontSize="16" FontWeight="Bold"
+                                       Foreground="#1565C0" Margin="0,0,0,8" VerticalAlignment="Top"/>
+
+                            <DataGrid x:Name="dg_ProductosSeleecionados" Margin="0,30,0,0"
+                                      AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column"
+                                      BorderBrush="#E0E0E0" BorderThickness="1"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
+                                    <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
+                                    <DataGridTextColumn Header="ProveedorId" Width="100" Binding="{Binding id_proveedor_producto}"/>
+                                    <DataGridTemplateColumn Header="Precio." Width="80">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding precio_compra_producto, StringFormat=C2}" Width="90" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="Cant.:" VerticalAlignment="Center" Margin="6,0,6,0"/>
+                                                    <ComboBox Width="80" x:Name="QuantityComboBox" SelectedIndex="0"
+                                                              BorderBrush="#1976D2" BorderThickness="2">
+                                                        <ComboBoxItem Content="1" IsSelected="True"/>
+                                                        <ComboBoxItem Content="2"/>
+                                                        <ComboBoxItem Content="3"/>
+                                                        <ComboBoxItem Content="4"/>
+                                                        <ComboBoxItem Content="5"/>
+                                                        <ComboBoxItem Content="6"/>
+                                                        <ComboBoxItem Content="7"/>
+                                                        <ComboBoxItem Content="8"/>
+                                                        <ComboBoxItem Content="9"/>
+                                                        <ComboBoxItem Content="10"/>
+                                                        <ComboBoxItem Content="11"/>
+                                                        <ComboBoxItem Content="12"/>
+                                                        <ComboBoxItem Content="13"/>
+                                                        <ComboBoxItem Content="14"/>
+                                                        <ComboBoxItem Content="15"/>
+                                                        <ComboBoxItem Content="16"/>
+                                                        <ComboBoxItem Content="17"/>
+                                                        <ComboBoxItem Content="18"/>
+                                                        <ComboBoxItem Content="19"/>
+                                                        <ComboBoxItem Content="20"/>
+                                                    </ComboBox>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Cant." Width="80" Binding="{Binding cantidad}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Botones inferiores + Total -->
+                <Grid Grid.Row="3" Margin="0,15,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btn_cancelar" Content="Cancelar" Background="#E53935" Foreground="White"
+                            Height="40" Width="160" FontWeight="Bold" HorizontalAlignment="Left" Grid.Column="0" Click="btn_cancelar_Click_1">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Border Background="#F5F5F5" CornerRadius="8" Padding="12,8" Margin="0,0,10,0"
+                                BorderBrush="#E0E0E0" BorderThickness="1">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Total:" FontWeight="Bold" Foreground="#1565C0" Margin="0,0,8,0"/>
+                                <TextBlock x:Name="Txt_TotalCompra" Text="$0.00"
+                                           FontWeight="Bold" Foreground="#2E7D32"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Button x:Name="btn_RealizarCompra" Content="Realizar compra" Background="#4CAF50" Foreground="White"
+                                Height="40" Width="160" FontWeight="Bold" Click="btn_RealizarCompra_Click">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border CornerRadius="8" Background="{TemplateBinding Background}">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

@@ -69,7 +69,7 @@ namespace LoginDeAbarrotech
             // Da un error que no entiendo, lastima es un buen detalle jaja
         }
         /// <summary>
-        /// La clase "ProductoSeleccionado se usa para agregarle un campo de cantidad a los productos, se hace herencia"
+        /// La clase "ProductoSeleccionado" se usa para agregarle un campo de cantidad a los productos, se hace herencia
         /// </summary>
         internal class ProductoSeleccionado : Producto
         {
@@ -120,7 +120,8 @@ namespace LoginDeAbarrotech
             long idAux = conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal);
             conexion.RealizarVenta(idAux, DateTime.Now, total, "Efectivo", 1);
             // Habria que hacer una ventana en donde selecciones el metodo de pago ademas de que te deberia dar un resumen de la venta
-            // Total - Cant. de productos - Usuario que realiza la venta - hora y fecha - numero de caja
+            // Usuario que realiza la venta - Fecha actual - Total - Metodo de pago - numero de caja
+            // Aparte deberia la llevar Cant. de productos
         }
     }
 }

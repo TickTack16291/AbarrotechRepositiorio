@@ -9,98 +9,124 @@
 
     <!-- Grid es el contenedor principal que organiza los elementos -->
     <Grid x:Name="Login_Abarrotech" Margin="0,0,0,-6">
-        <!-- Fondo degradado azul -->
+        <!-- Fondo blanco sólido -->
         <Grid.Background>
-            <!-- 
-                LinearGradientBrush -Crea un fondo con degradado de colores
-                StartPoint="0,0" es el punto inicial donde queremos el degradadp en este caso la esquina izquierda
-                EndPoint="0,1" - es el punto dinal del degradado, la esquina de abajo derecha
-                -->
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <!--Con los valores de gradient podemos modificar que tan degradado es el fondo-->
-                <GradientStop Color="#1976D2" Offset="2.5"/>
-                <GradientStop Color="#42A5F5" Offset="5.0"/>
-            </LinearGradientBrush>
+            <SolidColorBrush Color="White"/>
         </Grid.Background>
 
-        <!--Contenedor blanco para los componentes-->
-        <Border Background="White" CornerRadius="20" Padding="30" Width="380" Height="484"
+        <!--Contenedor azul para los componentes-->
+        <Border Background="#1565C0" CornerRadius="20" Padding="35" Width="400" Height="520"
             HorizontalAlignment="Center" VerticalAlignment="Center">
             <!--Con border effect damos la sensacion de una sombra -->
             <Border.Effect>
-                <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5"/>
+                <DropShadowEffect Color="#40000000" BlurRadius="20" ShadowDepth="8" Opacity="0.5"/>
             </Border.Effect>
-            <!-- StackPanel organiza los elementos comoua lista uno debajo del otro-->
+            <!-- StackPanel organiza los elementos como una lista uno debajo del otro-->
             <StackPanel>
 
                 <StackPanel>
                     <!--Viewbox hace que el contenido se escale automaticamente-->
-                    <Viewbox Width="60" Height="60" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <Viewbox Width="70" Height="70" HorizontalAlignment="Center" Margin="0,0,0,10">
                         <Canvas Width="24" Height="24">
-                            <Ellipse Fill="#1976D2" Width="6" Height="6" Canvas.Left="5" Canvas.Top="16"/>
-                            <Ellipse Fill="#1976D2" Width="6" Height="6" Canvas.Left="15" Canvas.Top="16"/>
+                            <Ellipse Fill="White" Width="6" Height="6" Canvas.Left="5" Canvas.Top="16"/>
+                            <Ellipse Fill="White" Width="6" Height="6" Canvas.Left="15" Canvas.Top="16"/>
                             <Path Data="M2,2 L4,2 L6,12 L18,12 L20,6 L7,6"
-                              Stroke="#1976D2" StrokeThickness="2" Fill="Transparent"/>
+                              Stroke="White" StrokeThickness="2" Fill="Transparent"/>
                         </Canvas>
                     </Viewbox>
-                    <TextBlock Text="AbarroTech" FontSize="22" FontWeight="Bold" 
-                           Foreground="#1565C0" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                    <TextBlock Text="AbarroTech" FontSize="26" FontWeight="Bold" 
+                           Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,25"/>
                 </StackPanel>
 
                 <!-- Cajas de texto para datos -->
-                <TextBlock Text="Usuario" Foreground="#424242" Margin="5,0,0,3"/>
-                <TextBox x:Name="txtUsuario" Margin="0,0,0,15" Height="43" Padding="10"
-                     BorderBrush="#1976D2" BorderThickness="2">
+                <TextBlock Text="Usuario" Foreground="White" FontWeight="SemiBold" Margin="5,0,0,5" FontSize="13"/>
+                <TextBox x:Name="txtUsuario" Margin="0,0,0,18" Height="45" Padding="12"
+                     BorderBrush="White" BorderThickness="2" Background="White" Foreground="#1565C0"
+                     FontSize="14">
                     <!-- Style - Define el aspecto visual del control , TargetType="TextBox" aplica este estilo a todos los TextBox-->
                     <TextBox.Style>
                         <Style TargetType="TextBox">
                             <Setter Property="Template">
-
                                 <Setter.Value>
                                     <!-- ControlTemplate es como una plantilla para que todos nuestros elementos se vean iguales-->
-                                    <!-- 
-                                            Border - Crea el borde redondeado
-                                            CornerRadius="8" - Bordes redondeados
-                                            TemplateBinding - Enlaza con las propiedades del TextBox original
-                                            ScrollViewer - Permite scroll si el texto es muy largo
-                                            -->
                                     <ControlTemplate TargetType="TextBox">
-                                        <Border CornerRadius="8" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <Border CornerRadius="8" 
+                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                Background="{TemplateBinding Background}">
                                             <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
                                         </Border>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter Property="BorderBrush" Value="#E3F2FD"/>
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </TextBox.Style>
                 </TextBox>
 
                 <!--Contraseña 
                 password box es lo mismo que textbox solo que oculta los caracteres al ser una contraseña-->
-                <TextBlock Text="Contraseña" Foreground="#424242" Margin="5,0,0,3"/>
-                <PasswordBox x:Name="txtPassword" Margin="0,0,0,20" Height="40" Padding="10"
-                         BorderBrush="#1976D2" BorderThickness="2">
+                <TextBlock Text="Contraseña" Foreground="White" FontWeight="SemiBold" Margin="5,0,0,5" FontSize="13"/>
+                <PasswordBox x:Name="txtPassword" Margin="0,0,0,15" Height="45" Padding="12"
+                         BorderBrush="White" BorderThickness="2" Background="White" Foreground="#1565C0"
+                         FontSize="14">
                     <PasswordBox.Style>
                         <Style TargetType="PasswordBox">
-
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="PasswordBox">
-                                        <Border CornerRadius="8" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                        <Border CornerRadius="8" 
+                                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                Background="{TemplateBinding Background}">
                                             <ScrollViewer Margin="0" x:Name="PART_ContentHost"/>
                                         </Border>
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter Property="BorderBrush" Value="#E3F2FD"/>
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
                     </PasswordBox.Style>
                 </PasswordBox>
-                <Label Name="Lbl_error" HorizontalAlignment="Center" Foreground="Red" Content="Usuario o contraseña invalidos" Visibility="Hidden"></Label>
+                
+                <Label Name="Lbl_error" 
+                       HorizontalAlignment="Center" 
+                       Foreground="#FFEBEE" 
+                       Background="#D32F2F"
+                       Content="Usuario o contraseña inválidos" 
+                       Visibility="Hidden"
+                       Padding="10,5"
+                       FontWeight="SemiBold"
+                       FontSize="12">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Label">
+                                        <Border CornerRadius="6" 
+                                                Background="{TemplateBinding Background}"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Label.Style>
+                </Label>
 
                 <!--Botones-->
-                <StackPanel Orientation="Vertical" Margin="0,0,0,10">
-                    <Button x:Name="btnLogin" Content="Ingresar" Background="#1976D2" Foreground="White"
-                        Height="40" FontWeight="Bold" Click="btnLogin_Click" IsDefault="True">
+                <StackPanel Orientation="Vertical" Margin="0,15,0,12">
+                    <Button x:Name="btnLogin" Content="Ingresar" Background="White" Foreground="#1565C0"
+                        Height="45" FontWeight="Bold" FontSize="14" Click="btnLogin_Click" IsDefault="True">
                         <!-- EL IsDefault = "True" es para que el evento del boton "Ingresar" tambien se active con el "enter"-->
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
@@ -113,6 +139,7 @@
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
+                                <Setter Property="Cursor" Value="Hand"/>
                             </Style>
                         </Button.Style>
 
@@ -123,7 +150,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
-                                                    To="#1565C0" Duration="0:0:0.3"/>
+                                                    To="#E3F2FD" Duration="0:0:0.2"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -131,7 +158,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
-                                                    To="#1976D2" Duration="0:0:0.3"/>
+                                                    To="White" Duration="0:0:0.2"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -139,8 +166,9 @@
                     </Button>
 
                 </StackPanel>
-                <Button x:Name="btn_Cerrar" Content="Salir" Background="#E53935" Foreground="White"
-                    Height="34" Width="100" Click="btn_Cerrar_Click" RenderTransformOrigin="0.55,2.319">
+                
+                <Button x:Name="btn_Cerrar" Content="Salir" Background="#D32F2F" Foreground="White"
+                    Height="38" Width="110" FontWeight="SemiBold" Click="btn_Cerrar_Click">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="Template">
@@ -152,10 +180,31 @@
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
+                            <Setter Property="Cursor" Value="Hand"/>
                         </Style>
                     </Button.Style>
+                    
+                    <!-- Animación hover para botón salir -->
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+                                                To="#B71C1C" Duration="0:0:0.2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+                                                To="#D32F2F" Duration="0:0:0.2"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Button.Triggers>
                 </Button>
-                <!-- BotOns pequeño para cerrar -->
+                <!-- Botón pequeño para cerrar -->
             </StackPanel>
         </Border>
     </Grid>

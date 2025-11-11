@@ -60,7 +60,7 @@
 
                     <!-- ID Empleado -->
                     <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0,10,10">
-                        <TextBlock Text="ID Empleado" Foreground="#424242" Margin="5,0,0,3"/>
+                        <TextBlock Text="No. de empleado" Foreground="#424242" Margin="5,0,0,3"/>
                         <TextBox x:Name="ct_IdEmpleado" Height="45" Padding="10"
                                  BorderBrush="#1976D2" BorderThickness="2"/>
                     </StackPanel>
@@ -103,8 +103,8 @@
                                   Margin="0,30,0,0"
                                   SelectionChanged="dg_Usuarios_SelectionChanged">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding id_usuario}" Width="60"/>
-                                <DataGridTextColumn Header="ID Empleado" Binding="{Binding id_empleado}" Width="120"/>
+                                <DataGridTextColumn Header="No." Binding="{Binding id_usuario}" Width="60"/>
+                                <DataGridTextColumn Header="No. de empleado" Binding="{Binding id_empleado}" Width="120"/>
                                 <DataGridTextColumn Header="Usuario" Binding="{Binding usuario}" Width="200"/>
                                 <DataGridTextColumn Header="Rol" Binding="{Binding rol_usuario}" Width="150"/>
                             </DataGrid.Columns>

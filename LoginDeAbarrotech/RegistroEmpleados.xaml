@@ -157,7 +157,7 @@
                                   Margin="0,30,0,0"
                                   SelectionChanged="dg_Empleados_SelectionChanged">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding id_empleado}" Width="60"/>
+                                <DataGridTextColumn Header="No." Binding="{Binding id_empleado}" Width="60"/>
                                 <DataGridTextColumn Header="Nombre" Binding="{Binding nombre_empleado}" Width="150"/>
                                 <DataGridTextColumn Header="Dirección" Binding="{Binding direccion_empleado}" Width="150"/>
                                 <DataGridTextColumn Header="Teléfono" Binding="{Binding telefono_empleado}" Width="100"/>

@@ -33,7 +33,12 @@ namespace LoginDeAbarrotech
         public void CargarProductosPorCategoria(string aux1, string aux2)
         {
             ConexionBD conexion = new ConexionBD();
-            var producto = conexion.ObtenerProductosPorCategoria(aux1, aux2);
+            List<Producto> producto;
+            if (aux2 == "")
+                producto = conexion.ObtenerProductosPorCategoria(aux1, null);
+            else
+                producto = conexion.ObtenerProductosPorCategoria(aux1, aux2);
+
             dg_ProductosDisponibles.ItemsSource = producto;
         }
         public void CargarProductosPorCoincidencia(string aux1)
@@ -66,7 +71,14 @@ namespace LoginDeAbarrotech
         }
         private void cb_categorias_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Da un error que no entiendo, lastima es un buen detalle jaja
+            if (!IsLoaded) return; // Evita ejecutar mientras la ventana se inicializa
+            txt_busqueda.Clear();
+
+            string categoria = (e.AddedItems.Count > 0 ? (e.AddedItems[0] as ComboBoxItem)?.Content?.ToString() : null)
+                       ?? cb_categorias.SelectedValue?.ToString()
+                       ?? cb_categorias.Text;
+
+            CargarProductosPorCategoria(categoria, "");
         }
         /// <summary>
         /// La clase "ProductoSeleccionado" se usa para agregarle un campo de cantidad a los productos, se hace herencia

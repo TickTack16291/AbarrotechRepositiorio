@@ -96,8 +96,10 @@
 
                     <TextBlock Text="Categoría:" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="#424242"/>
                     <ComboBox x:Name="cb_categorias" Grid.Column="1" Height="38" Padding="10"
-                              BorderBrush="#1976D2" BorderThickness="2" SelectedIndex="0" Grid.ColumnSpan="2" Margin="0,0,20,0" VerticalAlignment="Top" SelectionChanged="cb_categorias_SelectionChanged">
-                        <ComboBoxItem Content="Todas" IsSelected="True"/>
+                              BorderBrush="#1976D2" BorderThickness="2" SelectedIndex="0"
+                              Grid.ColumnSpan="2" Margin="0,0,20,0" VerticalAlignment="Top"
+                              SelectionChanged="cb_categorias_SelectionChanged">
+                        <ComboBoxItem Content="Todas"/>
                         <!-- categorias, erick queria que se pudieran agregar desde la interfaz, pero me dio flojera jaja -->
                         <!-- talvez despues -->
                         <ComboBoxItem Content="Bebidas"/>
@@ -118,7 +120,7 @@
                              ToolTip="Buscar por nombre (coincidencia parcial)"
                              Style="{StaticResource RoundedSearchTextBox}"/>
                     <Button x:Name="btn_filtrar" Grid.Column="4" Content="Buscar"
-                            Height="32" Width="96" Foreground="White" Background="#1976D2" Margin="0,3,0,0" VerticalAlignment="Top" Click="btn_filtrar_Click">
+                            Height="32" Width="96" Foreground="White" Background="#1976D2" Margin="0,3,0,0" VerticalAlignment="Top" Click="btn_filtrar_Click" IsDefault="True">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">

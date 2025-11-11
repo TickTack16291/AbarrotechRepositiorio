@@ -110,7 +110,11 @@
                             <ComboBoxItem Content="g"/>
                             <ComboBoxItem Content="l"/>
                             <ComboBoxItem Content="ml"/>
+                            <ComboBoxItem Content="oz"/>
                             <ComboBoxItem Content="pz"/>
+                            <ComboBoxItem Content="Galon"/>
+                            <ComboBoxItem Content="Caja"/>
+                            <ComboBoxItem Content="Docena"/>
                         </ComboBox>
                     </StackPanel>
 
@@ -144,7 +148,7 @@
                                   Margin="0,30,0,0"
                                   SelectionChanged="dg_Productos_SelectionChanged">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding id_producto}" Width="40"/>
+                                <DataGridTextColumn Header="No." Binding="{Binding id_producto}" Width="40"/>
                                 <DataGridTextColumn Header="Nombre" Binding="{Binding nombre_producto}" Width="250"/>
                                 <DataGridTextColumn Header="Marca" Binding="{Binding marca_producto}" Width="100"/>
                                 <DataGridTextColumn Header="Categoria" Binding="{Binding categoria_producto}" Width="100"/>

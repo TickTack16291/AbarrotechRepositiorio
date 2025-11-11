@@ -91,14 +91,30 @@
                             Padding="10"
                             Cursor="Hand"
                             Click="btn_ToggleMenu_Click"/>
-                    
-                    <TextBlock Text="ABARROTECH" 
+
+                    <!-- Marca horizontal (visible en expandido) -->
+                    <TextBlock x:Name="txt_Brand"
+                               Text="ABARROTECH" 
                                FontSize="18" 
                                FontWeight="Bold" 
                                Foreground="White" 
                                HorizontalAlignment="Center" 
                                Margin="0,10,0,0"/>
-                    
+
+                    <!-- Marca vertical (visible en colapsado) -->
+                    <TextBlock x:Name="txt_BrandVertical"
+                               Text="ABARROTECH"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               Margin="0,10,0,0"
+                               Visibility="Collapsed">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="-90"/>
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+
                     <TextBlock x:Name="txt_WelcomeUser" 
                                Text="Bienvenido, Usuario" 
                                FontSize="12" 
@@ -109,23 +125,40 @@
 
                 <!-- Botones del menú -->
                 <StackPanel Grid.Row="1" Margin="0,0,0,20">
-                    <Button x:Name="btn_Dashboard" Content="📊 Dashboard" Style="{StaticResource MenuButtonStyle}" Click="btn_Dashboard_Click"/>
-                    <Button x:Name="btn_Empleados" Content="👥 Empleados" Style="{StaticResource MenuButtonStyle}" Click="btn_Empleados_Click"/>
-                    <Button x:Name="btn_Proveedores" Content="🏢 Proveedores" Style="{StaticResource MenuButtonStyle}" Click="btn_Proveedores_Click"/>
+                    <Button x:Name="btn_Inicio" Content="📊 Inicio" Style="{StaticResource MenuButtonStyle}" Click="btn_Inicio_Click"/>
+                    <Button x:Name="btn_Ventas" Content="💰 Ventas" Style="{StaticResource MenuButtonStyle}" Click="btn_Ventas_Click"/>
                     <Button x:Name="btn_Productos" Content="📦 Productos" Style="{StaticResource MenuButtonStyle}" Click="btn_Productos_Click"/>
                     <Button x:Name="btn_Compras" Content="🛒 Compras" Style="{StaticResource MenuButtonStyle}" Click="btn_Compras_Click"/>
-                    <Button x:Name="btn_Ventas" Content="💰 Ventas" Style="{StaticResource MenuButtonStyle}" Click="btn_Ventas_Click"/>
+                    <Button x:Name="btn_Proveedores" Content="🏢 Proveedores" Style="{StaticResource MenuButtonStyle}" Click="btn_Proveedores_Click"/>
+                    <Button x:Name="btn_Empleados" Content="👥 Empleados" Style="{StaticResource MenuButtonStyle}" Click="btn_Empleados_Click"/>
                     <Button x:Name="btn_Usuarios" Content="👤 Usuarios" Style="{StaticResource MenuButtonStyle}" Click="btn_Usuarios_Click"/>
                 </StackPanel>
 
                 <!-- Botón de salir -->
-                <Button x:Name="btn_Salir" 
+                <Button x:Name="btn_Salir"
                         Grid.Row="2"
-                        Content="🚪 Cerrar Sesión" 
-                        Style="{StaticResource MenuButtonStyle}" 
-                        Background="#D32F2F" 
+                        Style="{StaticResource MenuButtonStyle}"
+                        Background="#D32F2F"
                         Margin="15,0,15,20"
+                        Foreground="White"
+                        Padding="15,12"
                         Click="btn_Salir_Click">
+                    <Button.Content>
+                        <!-- Icono + texto. El texto se ocultará al colapsar desde code-behind -->
+                        <StackPanel x:Name="SalirContentPanel" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <!-- Icono MDL2: usa entidad para evitar problemas de codificación -->
+                            <TextBlock x:Name="SalirIcon"
+                                       Text="🚪"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,6,0"/>
+                            <TextBlock x:Name="SalirText"
+                                       Text="Cerrar Sesión"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button.Content>
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}" 
@@ -164,7 +197,7 @@
                     
                     <StackPanel Grid.Column="0">
                         <TextBlock x:Name="txt_PageTitle" 
-                                   Text="Dashboard Principal" 
+                                   Text="Menu Principal" 
                                    FontSize="24" 
                                    FontWeight="Bold" 
                                    Foreground="#1565C0"/>
@@ -187,7 +220,6 @@
             <!-- Contenido principal -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
                 <StackPanel x:Name="MainContent">
-                    
                     <!-- Dashboard inicial -->
                     <Grid x:Name="DashboardContent">
                         <!-- Tarjetas de estadísticas -->
@@ -259,7 +291,7 @@
                                                        VerticalAlignment="Center" 
                                                        Opacity="0.7"/>
                                         </Grid>
-                                        <TextBlock Text="Artículos en inventario" 
+                                        <TextBlock Text="Productos en registrados en el sistema" 
                                                    FontSize="12" 
                                                    Foreground="#999999" 
                                                    Margin="0,10,0,0"/>

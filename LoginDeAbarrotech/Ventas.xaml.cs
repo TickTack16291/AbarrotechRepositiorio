@@ -24,6 +24,13 @@ namespace LoginDeAbarrotech
             InitializeComponent();
             CargarProductosDisponibles();
         }
+        private void VaciarTablaSeleccionados()
+        {
+            dg_ProductosSeleecionados.Items.Clear();
+            productosSeleccionados.Clear();
+            total = 0f;
+            Txt_TotalVenta.Text = "0";
+        }
         public void CargarProductosDisponibles()
         {
             ConexionBD conexion = new ConexionBD();
@@ -86,9 +93,11 @@ namespace LoginDeAbarrotech
         internal class ProductoSeleccionado : Producto
         {
             public int cantidad { get; set; } = 0;
+            public float Subtotal => cantidad * precio_venta_producto; // cálculo simple
         }
         float total = 0.0f;// Total de la compra
-        List<ProductoSeleccionado> productosSeleccionados = new List<ProductoSeleccionado>();// Esta aqui para que no se reinicie cada que se llame el evento
+
+        internal static List<ProductoSeleccionado> productosSeleccionados = new List<ProductoSeleccionado>();// Esta aqui para que no se reinicie cada que se llame el evento
         private void dg_ProductosDisponibles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var prseleccionado = dg_ProductosDisponibles.SelectedItem as Producto;
@@ -128,16 +137,49 @@ namespace LoginDeAbarrotech
         }
         private void btn_RealizarVenta_Click(object sender, RoutedEventArgs e)
         {
-            //ConexionBD conexion = new ConexionBD();
-            //long idAux = conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal);
-            //conexion.RealizarVenta(idAux, DateTime.Now, total, "Efectivo", 1);
-            //// Habria que hacer una ventana en donde selecciones el metodo de pago ademas de que te deberia dar un resumen de la venta
-            //// Usuario que realiza la venta - Fecha actual - Total - Metodo de pago - numero de caja
-            //// Aparte deberia la llevar Cant. de productos
-            
+            ConexionBD conexion = new ConexionBD();
+
             ResumenVenta resumenVenta = new ResumenVenta();
             resumenVenta.ShowDialog();
-            
+
+            if (!resumenVenta.cancelada)
+                VaciarTablaSeleccionados();// No se vacia si se cancelo, por que podria ser para seleccionar o quitar productos
+    }
+        private void dg_ProductosSeleecionados_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var prod = dg_ProductosSeleecionados.SelectedItem as ProductoSeleccionado;
+            if (prod == null) return;
+
+            // Restar el subtotal del producto y quitarlo de ambas colecciones
+            total -= prod.precio_venta_producto * prod.cantidad;
+            if (total < 0) total = 0f;
+            Txt_TotalVenta.Text = total.ToString();
+
+            productosSeleccionados.Remove(prod);
+            dg_ProductosSeleecionados.Items.Remove(prod);
+        }
+        private void dg_ProductosSeleecionados_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var prod = dg_ProductosSeleecionados.SelectedItem as ProductoSeleccionado;
+            if (prod == null) return;
+        
+            // Disminuir en 1 la cantidad y ajustar total
+            total -= prod.precio_venta_producto;
+            if (total < 0) total = 0f;
+        
+            prod.cantidad--;
+        
+            if (prod.cantidad <= 0)
+            {
+                productosSeleccionados.Remove(prod);
+                dg_ProductosSeleecionados.Items.Remove(prod);
+            }
+        
+            Txt_TotalVenta.Text = total.ToString();
+            dg_ProductosSeleecionados.Items.Refresh();
+        
+            // Limpia selección para permitir nuevo clic
+            dg_ProductosSeleecionados.SelectedItem = null;
         }
     }
 }

@@ -853,7 +853,7 @@ namespace LoginDeAbarrotech
         /// <summary>
         /// Operaciones de ventas
         /// </summary>
-        public bool RealizarVenta(long idUsuario, DateTime fechaVenta, float totalVenta, string formaPagoVenta, int caja)
+        public bool RealizarVenta(Venta venta)
         {
             using (var Conexion = new MySqlConnection(conexionString))
             {
@@ -868,11 +868,11 @@ namespace LoginDeAbarrotech
 
                     using (var command = new MySqlCommand(sql, Conexion))
                     {
-                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
-                        command.Parameters.AddWithValue("@fecha_venta", fechaVenta);
-                        command.Parameters.AddWithValue("@total_venta", totalVenta);
-                        command.Parameters.AddWithValue("@forma_pago_venta", formaPagoVenta);
-                        command.Parameters.AddWithValue("@caja", caja);
+                        command.Parameters.AddWithValue("@id_usuario", venta.id_usuario);
+                        command.Parameters.AddWithValue("@fecha_venta", venta.fecha_venta);
+                        command.Parameters.AddWithValue("@total_venta", venta.total_venta);
+                        command.Parameters.AddWithValue("@forma_pago_venta", venta.forma_pago_venta);
+                        command.Parameters.AddWithValue("@caja", venta.caja);
 
                         int result = command.ExecuteNonQuery();
                         return result > 0; // True si se registró la venta

@@ -51,8 +51,8 @@
         <!-- Fondo -->
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="#1976D2" Offset="0"/>
-                <GradientStop Color="#42A5F5" Offset="1"/>
+                <GradientStop Color="#1565C0" Offset="0"/>
+                <GradientStop Color="#1565C0" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
 
@@ -173,10 +173,10 @@
                                       BorderBrush="#E0E0E0" BorderThickness="1"
                                       ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="dg_ProductosDisponibles_SelectionChanged">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
+                                    <DataGridTextColumn Header="No." Width="35" Binding="{Binding id_producto}"/>
                                     <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
                                     <DataGridTextColumn Header="Categoría" Width="100" Binding="{Binding categoria_producto}"/>
-                                    <DataGridTextColumn Header="Precio" Width="85">
+                                    <DataGridTextColumn Header="Precio" Width="83">
                                         <DataGridTextColumn.Binding>
                                             <Binding Path="precio_venta_producto" StringFormat="C2"/>
                                         </DataGridTextColumn.Binding>
@@ -201,44 +201,17 @@
                                       AutoGenerateColumns="False" IsReadOnly="True"
                                       HeadersVisibility="Column"
                                       BorderBrush="#E0E0E0" BorderThickness="1"
-                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                      SelectionChanged="dg_ProductosSeleecionados_SelectionChanged">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
-                                    <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
+                                    <DataGridTextColumn Header="No." Width="35" Binding="{Binding id_producto}"/>
+                                    <DataGridTextColumn Header="Nombre" Width="225" Binding="{Binding nombre_producto}"/>
                                     <DataGridTextColumn Header="Categoría" Width="100" Binding="{Binding categoria_producto}"/>
-                                    <DataGridTemplateColumn Header="Precio." Width="80">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding precio_venta_producto, StringFormat=C2}" Width="90" VerticalAlignment="Center"/>
-                                                    <TextBlock Text="Cant.:" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                                                    <ComboBox Width="80" x:Name="QuantityComboBox" SelectedIndex="0"
-                                                              BorderBrush="#1976D2" BorderThickness="2">
-                                                        <ComboBoxItem Content="1" IsSelected="True"/>
-                                                        <ComboBoxItem Content="2"/>
-                                                        <ComboBoxItem Content="3"/>
-                                                        <ComboBoxItem Content="4"/>
-                                                        <ComboBoxItem Content="5"/>
-                                                        <ComboBoxItem Content="6"/>
-                                                        <ComboBoxItem Content="7"/>
-                                                        <ComboBoxItem Content="8"/>
-                                                        <ComboBoxItem Content="9"/>
-                                                        <ComboBoxItem Content="10"/>
-                                                        <ComboBoxItem Content="11"/>
-                                                        <ComboBoxItem Content="12"/>
-                                                        <ComboBoxItem Content="13"/>
-                                                        <ComboBoxItem Content="14"/>
-                                                        <ComboBoxItem Content="15"/>
-                                                        <ComboBoxItem Content="16"/>
-                                                        <ComboBoxItem Content="17"/>
-                                                        <ComboBoxItem Content="18"/>
-                                                        <ComboBoxItem Content="19"/>
-                                                        <ComboBoxItem Content="20"/>
-                                                    </ComboBox>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Precio" Width="85">
+                                        <DataGridTextColumn.Binding>
+                                            <Binding Path="precio_venta_producto" StringFormat="C2"/>
+                                        </DataGridTextColumn.Binding>
+                                    </DataGridTextColumn>
                                     <DataGridTextColumn Header="Cant." Width="80" Binding="{Binding cantidad}"/>
                                 </DataGrid.Columns>
                             </DataGrid>

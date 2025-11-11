@@ -4,13 +4,12 @@
         Title="Resumen de la Venta"
         Height="460"
         Width="560"
-        WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         WindowStyle="ToolWindow"
         ShowInTaskbar="False"
-        Background="#F5F5F5">
+        Background="#1565C0"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <!-- Botón con esquinas redondeadas (coherente con Compras) -->
         <Style x:Key="RoundedButtonStyle" TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
@@ -29,7 +28,6 @@
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
 
-        <!-- TextBox redondeado similar al estilo de búsqueda en Compras -->
         <Style x:Key="RoundedInputTextBox" TargetType="TextBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="BorderBrush" Value="#1976D2"/>
@@ -69,7 +67,7 @@
     </Window.Resources>
 
     <Grid Margin="0">
-        <!-- Tarjeta principal (coherente con tarjetas del dashboard) -->
+        <!-- Tarjeta principal -->
         <Border Background="White"
                 CornerRadius="12"
                 Padding="16"
@@ -115,40 +113,47 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- Izquierda: usuario, fecha, pago, caja -->
-                        <TextBlock Text="Usuario:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Foreground="#424242"/>
-                        <TextBlock Text="{Binding Usuario}" Grid.Row="0" Grid.Column="1" FontWeight="SemiBold"/>
+                        <TextBlock Text="Usuario:" Grid.Column="0" VerticalAlignment="Center" Foreground="#424242" Margin="0,0,87,0"/>
+                        <TextBlock Name="txt_usuario" Grid.Column="0" VerticalAlignment="Center" Foreground="#424242" Margin="58,0,19,0" Grid.ColumnSpan="2"/>
 
-                        <TextBlock Text="Fecha y hora:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Foreground="#424242"/>
-                        <TextBlock Text="{Binding FechaHora, StringFormat=dd/MM/yyyy HH:mm}" Grid.Row="1" Grid.Column="1"/>
+                        <TextBlock Text="Fecha y hora:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Foreground="#424242" Margin="0,0,70,0"/>
+                        <TextBlock Name="txt_FechaHora" Grid.Column="0" VerticalAlignment="Center" Foreground="#424242" Margin="75,0,19,0" Grid.ColumnSpan="2" Grid.Row="1"/>
 
-                        <TextBlock Text="Método de pago:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Foreground="#424242"/>
-                        <ComboBox Grid.Row="2"
-                                  ItemsSource="{Binding MetodosPago}"
-                                  SelectedItem="{Binding MetodoPagoSeleccionado}"
+                        <TextBlock Text="Método de pago:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Foreground="#424242" Margin="0,0,37,0"/>
+                        <ComboBox 
+                                  Name="cb_metodoPago"
+                                  Grid.Row="3"
                                   MinWidth="160"
-                                  BorderBrush="#1976D2" BorderThickness="2" Margin="0,16,70,19" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                                  BorderBrush="#1976D2"
+                                  BorderThickness="2"
+                                  Margin="0,3,70,49"
+                                  Grid.ColumnSpan="2">
+                            <!-- Métodos de pago agregados -->
+                            <ComboBoxItem Content="Efectivo"/>
+                            <ComboBoxItem Content="Tarjeta de crédito"/>
+                            <ComboBoxItem Content="Tarjeta de débito"/>
+                            <ComboBoxItem Content="Transferencia bancaria"/>
+                            <ComboBoxItem Content="Cheque"/>
+                            <ComboBoxItem Content="Vale"/>
+                            <ComboBoxItem Content="Pago mixto"/>
+                            <ComboBoxItem Content="Otros"/>
+                        </ComboBox>
 
-                        <TextBlock Text="Caja:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Foreground="#424242"/>
+                        <TextBlock Text="Caja:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Foreground="#424242" Margin="0,31,97,0"/>
+                        <TextBlock Name="txt_caja" Grid.Column="0" VerticalAlignment="Top" Foreground="#424242" Margin="35,31,42,0" Grid.ColumnSpan="2" Grid.Row="3"/>
 
-                        <!-- Derecha: totales compactos -->
-                        <TextBlock Text="Productos distintos:" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Foreground="#424242"/>
-                        <TextBlock Text="{Binding CantidadProductos}" Grid.Row="0" Grid.Column="3"/>
+                        <TextBlock Text="Productos distintos:" Grid.Column="2" VerticalAlignment="Center" Foreground="#424242" Margin="0,0,28,0"/>
+                        <TextBlock Name="txt_distintos" Grid.Column="2" VerticalAlignment="Center" Foreground="#424242" Margin="112,0,13,0" Grid.ColumnSpan="2"/>
+                        <TextBlock Text="Unidades totales:" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Foreground="#424242" Margin="0,0,37,0"/>
+                        <TextBlock Name="txt_productosTotales" Grid.Column="2" VerticalAlignment="Center" Foreground="#424242" Margin="108,0,17,0" Grid.ColumnSpan="2" Grid.Row="1"/>
 
-                        <TextBlock Text="Unidades totales:" Grid.Row="1" Grid.Column="2" VerticalAlignment="Center" Foreground="#424242"/>
-                        <TextBlock Text="{Binding UnidadesTotales}" Grid.Row="1" Grid.Column="3"/>
+                        <TextBlock Text="Total:" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top" Foreground="#424242" Margin="0,31,102,0" Height="16"/>
+                        <TextBlock Name="txt_Total" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top" Foreground="#424242" Margin="43,31,34,0" Height="16" Grid.ColumnSpan="2"/>
+                        <Label Name="Lbl_mensaje" Foreground="Red" Visibility="Hidden" Content="Debe seleccionar un metodo de pago" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="2,49,0,0" Grid.Row="3" VerticalAlignment="Center" RenderTransformOrigin="-1.009,2.654" Width="474" Grid.ColumnSpan="4"/>
 
-                        <TextBlock Text="Total:" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top" Foreground="#424242" Margin="0,8,0,0"/>
-                        <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal">
-                            <TextBlock Text="{Binding Total, StringFormat=C}"
-                                       FontWeight="Bold"
-                                       FontSize="16"
-                                       Foreground="#2E7D32"/>
-                        </StackPanel>
                     </Grid>
                 </Border>
 
-                <!-- Detalle de productos (compacto) -->
                 <Border Grid.Row="2"
                         Margin="0,10,0,10"
                         Padding="8"
@@ -156,38 +161,39 @@
                         BorderThickness="1"
                         CornerRadius="8">
                     <DataGrid ItemsSource="{Binding Items}"
+                              Name="dg_resumenVenta"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               IsReadOnly="True"
                               HeadersVisibility="Column"
                               GridLinesVisibility="Horizontal"
                               BorderBrush="#E0E0E0" BorderThickness="1"
-                              RowHeaderWidth="0">
+                              RowHeaderWidth="0" Margin="0,1,0,0">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Producto" Binding="{Binding Nombre}" Width="*"/>
-                            <DataGridTextColumn Header="Cant." Binding="{Binding Cantidad}" Width="60"/>
-                            <DataGridTextColumn Header="P.Unit." Binding="{Binding PrecioUnitario, StringFormat=C}" Width="90"/>
-                            <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal, StringFormat=C}" Width="90"/>
+                            <DataGridTextColumn Header="Producto" Binding="{Binding nombre_producto}" Width="*"/>
+                            <DataGridTextColumn Header="Cant." Binding="{Binding cantidad}" Width="60"/>
+                            <DataGridTextColumn Header="P.Unit." Binding="{Binding precio_venta_producto, StringFormat=C}" Width="90"/>
+                            <DataGridTextColumn Header="Subtotal"
+                                                Binding="{Binding Subtotal, StringFormat={}{0:C}}"
+                                                Width="90"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Border>
 
-                <!-- Botones (sin eventos) -->
                 <StackPanel Grid.Row="3"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
-                            Margin="0,0,0,0"
-                            >
+                            Margin="0,0,0,0">
                     <Button Content="Cancelar"
                             Width="110"
                             Margin="0,0,8,0"
                             Background="#E53935"
-                            Style="{StaticResource RoundedButtonStyle}" Click="Button_Click"/>
+                            Style="{StaticResource RoundedButtonStyle}" Click="Button_Click_Cancelar"/>
                     <Button Content="Confirmar"
                             Width="140"
                             FontWeight="Bold"
                             Background="#4CAF50"
-                            Style="{StaticResource RoundedButtonStyle}"/>
+                            Style="{StaticResource RoundedButtonStyle}" Click="Button_Click_Confirmar"/>
                 </StackPanel>
             </Grid>
         </Border>

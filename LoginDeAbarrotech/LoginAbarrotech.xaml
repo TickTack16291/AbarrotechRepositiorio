@@ -96,7 +96,7 @@
                         </Style>
                     </PasswordBox.Style>
                 </PasswordBox>
-                
+
                 <Label Name="Lbl_error" 
                        HorizontalAlignment="Center" 
                        Foreground="#FFEBEE" 
@@ -166,7 +166,7 @@
                     </Button>
 
                 </StackPanel>
-                
+
                 <Button x:Name="btn_Cerrar" Content="Salir" Background="#D32F2F" Foreground="White"
                     Height="38" Width="110" FontWeight="SemiBold" Click="btn_Cerrar_Click">
                     <Button.Style>
@@ -183,7 +183,7 @@
                             <Setter Property="Cursor" Value="Hand"/>
                         </Style>
                     </Button.Style>
-                    
+
                     <!-- Animación hover para botón salir -->
                     <Button.Triggers>
                         <EventTrigger RoutedEvent="UIElement.MouseEnter">

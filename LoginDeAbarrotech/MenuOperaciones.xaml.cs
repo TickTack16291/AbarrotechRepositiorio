@@ -103,7 +103,6 @@ namespace LoginDeAbarrotech
             txt_WelcomeUser.Visibility = isMenuCollapsed ? Visibility.Collapsed : Visibility.Visible;
             txt_BrandVertical.Visibility = isMenuCollapsed ? Visibility.Visible : Visibility.Collapsed;
         }
-
         private void UpdateSidebarButtonsVisual(bool collapsed)
         {
             foreach (Button btn in FindVisualChildren<Button>(SidebarBorder))
@@ -145,21 +144,18 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-
         private static string ExtractIcon(string content)
         {
             if (string.IsNullOrWhiteSpace(content)) return content;
             int spaceIndex = content.IndexOf(' ');
             return spaceIndex > 0 ? content[..spaceIndex] : content;
         }
-
         private static string ExtractLabel(string content)
         {
             if (string.IsNullOrWhiteSpace(content)) return string.Empty;
             int spaceIndex = content.IndexOf(' ');
             return spaceIndex > 0 ? content[(spaceIndex + 1)..] : string.Empty;
         }
-
         // Método auxiliar para encontrar elementos visuales hijos
         private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
@@ -185,7 +181,7 @@ namespace LoginDeAbarrotech
             txt_PageTitle.Text = title;
             txt_PageSubtitle.Text = subtitle;
         }
-         private bool tieneAcceso(string Usuario)
+        private bool tieneAcceso(string Usuario)
         {
             ConexionBD conexion = new ConexionBD();
             string aux = conexion.ObtenerRolDeUsuario(LoginAbarrotech.UsuarioGlobal);

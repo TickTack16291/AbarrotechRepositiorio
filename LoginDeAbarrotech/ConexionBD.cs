@@ -1178,6 +1178,35 @@ namespace LoginDeAbarrotech
                 }
             }
         }
+        public List<string> ObtenerProveedoresActivos()
+        {
+            List<string> nombres = new List<string>();
+
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = "SELECT nombre_proveedor FROM proveedores WHERE estado_proveedor = 'Activo'";
+
+                    using (var comando = new MySqlCommand(sql, Conexion))
+                    using (var reader = comando.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string nom = reader.GetString("nombre_proveedor");
+                            nombres.Add(nom);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener nombres de proveedores: {ex.Message}");
+                }
+            }
+
+            return nombres;
+        }
         /// <summary>
         /// Operaciones de transacciones e inventario
         /// </summary>

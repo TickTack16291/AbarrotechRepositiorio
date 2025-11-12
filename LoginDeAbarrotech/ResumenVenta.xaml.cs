@@ -50,7 +50,7 @@ namespace LoginDeAbarrotech
 
             ConexionBD conexion = new ConexionBD();
 
-            venta.id_venta = 0;
+            venta.id_venta = 0;// Chance deberia quitarlo de la clase, pero que mas da solo una linea
             venta.id_usuario = conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal);
             venta.fecha_venta = DateTime.Now;
             venta.total_venta = total;
@@ -80,10 +80,15 @@ namespace LoginDeAbarrotech
             venta.fecha_venta = DateTime.Now;
 
             ConexionBD conexion = new ConexionBD();
-            if (conexion.RealizarVenta(venta))
+            if (conexion.RealizarVenta(venta))// Aqui se hace la venta y se agrega a la base de datos
             {
                 MessageBox.Show("¡Venta realizada correctamente!");
                 CrearTicket(); // Se guardan en -> "C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets"
+
+                // Agregamos los detalles de la venta necesarios(1 producto)
+                foreach (var ps in Ventas.productosSeleccionados)
+                    conexion.AgregarDetalleVenta(long.Parse(conexion.ObtenerIdVenta()), ps.id_producto, ps.cantidad, ps.precio_venta_producto);
+                // falta hacer modificar el inventario y las trasnsacciones, pero debo hacer primero compras jaja que hueva
             }
             else
             {

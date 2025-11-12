@@ -3,21 +3,27 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using static LoginDeAbarrotech.Ventas;
+using System.IO;
 
 namespace LoginDeAbarrotech
 {
     public partial class ResumenVenta : Window
     {
+        /// <summary>
+        /// Lógica de interacción para ResumenVenta.xaml
+        /// </summary>
         public ResumenVenta()
         {
             InitializeComponent();
             CargarDatosDeVenta();
             CargarProductosVenta();
         }
-
+        
+        /// <summary>
+        /// Objeto para pasar datos de la venta
+        /// </summary>
         Venta venta = new Venta();
         public bool cancelada = false;
-
         public void MostrarMensaje()
         {
             Lbl_mensaje.Visibility = Visibility.Visible;
@@ -32,7 +38,6 @@ namespace LoginDeAbarrotech
             };
             Lbl_mensaje.BeginAnimation(MarginProperty, animacion);
         }
-
         public void CargarDatosDeVenta()
         {
             txt_usuario.Text = LoginAbarrotech.UsuarioGlobal;
@@ -51,18 +56,15 @@ namespace LoginDeAbarrotech
             venta.total_venta = total;
             venta.caja = 1;
         }
-
         public void CargarProductosVenta()
         {
             dg_resumenVenta.ItemsSource = Ventas.productosSeleccionados;
         }
-
         private void Button_Click_Cancelar(object sender, RoutedEventArgs e)
         {
             cancelada = true;
             Hide();
         }
-
         private void Button_Click_Confirmar(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(cb_metodoPago.Text))
@@ -81,12 +83,65 @@ namespace LoginDeAbarrotech
             if (conexion.RealizarVenta(venta))
             {
                 MessageBox.Show("¡Venta realizada correctamente!");
+                CrearTicket(); // Se guardan en -> "C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets"
             }
             else
             {
                 MessageBox.Show("Error al registrar la venta.");
             }
             Hide();
+        }
+
+        /// <summary>
+        /// Majeno de archivos para tikets
+        /// </summary>
+        private void CrearTicket()
+        {
+            ConexionBD conexion = new ConexionBD();
+            string idVenta = conexion.ObtenerIdVenta();// Obtiene el ID de la venta más reciente
+            venta.forma_pago_venta = cb_metodoPago.Text.Trim();
+
+            // Contenido inicial del ticket
+
+            // Usamos un foreach para hacer la lista de productos
+            string listaProductos = "";
+            foreach (var ps in Ventas.productosSeleccionados)
+            {// Agregamos todos los productos seleccionados para la venta a un string
+                listaProductos += $"{ps.nombre_producto} - Cantidad: {ps.cantidad} - Precio Unitario: {ps.precio_venta_producto} - Subtotal: {ps.Subtotal}\n";
+            }
+
+            string tiket = $"- - - - Ticket de Venta No. {idVenta} - - - -\n" +
+                           $"Usuario: {LoginAbarrotech.UsuarioGlobal}\n" +
+                           $"Total: {venta.total_venta}\n" +
+                           $"Caja: {venta.caja}\n" +
+                           $"Fecha y hora: {venta.fecha_venta}\n" +
+                           $"Método de pago: {venta.forma_pago_venta}\n" +
+                           "---------------------------------------------------\n" +
+                           "Productos:\n" + listaProductos;
+
+            // Ruta donde se guardarán los tickets, creo que deberiamos usar una general para que no falle en otros dispositivos
+            string targetDir = @"C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets";
+
+            try
+            {
+                // Asegura que el directorio exista (lo crea si falta).
+                Directory.CreateDirectory(targetDir);
+
+                // El "$" es como la "f" en python
+                string fileName = $"ticket{idVenta}_{LoginAbarrotech.UsuarioGlobal}.txt"; // El ticket lleva el id de la venta y el usuario que la realizó
+
+                // Combina de forma segura el directorio y el nombre de archivo.
+                string fullPath = Path.Combine(targetDir, fileName);
+
+                // Escribe todo el contenido del ticket en el archivo (sobrescribe si existe).
+                File.WriteAllText(fullPath, tiket);
+
+                MessageBox.Show($"¡Ticket creado con éxito en:\n{fullPath}", "Ticket creado", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al crear el ticket:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

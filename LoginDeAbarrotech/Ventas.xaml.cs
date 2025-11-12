@@ -24,6 +24,17 @@ namespace LoginDeAbarrotech
             InitializeComponent();
             CargarProductosDisponibles();
         }
+        public void MostrarMensaje()
+        {
+            Lbl_mensaje.Visibility = Visibility.Visible;
+            var animacion = new System.Windows.Media.Animation.ThicknessAnimation();
+            animacion.Duration = TimeSpan.FromMilliseconds(100);
+            animacion.From = new Thickness(0);
+            animacion.To = new Thickness(5);
+            animacion.AutoReverse = true;
+            animacion.RepeatBehavior = new System.Windows.Media.Animation.RepeatBehavior(2);
+            Lbl_mensaje.BeginAnimation(MarginProperty, animacion);
+        }
         private void VaciarTablaSeleccionados()
         {
             dg_ProductosSeleecionados.Items.Clear();
@@ -139,25 +150,17 @@ namespace LoginDeAbarrotech
         {
             ConexionBD conexion = new ConexionBD();
 
+            if(total == 0) {
+                MostrarMensaje();
+                return;
+            }
+
             ResumenVenta resumenVenta = new ResumenVenta();
             resumenVenta.ShowDialog();
 
             if (!resumenVenta.cancelada)
                 VaciarTablaSeleccionados();// No se vacia si se cancelo, por que podria ser para seleccionar o quitar productos
     }
-        private void dg_ProductosSeleecionados_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var prod = dg_ProductosSeleecionados.SelectedItem as ProductoSeleccionado;
-            if (prod == null) return;
-
-            // Restar el subtotal del producto y quitarlo de ambas colecciones
-            total -= prod.precio_venta_producto * prod.cantidad;
-            if (total < 0) total = 0f;
-            Txt_TotalVenta.Text = total.ToString();
-
-            productosSeleccionados.Remove(prod);
-            dg_ProductosSeleecionados.Items.Remove(prod);
-        }
         private void dg_ProductosSeleecionados_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var prod = dg_ProductosSeleecionados.SelectedItem as ProductoSeleccionado;

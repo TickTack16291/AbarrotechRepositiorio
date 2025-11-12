@@ -39,11 +39,10 @@ namespace LoginDeAbarrotech
 
             Lbl_mensaje.Content = mensaje;
             Lbl_mensaje.Visibility = Visibility.Visible;
-            var margenBase = Lbl_mensaje.Margin;
             var animacion = new System.Windows.Media.Animation.ThicknessAnimation();
-            animacion.From = margenBase;
-            animacion.To = new Thickness(margenBase.Left + 5, margenBase.Top, margenBase.Right, margenBase.Bottom);
             animacion.Duration = TimeSpan.FromMilliseconds(100);
+            animacion.From = new Thickness(0);
+            animacion.To = new Thickness(5);
             animacion.AutoReverse = true;
             animacion.RepeatBehavior = new System.Windows.Media.Animation.RepeatBehavior(2);
             Lbl_mensaje.BeginAnimation(MarginProperty, animacion);

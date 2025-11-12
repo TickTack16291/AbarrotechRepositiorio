@@ -1086,6 +1086,31 @@ namespace LoginDeAbarrotech
             }
             return listaProductos;
         }
+        public string ObtenerIdVenta()
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = "SELECT id_venta FROM ventas ORDER BY fecha_venta DESC LIMIT 1";
+
+                    using (var comando = new MySqlCommand(sql, Conexion))
+                    {
+                        var resultado = comando.ExecuteScalar();
+                        if (resultado != null && resultado != DBNull.Value)
+                            return resultado.ToString();
+                        else
+                            return "0"; // No hay ventas registradas
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener el id de la venta: {ex.Message}");
+                    return ""; // Indicar error
+                }
+            }
+        }
 
         /// <summary>
         /// Operaciones de compras

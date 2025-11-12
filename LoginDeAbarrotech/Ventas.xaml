@@ -80,6 +80,11 @@
                 <Grid Grid.Row="0">
                     <TextBlock Text="Ventas" FontSize="22" FontWeight="Bold"
                                Foreground="#1565C0" HorizontalAlignment="Center"/>
+                    <Label x:Name="Lbl_mensaje"
+                            HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Foreground="Red"
+                            Content="Debe seleccionar productos para realizar la venta"
+                            Visibility="Hidden"/>
                 </Grid>
 
                 <!-- Filtros -->

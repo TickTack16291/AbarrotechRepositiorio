@@ -95,7 +95,11 @@ namespace LoginDeAbarrotech
                 // Agregamos los detalles de la venta necesarios(1 producto)
                 foreach (var ps in Compras.productosSeleccionados)
                     conexion.AgregarDetalleCompra(long.Parse(conexion.ObtenerIdCompra()), ps.id_producto, ps.cantidad, ps.precio_compra_producto);
-                // falta hacer modificar el inventario y las trasnsacciones, pero debo hacer primero compras jaja que hueva
+                // falta hacer modificar el inventario y las trasnsacciones, pero debo hacer primero compras jaja que
+                // jaja sigue dando hueva hacerlo, pero ni modo
+
+
+
             }
             else
             {

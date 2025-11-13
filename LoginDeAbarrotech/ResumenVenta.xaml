@@ -132,7 +132,7 @@
                             <ComboBoxItem Content="Efectivo"/>
                             <ComboBoxItem Content="Tarjeta de crédito"/>
                             <ComboBoxItem Content="Tarjeta de débito"/>
-                            <ComboBoxItem Content="Transferencia bancaria"/>
+                            <ComboBoxItem Content="Transferencia"/>
                             <ComboBoxItem Content="Cheque"/>
                             <ComboBoxItem Content="Vale"/>
                             <ComboBoxItem Content="Pago mixto"/>

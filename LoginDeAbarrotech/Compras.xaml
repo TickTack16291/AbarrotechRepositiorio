@@ -76,6 +76,11 @@
                 <Grid Grid.Row="0">
                     <TextBlock Text="Compras" FontSize="22" FontWeight="Bold"
                                Foreground="#1565C0" HorizontalAlignment="Center"/>
+                    <Label x:Name="Lbl_mensaje"
+                            HorizontalAlignment="Right" VerticalAlignment="Center"
+                            Foreground="Red"
+                            Content="Debe seleccionar productos para realizar la compra"
+                            Visibility="Hidden"/>
                 </Grid>
 
                 <!-- Filtros -->
@@ -92,14 +97,13 @@
 
                     <TextBlock Text="Proveedor:" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="#424242"/>
                     <ComboBox x:Name="cb_proveedores" Grid.Column="1" Height="38" Padding="10"
-                              BorderBrush="#1976D2" BorderThickness="2" Grid.ColumnSpan="2" Margin="0,0,20,0" VerticalAlignment="Top"/>
+                              BorderBrush="#1976D2" BorderThickness="2" Grid.ColumnSpan="2" Margin="0,0,20,0" VerticalAlignment="Top" SelectionChanged="cb_proveedores_SelectionChanged"/>
 
                     <TextBox x:Name="txt_busqueda" Grid.Column="3" Height="38"
                              BorderBrush="#1976D2" BorderThickness="2"
                              ToolTip="Buscar por nombre (coincidencia parcial)"
                              Style="{StaticResource RoundedSearchTextBox}"/>
-                    <Button x:Name="btn_filtrar" Grid.Column="4" Content="Buscar"
-                            Height="32" Width="96" Foreground="White" Background="#1976D2" Margin="0,3,0,0" VerticalAlignment="Top" Click="btn_filtrar_Click">
+                    <Button x:Name="btn_filtrar" Grid.Column="4" Content="Buscar" Width="96" Foreground="White" Background="#1976D2" Margin="0,3,0,3" Click="btn_filtrar_Click">
                         <Button.Style>
                             <Style TargetType="{x:Type Button}">
                                 <Setter Property="Template">
@@ -152,9 +156,9 @@
                                       BorderBrush="#E0E0E0" BorderThickness="1"
                                       ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="dg_ProductosDisponibles_SelectionChanged">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
+                                    <DataGridTextColumn Header="No." Width="35" Binding="{Binding id_producto}"/>
                                     <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
-                                    <DataGridTextColumn Header="ProveedorId" Width="100" Binding="{Binding id_proveedor_producto}"/>
+                                    <DataGridTextColumn Header="Proveedor" Width="100" Binding="{Binding id_proveedor_producto}"/>
                                     <DataGridTextColumn Header="Precio compra" Width="110">
                                         <DataGridTextColumn.Binding>
                                             <Binding Path="precio_compra_producto" StringFormat="C2"/>
@@ -180,44 +184,16 @@
                                       AutoGenerateColumns="False" IsReadOnly="True"
                                       HeadersVisibility="Column"
                                       BorderBrush="#E0E0E0" BorderThickness="1"
-                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="dg_ProductosSeleecionados_SelectionChanged_1">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="ID" Width="35" Binding="{Binding id_producto}"/>
+                                    <DataGridTextColumn Header="No." Width="35" Binding="{Binding id_producto}"/>
                                     <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
-                                    <DataGridTextColumn Header="ProveedorId" Width="100" Binding="{Binding id_proveedor_producto}"/>
-                                    <DataGridTemplateColumn Header="Precio." Width="80">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding precio_compra_producto, StringFormat=C2}" Width="90" VerticalAlignment="Center"/>
-                                                    <TextBlock Text="Cant.:" VerticalAlignment="Center" Margin="6,0,6,0"/>
-                                                    <ComboBox Width="80" x:Name="QuantityComboBox" SelectedIndex="0"
-                                                              BorderBrush="#1976D2" BorderThickness="2">
-                                                        <ComboBoxItem Content="1" IsSelected="True"/>
-                                                        <ComboBoxItem Content="2"/>
-                                                        <ComboBoxItem Content="3"/>
-                                                        <ComboBoxItem Content="4"/>
-                                                        <ComboBoxItem Content="5"/>
-                                                        <ComboBoxItem Content="6"/>
-                                                        <ComboBoxItem Content="7"/>
-                                                        <ComboBoxItem Content="8"/>
-                                                        <ComboBoxItem Content="9"/>
-                                                        <ComboBoxItem Content="10"/>
-                                                        <ComboBoxItem Content="11"/>
-                                                        <ComboBoxItem Content="12"/>
-                                                        <ComboBoxItem Content="13"/>
-                                                        <ComboBoxItem Content="14"/>
-                                                        <ComboBoxItem Content="15"/>
-                                                        <ComboBoxItem Content="16"/>
-                                                        <ComboBoxItem Content="17"/>
-                                                        <ComboBoxItem Content="18"/>
-                                                        <ComboBoxItem Content="19"/>
-                                                        <ComboBoxItem Content="20"/>
-                                                    </ComboBox>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Proveedor" Width="100" Binding="{Binding id_proveedor_producto}"/>
+                                    <DataGridTextColumn Header="Precio" Width="85">
+                                        <DataGridTextColumn.Binding>
+                                            <Binding Path="precio_compra_producto" StringFormat="C2"/>
+                                        </DataGridTextColumn.Binding>
+                                    </DataGridTextColumn>
                                     <DataGridTextColumn Header="Cant." Width="80" Binding="{Binding cantidad}"/>
                                 </DataGrid.Columns>
                             </DataGrid>

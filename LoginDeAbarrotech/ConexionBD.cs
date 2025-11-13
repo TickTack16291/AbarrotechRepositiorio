@@ -1023,7 +1023,7 @@ namespace LoginDeAbarrotech
             }
             return listaProductos;
         }
-        public List<Producto> ObtenerProductosPorCoincidencia(string busqueda)
+        public List<Producto> ObtenerProductosPorCoincidenciaActivos(string busqueda)
         {
             List<Producto> listaProductos = new List<Producto>();
             using (var Conexion = new MySqlConnection(conexionString))
@@ -1032,7 +1032,6 @@ namespace LoginDeAbarrotech
                 {
                     Conexion.Open();
 
-                    //  Filtra por categoría exacta (@Categoria)
                     //  Solo productos Activo
                     //  Si @Patron es NULL, NO aplica filtro por nombre (se omite).
                     //  Si NO es NULL, aplica un LIKE con LOWER(nombre_producto) para coincidir sin distinguir mayúsculas/minúsculas.
@@ -1115,7 +1114,7 @@ namespace LoginDeAbarrotech
         /// <summary>
         /// Operaciones de compras
         /// </summary>
-        public bool RealizarCompra(long idUsuario, DateTime fechaCompra, float totalCompra, string formaPagoCompra, int caja)
+        public bool RealizarCompra(Compra compra)
         {
             using (var Conexion = new MySqlConnection(conexionString))
             {
@@ -1124,25 +1123,25 @@ namespace LoginDeAbarrotech
                     Conexion.Open();
 
                     string sql = @"INSERT INTO `compras`
-                           (`id_usuario`, `fecha_compra`, `total_compra`, `forma_pago_compra`, `caja`)
-                           VALUES
-                           (@id_usuario, @fecha_compra, @total_compra, @forma_pago_compras, @caja);";
+                   (`id_usuario`, `fecha_compra`, `total_compra`, `forma_pago_compra`, `caja`)
+                   VALUES
+                   (@id_usuario, @fecha_compra, @total_compra, @forma_pago_compra, @caja);";
 
                     using (var command = new MySqlCommand(sql, Conexion))
                     {
-                        command.Parameters.AddWithValue("@id_usuario", idUsuario);
-                        command.Parameters.AddWithValue("@fecha_compra", fechaCompra);
-                        command.Parameters.AddWithValue("@total_compra", totalCompra);
-                        command.Parameters.AddWithValue("@forma_pago_compra", formaPagoCompra);
-                        command.Parameters.AddWithValue("@caja", caja);
+                        command.Parameters.AddWithValue("@id_usuario", compra.id_usuario);
+                        command.Parameters.AddWithValue("@fecha_compra", compra.fecha_compra);
+                        command.Parameters.AddWithValue("@total_compra", compra.total_compra);
+                        command.Parameters.AddWithValue("@forma_pago_compra", compra.forma_pago_compra);
+                        command.Parameters.AddWithValue("@caja", compra.caja);
 
                         int result = command.ExecuteNonQuery();
-                        return result > 0; // True si se registró la venta
+                        return result > 0; // True si se registró la compra
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error en la venta: " + ex.Message);
+                    MessageBox.Show("Error en la compra: " + ex.Message);
                     return false;
                 }
             }
@@ -1206,6 +1205,147 @@ namespace LoginDeAbarrotech
             }
 
             return nombres;
+        }
+        public List<Producto> ObtenerProductosPorProveedor(int idProveedor, string busqueda = null)
+        {
+            List<Producto> listaProductos = new List<Producto>();
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    //  Filtra por el id de proveedor (@idProveedor)
+                    //  Si @Patron es NULL, NO aplica filtro por nombre (se omite).
+                    //  Si NO es NULL, aplica un LIKE con LOWER(nombre_producto) para coincidir sin distinguir mayúsculas/minúsculas.
+                    string sql = @"
+                            SELECT * FROM productos WHERE id_proveedor_producto = @idProveedor 
+                            AND estado_producto = 'Activo'
+                            AND (@Patron IS NULL OR LOWER(nombre_producto) LIKE @Patron)";
+                    // LiKE es para busquedas parciales, puedes colocar el unicio, final o un conjunto de letras para que haga esta busqueda 
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@idProveedor", idProveedor);
+
+                        // Construye el patrón de búsqueda si hay texto:
+                        // Trim quita espacios al inicio/fin
+                        // ToLower para comparar en minúsculas (acompañado por LOWER en SQL)
+                        // %...% para coincidencia parcial en cualquier posición
+                        string patron = string.IsNullOrWhiteSpace(busqueda)
+                            ? null
+                            : $"%{busqueda.Trim().ToLower()}%";
+
+                        // Si no hay texto, se manda NULL => el predicado (@Patron IS NULL OR ...) se cumple y se omite el filtro
+                        if (patron is null)
+                            command.Parameters.AddWithValue("@Patron", DBNull.Value);
+                        else
+                            command.Parameters.AddWithValue("@Patron", patron);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Producto productoAux = new Producto(
+                                    reader.GetInt32(0),       // id_producto
+                                    reader.GetString(1),      // nombre_producto
+                                    reader.GetString(2),      // marca_producto
+                                    reader.GetInt32(3),       // presentacion_producto
+                                    reader.GetString(4),      // unidad_medida_producto
+                                    reader.GetFloat(5),       // precio_venta_producto
+                                    reader.GetFloat(6),       // precio_compra_producto
+                                    reader.GetString(7),      // estado_producto
+                                    reader.GetString(8),      // categoria_producto
+                                    reader.GetInt32(9)        // id_proveedor_producto
+                                );
+
+                                listaProductos.Add(productoAux);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar a la base de datos: " + ex.Message);
+                }
+            }
+            return listaProductos;
+        }
+        public List<Producto> ObtenerProductosPorCoincidenciaTodos(string busqueda)
+        {
+            List<Producto> listaProductos = new List<Producto>();
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"SELECT * FROM productos WHERE (@Patron IS NULL OR LOWER(nombre_producto) LIKE @Patron)";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        string patron = string.IsNullOrWhiteSpace(busqueda)
+                            ? null
+                            : $"%{busqueda.Trim().ToLower()}%";
+
+                        if (patron is null)
+                            command.Parameters.AddWithValue("@Patron", DBNull.Value);
+                        else
+                            command.Parameters.AddWithValue("@Patron", patron);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Producto productoAux = new Producto(
+                                    reader.GetInt32(0),       // id_producto
+                                    reader.GetString(1),      // nombre_producto
+                                    reader.GetString(2),      // marca_producto
+                                    reader.GetInt32(3),       // presentacion_producto
+                                    reader.GetString(4),      // unidad_medida_producto
+                                    reader.GetFloat(5),       // precio_venta_producto
+                                    reader.GetFloat(6),       // precio_compra_producto
+                                    reader.GetString(7),      // estado_producto
+                                    reader.GetString(8),      // categoria_producto
+                                    reader.GetInt32(9)        // id_proveedor_producto
+                                );
+
+                                listaProductos.Add(productoAux);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar a la base de datos: " + ex.Message);
+                }
+            }
+            return listaProductos;
+        }
+        public string ObtenerIdCompra()
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = "SELECT id_compra FROM compras ORDER BY fecha_compra DESC LIMIT 1";
+
+                    using (var comando = new MySqlCommand(sql, Conexion))
+                    {
+                        var resultado = comando.ExecuteScalar();
+                        if (resultado != null && resultado != DBNull.Value)
+                            return resultado.ToString();
+                        else
+                            return "0"; // No hay ventas registradas
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener el id de la compra: {ex.Message}");
+                    return ""; // Indicar error
+                }
+            }
         }
         /// <summary>
         /// Operaciones de transacciones e inventario

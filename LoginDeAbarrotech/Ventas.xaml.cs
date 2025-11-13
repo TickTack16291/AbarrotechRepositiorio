@@ -52,7 +52,7 @@ namespace LoginDeAbarrotech
         {
             ConexionBD conexion = new ConexionBD();
             List<Producto> producto;
-            if (aux2 == "")
+            if (aux2 == string.Empty)
                 producto = conexion.ObtenerProductosPorCategoria(aux1, null);
             else
                 producto = conexion.ObtenerProductosPorCategoria(aux1, aux2);
@@ -62,7 +62,7 @@ namespace LoginDeAbarrotech
         public void CargarProductosPorCoincidencia(string aux1)
         {
             ConexionBD conexion = new ConexionBD();
-            var producto = conexion.ObtenerProductosPorCoincidencia(aux1);
+            var producto = conexion.ObtenerProductosPorCoincidenciaActivos(aux1);
             dg_ProductosDisponibles.ItemsSource = producto;
         }
         private void btn_cancelar_Click_1(object sender, RoutedEventArgs e)

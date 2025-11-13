@@ -1,28 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using static LoginDeAbarrotech.Ventas;
-using System.IO;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace LoginDeAbarrotech
 {
-    public partial class ResumenVenta : Window
+    /// <summary>
+    /// Lógica de interacción para ResumenCompra.xaml
+    /// </summary>
+    public partial class ResumenCompra : Window
     {
-        /// <summary>
-        /// Lógica de interacción para ResumenVenta.xaml
-        /// </summary>
-        public ResumenVenta()
+        public ResumenCompra()
         {
             InitializeComponent();
-            CargarDatosDeVenta();
-            CargarProductosVenta();
+            CargarDatosDeCompra();
+            CargarProductosCompra();
         }
-        
+
         /// <summary>
-        /// Objeto para pasar datos de la venta
+        /// Objeto para pasar datos de la compra
         /// </summary>
-        Venta venta = new Venta();
+        Compra compra = new Compra();
         public bool cancelada = false;
         public void MostrarMensaje()
         {
@@ -38,27 +45,27 @@ namespace LoginDeAbarrotech
             };
             Lbl_mensaje.BeginAnimation(MarginProperty, animacion);
         }
-        public void CargarDatosDeVenta()
+        public void CargarDatosDeCompra()
         {
             txt_usuario.Text = LoginAbarrotech.UsuarioGlobal;
             txt_FechaHora.Text = DateTime.Now.ToString("g");
             txt_caja.Text = "1";
-            txt_distintos.Text = Ventas.productosSeleccionados.Count.ToString();
-            txt_productosTotales.Text = Ventas.productosSeleccionados.Sum(p => p.cantidad).ToString();
-            float total = Ventas.productosSeleccionados.Sum(p => p.Subtotal);
+            txt_distintos.Text = Compras.productosSeleccionados.Count.ToString();
+            txt_productosTotales.Text = Compras.productosSeleccionados.Sum(p => p.cantidad).ToString();
+            float total = Compras.productosSeleccionados.Sum(p => p.Subtotal);
             txt_Total.Text = total.ToString();
 
             ConexionBD conexion = new ConexionBD();
 
-            venta.id_venta = 0;// Chance deberia quitarlo de la clase, pero que mas da solo una linea
-            venta.id_usuario = conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal);
-            venta.fecha_venta = DateTime.Now;
-            venta.total_venta = total;
-            venta.caja = 1;
+            compra.id_compra = 0;// Chance deberia quitarlo de la clase, pero que mas da solo una linea
+            compra.id_usuario = conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal);
+            compra.fecha_compra = DateTime.Now;
+            compra.total_compra = total;
+            compra.caja = 1;
         }
-        public void CargarProductosVenta()
+        public void CargarProductosCompra()
         {
-            dg_resumenVenta.ItemsSource = Ventas.productosSeleccionados;
+            dg_resumenVenta.ItemsSource = Compras.productosSeleccionados;
         }
         private void Button_Click_Cancelar(object sender, RoutedEventArgs e)
         {
@@ -73,21 +80,21 @@ namespace LoginDeAbarrotech
                 return;
             }
 
-            venta.forma_pago_venta = cb_metodoPago.Text.Trim();
+            compra.forma_pago_compra = cb_metodoPago.Text.Trim();
 
             // Se recalculan por seguridad
-            venta.total_venta = Ventas.productosSeleccionados.Sum(p => p.Subtotal);
-            venta.fecha_venta = DateTime.Now;
+            compra.total_compra = Compras.productosSeleccionados.Sum(p => p.Subtotal);
+            compra.fecha_compra = DateTime.Now;
 
             ConexionBD conexion = new ConexionBD();
-            if (conexion.RealizarVenta(venta))// Aqui se hace la venta y se agrega a la base de datos
+            if (conexion.RealizarCompra(compra))// Aqui se hace la venta y se agrega a la base de datos
             {
                 MessageBox.Show("¡Venta realizada correctamente!");
                 CrearTicket(); // Se guardan en -> "C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets"
 
                 // Agregamos los detalles de la venta necesarios(1 producto)
-                foreach (var ps in Ventas.productosSeleccionados)
-                    conexion.AgregarDetalleVenta(long.Parse(conexion.ObtenerIdVenta()), ps.id_producto, ps.cantidad, ps.precio_venta_producto);
+                foreach (var ps in Compras.productosSeleccionados)
+                    conexion.AgregarDetalleCompra(long.Parse(conexion.ObtenerIdCompra()), ps.id_producto, ps.cantidad, ps.precio_compra_producto);
                 // falta hacer modificar el inventario y las trasnsacciones, pero debo hacer primero compras jaja que hueva
             }
             else
@@ -103,29 +110,29 @@ namespace LoginDeAbarrotech
         private void CrearTicket()
         {
             ConexionBD conexion = new ConexionBD();
-            string idVenta = conexion.ObtenerIdVenta();// Obtiene el ID de la venta más reciente
-            venta.forma_pago_venta = cb_metodoPago.Text.Trim();
+            string idCompra = conexion.ObtenerIdCompra();// Obtiene el ID de la venta más reciente
+            compra.forma_pago_compra = cb_metodoPago.Text.Trim();
 
             // Contenido inicial del ticket
 
             // Usamos un foreach para hacer la lista de productos
             string listaProductos = "";
-            foreach (var ps in Ventas.productosSeleccionados)
+            foreach (var ps in Compras.productosSeleccionados)
             {// Agregamos todos los productos seleccionados para la venta a un string
-                listaProductos += $"{ps.nombre_producto} - Cantidad: {ps.cantidad} - Precio Unitario: {ps.precio_venta_producto} - Subtotal: {ps.Subtotal}\n";
+                listaProductos += $"{ps.nombre_producto} - Cantidad: {ps.cantidad} - Precio Unitario: {ps.precio_compra_producto} - Subtotal: {ps.Subtotal}\n";
             }
 
-            string tiket = $"- - - - Ticket de Venta No. {idVenta} - - - -\n" +
+            string tiket = $"- - - - Ticket de Compra No. {idCompra} - - - -\n" +
                            $"Usuario: {LoginAbarrotech.UsuarioGlobal}\n" +
-                           $"Total: {venta.total_venta}\n" +
-                           $"Caja: {venta.caja}\n" +
-                           $"Fecha y hora: {venta.fecha_venta}\n" +
-                           $"Método de pago: {venta.forma_pago_venta}\n" +
+                           $"Total: {compra.total_compra}\n" +
+                           $"Caja: {compra.caja}\n" +
+                           $"Fecha y hora: {compra.fecha_compra}\n" +
+                           $"Método de pago: {compra.forma_pago_compra}\n" +
                            "---------------------------------------------------\n" +
                            "Productos:\n" + listaProductos;
 
             // Ruta donde se guardarán los tickets, creo que deberiamos usar una general para que no falle en otros dispositivos
-            string targetDir = @"C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets\Ventas";
+            string targetDir = @"C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets\Compras";
 
             try
             {
@@ -133,7 +140,7 @@ namespace LoginDeAbarrotech
                 Directory.CreateDirectory(targetDir);
 
                 // El "$" es como la "f" en python
-                string fileName = $"ticketVenta{idVenta}_{LoginAbarrotech.UsuarioGlobal}.txt"; // El ticket lleva el id de la venta y el usuario que la realizó
+                string fileName = $"ticket_Compra{idCompra}_{LoginAbarrotech.UsuarioGlobal}.txt"; // El ticket lleva el id de la compra y el usuario que la realizó
 
                 // Combina de forma segura el directorio y el nombre de archivo.
                 string fullPath = Path.Combine(targetDir, fileName);

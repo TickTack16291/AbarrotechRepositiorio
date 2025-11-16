@@ -85,10 +85,14 @@ namespace LoginDeAbarrotech
                 MessageBox.Show("¡Venta realizada correctamente!");
                 CrearTicket(); // Se guardan en -> "C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets"
 
+
                 // Agregamos los detalles de la venta necesarios(1 producto)
                 foreach (var ps in Ventas.productosSeleccionados)
                     conexion.AgregarDetalleVenta(long.Parse(conexion.ObtenerIdVenta()), ps.id_producto, ps.cantidad, ps.precio_venta_producto);
                 // falta hacer modificar el inventario y las trasnsacciones, pero debo hacer primero compras jaja que hueva
+                
+                // Limpiamos la lista de productos seleccionados para mas ventas
+                Ventas.productosSeleccionados.Clear();
             }
             else
             {

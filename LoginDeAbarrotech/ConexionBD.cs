@@ -1350,6 +1350,38 @@ namespace LoginDeAbarrotech
         /// <summary>
         /// Operaciones de transacciones e inventario
         /// </summary>
+        public bool AgregarInventario(long idProducto, long codigoBarras, int cantidad, string ubicacion, DateTime fechaElaboracion, DateTime fechaCaducidad)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = @"INSERT INTO `inventario`
+                           (`id_producto`, `codigo_barras_inventario`, `cantidad_inventario`, `ubicacion_inventario`, `fecha_elaboracion`, `fecha_caducidad`)
+                           VALUES
+                           (@id_producto, @codigo_barras_inventario, @cantidad_inventario, @ubicacion_inventario, @fecha_elaboracion, @fecha_caducidad);";
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@id_producto", idProducto);
+                        command.Parameters.AddWithValue("@codigo_barras_inventario", codigoBarras);
+                        command.Parameters.AddWithValue("@cantidad_inventario", cantidad);
+                        command.Parameters.AddWithValue("@ubicacion_inventario", ubicacion);
+                        command.Parameters.AddWithValue("@fecha_elaboracion", fechaElaboracion);
+                        command.Parameters.AddWithValue("@fecha_caducidad", fechaCaducidad);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al registrar inventario: " + ex.Message);
+                    return false;
+                }
+            }
+        }
         public bool RealizarTransaccion(long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long idVenta, long idCompra)// Revisar nulos
         {
             using (var Conexion = new MySqlConnection(conexionString))
@@ -1380,38 +1412,6 @@ namespace LoginDeAbarrotech
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error al registrar la transacción: " + ex.Message);
-                    return false;
-                }
-            }
-        }
-        public bool AgregarInventario(long idProducto, string codigoBarras, int cantidad, string ubicacion, DateTime fechaElaboracion, DateTime fechaCaducidad)
-        {
-            using (var Conexion = new MySqlConnection(conexionString))
-            {
-                try
-                {
-                    Conexion.Open();
-                    string sql = @"INSERT INTO `inventario`
-                           (`id_producto`, `codigo_barras_inventario`, `cantidad_inventario`, `ubicacion_inventario`, `fecha_elaboracion`, `fecha_caducidad`)
-                           VALUES
-                           (@id_producto, @codigo_barras_inventario, @cantidad_inventario, @ubicacion_inventario, @fecha_elaboracion, @fecha_caducidad);";
-
-                    using (var command = new MySqlCommand(sql, Conexion))
-                    {
-                        command.Parameters.AddWithValue("@id_producto", idProducto);
-                        command.Parameters.AddWithValue("@codigo_barras_inventario", codigoBarras);
-                        command.Parameters.AddWithValue("@cantidad_inventario", cantidad);
-                        command.Parameters.AddWithValue("@ubicacion_inventario", ubicacion);
-                        command.Parameters.AddWithValue("@fecha_elaboracion", fechaElaboracion);
-                        command.Parameters.AddWithValue("@fecha_caducidad", fechaCaducidad);
-
-                        int result = command.ExecuteNonQuery();
-                        return result > 0;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al registrar inventario: " + ex.Message);
                     return false;
                 }
             }

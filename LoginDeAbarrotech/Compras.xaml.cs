@@ -115,13 +115,13 @@ namespace LoginDeAbarrotech
         /// La clase "ProductoSeleccionado" se usa para agregarle un campo de cantidad a los productos, se hace herencia
         /// </summary>
  
-        internal class ProductoSeleccionado : Producto
+        internal class ProductoSeleccionadoCompra : Producto
         {
             public int cantidad { get; set; } = 0;
             public float Subtotal => cantidad * precio_compra_producto; // Usar precio_compra_producto en compras
         }
         float total = 0.0f;// Total de la compra
-        internal static List<ProductoSeleccionado> productosSeleccionados = new List<ProductoSeleccionado>();// Esta aqui para que no se reinicie cada que se llame el evento
+        internal static List<ProductoSeleccionadoCompra> productosSeleccionados = new List<ProductoSeleccionadoCompra>();// Esta aqui para que no se reinicie cada que se llame el evento
         private void dg_ProductosDisponibles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var prseleccionado = dg_ProductosDisponibles.SelectedItem as Producto;
@@ -135,7 +135,7 @@ namespace LoginDeAbarrotech
 
             if (existente == null)
             {
-                var prAux = new ProductoSeleccionado
+                var prAux = new ProductoSeleccionadoCompra
                 {
                     id_producto = prseleccionado.id_producto,
                     nombre_producto = prseleccionado.nombre_producto,
@@ -177,7 +177,7 @@ namespace LoginDeAbarrotech
         }
         private void dg_ProductosSeleecionados_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-            var prod = dg_ProductosSeleecionados.SelectedItem as ProductoSeleccionado;
+            var prod = dg_ProductosSeleecionados.SelectedItem as ProductoSeleccionadoCompra;
             if (prod == null) return;
 
             // Disminuir en 1 la cantidad y ajustar total

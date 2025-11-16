@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         Title="Compras" Height="680" Width="1300" WindowStartupLocation="CenterScreen">
 
-    <!-- Estilo para redondear la caja de búsqueda (igual al de Ventas) -->
     <Window.Resources>
         <Style x:Key="RoundedSearchTextBox" TargetType="TextBox">
             <Setter Property="Background" Value="White"/>

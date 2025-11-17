@@ -4,7 +4,7 @@ namespace LoginDeAbarrotech
 {
     public class Proveedor
     {
-        public int id_proveedor { get; set; }
+        public long id_proveedor { get; set; }
         public string nombre_proveedor { get; set; }
         public string responsable_proveedor { get; set; }
         public string direccion_proveedor { get; set; }
@@ -14,7 +14,7 @@ namespace LoginDeAbarrotech
 
         public Proveedor() { }
 
-        public Proveedor(int id_proveedor, string nombre_proveedor, string responsable_proveedor,
+        public Proveedor(long id_proveedor, string nombre_proveedor, string responsable_proveedor,
                          string direccion_proveedor, long telefono_proveedor, string email_proveedor, string estado_proveedor)
         {
             this.id_proveedor = id_proveedor;

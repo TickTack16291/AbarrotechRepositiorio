@@ -4,8 +4,8 @@ namespace LoginDeAbarrotech
 {
     public class Venta
     {
-        public int id_venta { get; set; }
-        public int id_usuario { get; set; }
+        public long id_venta { get; set; }
+        public long id_usuario { get; set; }
         public DateTime fecha_venta { get; set; }
         public float total_venta { get; set; }
         public string forma_pago_venta { get; set; }

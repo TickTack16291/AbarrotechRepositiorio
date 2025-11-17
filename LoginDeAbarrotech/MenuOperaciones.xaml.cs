@@ -254,9 +254,9 @@ namespace LoginDeAbarrotech
             try
             {
                 string UsuarioIniciado = LoginAbarrotech.UsuarioGlobal;
-                int idAux = conexion.ObtenerIdUsuario(UsuarioIniciado);
+                long idAux = conexion.ObtenerIdUsuario(UsuarioIniciado);
                 DateTime fechaActual = DateTime.Now;
-                int idInicio = conexion.ObtenerIdSesionMasReciente(idAux);
+                long idInicio = conexion.ObtenerIdSesionMasReciente(idAux);
                 
                 conexion.RegistrarCierreSesion(idInicio, idAux, fechaActual, 1);
             }

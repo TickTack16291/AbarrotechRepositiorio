@@ -143,7 +143,7 @@ namespace LoginDeAbarrotech
 
             ConexionBD conexion = new ConexionBD();
 
-            int idProAux = conexion.ObtenerIdProveedor(cb_nombreProvedor.Text);
+            long idProAux = conexion.ObtenerIdProveedor(cb_nombreProvedor.Text);
 
             Producto producto = new Producto(0,
                 ct_Nombre.Text,
@@ -229,7 +229,7 @@ namespace LoginDeAbarrotech
 
                 ConexionBD conexion = new ConexionBD();
 
-                int idProAux = conexion.ObtenerIdProveedor(cb_nombreProvedor.Text);
+                long idProAux = conexion.ObtenerIdProveedor(cb_nombreProvedor.Text);
 
                 Producto productoModificado = new Producto(
                     productoSeleccionado.id_producto,

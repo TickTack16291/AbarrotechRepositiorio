@@ -19,7 +19,7 @@ namespace LoginDeAbarrotech
     /// </summary>
     public partial class RegistroProveedores : Window
     {
-        public int idProvAux = 0;
+        public long idProvAux = 0;
         
         public RegistroProveedores()
         {

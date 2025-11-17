@@ -55,7 +55,7 @@ namespace LoginDeAbarrotech
                     // Aqui debe abrir un el menu de operciones
 
                     // Operaciones necesarias para registrar el inicio de sesion
-                    int idAux = conexion.ObtenerIdUsuario(usuarioAux);
+                    long idAux = conexion.ObtenerIdUsuario(usuarioAux);
                     DateTime fechaActual= DateTime.Now;
                     conexion.RegistrarInicioSesion(idAux, fechaActual, 1);
 

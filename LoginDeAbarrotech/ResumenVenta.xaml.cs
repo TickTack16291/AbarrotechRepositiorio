@@ -90,7 +90,26 @@ namespace LoginDeAbarrotech
                 foreach (var ps in Ventas.productosSeleccionados)
                     conexion.AgregarDetalleVenta(long.Parse(conexion.ObtenerIdVenta()), ps.id_producto, ps.cantidad, ps.precio_venta_producto);
                 // falta hacer modificar el inventario y las trasnsacciones, pero debo hacer primero compras jaja que hueva
-                
+
+                // Inventario y transacción
+                /// Campos de transacciones:
+                /// long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long idVenta, long idCompra
+                foreach (var ps in Compras.productosSeleccionados)
+                {
+                    // Modificamos el inventario con procedure
+                    conexion.RealizarVentaPorProcedure(ps.id_producto, ps.cantidad);
+
+                    // Id de la sesion más reciente
+                    long idSesion = conexion.ObtenerIdSesionMasReciente(conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal));
+                    //Id del inventario recien agregado
+                    long idInventario = conexion.ObtenerIdInventario();
+                    //Id de la compra
+                    long idCompra = conexion.ObtenerIdCompra();
+
+                    // Agregamos la transacción
+                    conexion.RealizarTransaccion(idInventario, idSesion, "Venta", ps.cantidad, DateTime.Now, null, idCompra);
+                }
+
                 // Limpiamos la lista de productos seleccionados para mas ventas
                 Ventas.productosSeleccionados.Clear();
             }

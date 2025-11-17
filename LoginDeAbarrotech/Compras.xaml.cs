@@ -43,7 +43,7 @@ namespace LoginDeAbarrotech
             total = 0f;
             Txt_TotalCompra.Text = "0";
         }
-        public void CargarProductosPorProveedor(int aux1, string aux2)
+        public void CargarProductosPorProveedor(long aux1, string aux2)
         {
             ConexionBD conexion = new ConexionBD();
             List<Producto> producto;

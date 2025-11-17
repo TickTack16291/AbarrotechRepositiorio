@@ -94,18 +94,26 @@ namespace LoginDeAbarrotech
 
                 // Agregamos los detalles de la compra necesarios
                 foreach (var ps in Compras.productosSeleccionados)
-                    conexion.AgregarDetalleCompra(long.Parse(conexion.ObtenerIdCompra()), ps.id_producto, ps.cantidad, ps.precio_compra_producto);
+                    conexion.AgregarDetalleCompra(conexion.ObtenerIdCompra(), ps.id_producto, ps.cantidad, ps.precio_compra_producto);
 
-                // Inventario
-
+                // Inventario y transacción
+                /// Campos de transacciones:
+                /// long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long idVenta, long idCompra
                 foreach (var ps in Compras.productosSeleccionados)
                 {
-                    conexion.AgregarInventario(ps.id_producto, 0, ps.cantidad, "Almacén", DateTime.Now, DateTime.Now.AddMonths(6));
+                    // Agregamos el inventario
+                    conexion.AgregarInventario(ps.id_producto, 0, ps.cantidad, "Almacén", DateTime.Now, DateTime.Now.AddMonths(2));// Hay que checar lo de las fechas de elaboración y caducidad
+
+                    // Id de la sesion más reciente
+                    long idSesion = conexion.ObtenerIdSesionMasReciente(conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal));
+                        //Id del inventario recien agregado
+                        long idInventario = conexion.ObtenerIdInventario();
+                        //Id de la compra
+                        long idCompra = conexion.ObtenerIdCompra();
+
+                    // Agregamos la transacción
+                    conexion.RealizarTransaccion(idInventario, idSesion, "Compra", ps.cantidad, DateTime.Now, null, idCompra);
                 }
-
-                // Transacciones
-
-
 
                 // Limpiamos la lista de productos seleccionados para mas compras
                 Compras.productosSeleccionados.Clear();
@@ -124,7 +132,7 @@ namespace LoginDeAbarrotech
         private void CrearTicket()
         {
             ConexionBD conexion = new ConexionBD();
-            string idCompra = conexion.ObtenerIdCompra();// Obtiene el ID de la venta más reciente
+            long idCompra = conexion.ObtenerIdCompra();// Obtiene el ID de la venta más reciente
             compra.forma_pago_compra = cb_metodoPago.Text.Trim();
 
             // Contenido inicial del ticket

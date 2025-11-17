@@ -86,7 +86,7 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-        public bool obtenerIdEmpleadoDeUsuarios(int idEmpleado)
+        public bool obtenerIdEmpleadoDeUsuarios(long idEmpleado)
         {
             using (var conexion = new MySqlConnection(conexionString))
             {
@@ -100,7 +100,7 @@ namespace LoginDeAbarrotech
                     {
                         while (reader.Read())
                         {
-                            int Id_Empleado_Obtenido = reader.GetInt32(0);
+                            long Id_Empleado_Obtenido = reader.GetInt64(0);
                             if (idEmpleado == Id_Empleado_Obtenido)
                                 return true;
                         }
@@ -135,7 +135,7 @@ namespace LoginDeAbarrotech
                         while (reader.Read())
                         {
                             Producto productoAux = new Producto(
-                                reader.GetInt32(0),       // id_producto
+                                reader.GetInt64(0),       // id_producto
                                 reader.GetString(1),      // nombre_producto
                                 reader.GetString(2),      // marca_producto
                                 reader.GetInt32(3),      // presentacion_producto
@@ -144,7 +144,7 @@ namespace LoginDeAbarrotech
                                 reader.GetFloat(6),       // precio_compra_producto
                                 reader.GetString(7),       // estado_producto
                                 reader.GetString(8),      // categoria_producto
-                                reader.GetInt32(9)        // id_proveedor_producto
+                                reader.GetInt64(9)        // id_proveedor_producto
                             );
 
                             listaProductos.Add(productoAux);
@@ -268,7 +268,7 @@ namespace LoginDeAbarrotech
 
             return nombres;
         }
-        public int ObtenerIdProveedor(string proveedor)
+        public long ObtenerIdProveedor(string proveedor)
         {
             using (var Conexion = new MySqlConnection(conexionString))
             {
@@ -284,7 +284,7 @@ namespace LoginDeAbarrotech
                         {
                             if (reader.Read())
                             {
-                                return reader.GetInt32("id_proveedor");
+                                return reader.GetInt64("id_proveedor");
                             }
                         }
                     }
@@ -297,7 +297,7 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-        public string ObtenerNombreProveedor(int id)
+        public string ObtenerNombreProveedor(long idProveedor)
         {
             using (var Conexion = new MySqlConnection(conexionString))
             {
@@ -308,7 +308,7 @@ namespace LoginDeAbarrotech
 
                     using (var comando = new MySqlCommand(sql, Conexion))
                     {
-                        comando.Parameters.AddWithValue("@id", id);
+                        comando.Parameters.AddWithValue("@id", idProveedor);
                         using (var reader = comando.ExecuteReader())
                         {
                             if (reader.Read())
@@ -639,7 +639,7 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-        public bool validarIdEmpleado(int idEmpleado)
+        public bool validarIdEmpleado(long idEmpleado)
         {
             using (var conexion = new MySqlConnection(conexionString))
             {
@@ -703,7 +703,7 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-        public string ObtenerRolDeEmpleado(int IdEmpleado)
+        public string ObtenerRolDeEmpleado(long IdEmpleado)
         {
             using (var conexion = new MySqlConnection(conexionString))
             {
@@ -739,7 +739,7 @@ namespace LoginDeAbarrotech
         /// <summary>
         /// Registro de inicios y cierres de sesion
         /// </summary>
-        public bool RegistrarInicioSesion(int idUsuario, DateTime fechaHora, int numeroCaja)
+        public bool RegistrarInicioSesion(long idUsuario, DateTime fechaHora, int numeroCaja)
         {
             using (var conexion = new MySqlConnection(conexionString))
             {
@@ -760,13 +760,14 @@ namespace LoginDeAbarrotech
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show("Error al registrar inicio de sesión: " + ex.Message);
+                    MessageBox.Show("Error al registrar inicio de sesión: " + ex.Message);
                     // Luego lo arreglo jaja, es por el indice en la tabla de inicios de sesion
+                    // Creo que ya lo arregle jaja
                     return false;
                 }
             }
         }
-        public bool RegistrarCierreSesion(int idInicioSesion, int idUsuario, DateTime fechaHora, int numeroCaja)
+        public bool RegistrarCierreSesion(long idInicioSesion, long idUsuario, DateTime fechaHora, int numeroCaja)
         {
             using (var conexion = new MySqlConnection(conexionString))
             {
@@ -793,7 +794,7 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-        public int ObtenerIdUsuario(string Usuario)
+        public long ObtenerIdUsuario(string Usuario)
         {
             using (var conexion = new MySqlConnection(conexionString))
             {
@@ -818,7 +819,7 @@ namespace LoginDeAbarrotech
             }
             return 0;
         }
-        public int ObtenerIdSesionMasReciente(int idUsuario)
+        public long ObtenerIdSesionMasReciente(long idUsuario)
         {
             using (var conexion = new MySqlConnection(conexionString))
             {
@@ -940,7 +941,7 @@ namespace LoginDeAbarrotech
                                 reader.GetString(4),      // unidad_medida_producto
                                 reader.GetFloat(5),       // precio_venta_producto
                                 reader.GetFloat(6),       // precio_compra_producto
-                                reader.GetString(7),       // estado_producto
+                                reader.GetString(7),      // estado_producto
                                 reader.GetString(8),      // categoria_producto
                                 reader.GetInt32(9)        // id_proveedor_producto
                             );
@@ -1206,7 +1207,7 @@ namespace LoginDeAbarrotech
 
             return nombres;
         }
-        public List<Producto> ObtenerProductosPorProveedor(int idProveedor, string busqueda = null)
+        public List<Producto> ObtenerProductosPorProveedor(long idProveedor, string busqueda = null)
         {
             List<Producto> listaProductos = new List<Producto>();
             using (var Conexion = new MySqlConnection(conexionString))
@@ -1322,28 +1323,31 @@ namespace LoginDeAbarrotech
             }
             return listaProductos;
         }
-        public string ObtenerIdCompra()
+        public long ObtenerIdCompra()
         {
             using (var Conexion = new MySqlConnection(conexionString))
             {
                 try
                 {
                     Conexion.Open();
-                    string sql = "SELECT id_compra FROM compras ORDER BY fecha_compra DESC LIMIT 1";
+                    string sql = "SELECT id_compra FROM compras ORDER BY id_compra DESC LIMIT 1";
 
                     using (var comando = new MySqlCommand(sql, Conexion))
                     {
-                        var resultado = comando.ExecuteScalar();
-                        if (resultado != null && resultado != DBNull.Value)
-                            return resultado.ToString();
-                        else
-                            return "0"; // No hay ventas registradas
+                        using (var reader = comando.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return reader.GetInt64("id_compra");
+                            }
+                        }
                     }
+                    return 0; // No encontrado
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error al obtener el id de la compra: {ex.Message}");
-                    return ""; // Indicar error
+                    return 0; // Indicar error
                 }
             }
         }
@@ -1382,7 +1386,35 @@ namespace LoginDeAbarrotech
                 }
             }
         }
-        public bool RealizarTransaccion(long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long idVenta, long idCompra)// Revisar nulos
+        public long ObtenerIdInventario()
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = "SELECT id_inventario FROM inventario ORDER BY id_inventario DESC LIMIT 1";
+
+                    using (var comando = new MySqlCommand(sql, Conexion))
+                    {
+                        using (var reader = comando.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return reader.GetInt64("id_inventario");
+                            }
+                        }
+                    }
+                    return 0; // No encontrado
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al obtener el id del inventario: {ex.Message}");
+                    return 0; // Indicar error
+                }
+            }
+        }
+        public bool RealizarTransaccion(long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long? idVenta, long? idCompra)
         {
             using (var Conexion = new MySqlConnection(conexionString))
             {
@@ -1391,9 +1423,9 @@ namespace LoginDeAbarrotech
                     Conexion.Open();
 
                     string sql = @"INSERT INTO `transacciones`
-                           (`id_inventario`, `id_inicio_sesion`, `tipo_movimiento_transaccion`, `cantidad_modificada_transaccion`, `fecha_registro_salida_transaccion`, `id_venta`, `id_compra`)
-                           VALUES
-                           (@id_inventario, @id_inicio_sesion, @tipo_movimiento_transaccion, @cantidad_modificada_transaccion, @fecha_registro_salida_transaccion, @id_venta, @id_compra);";
+                   (`id_inventario`, `id_inicio_sesion`, `tipo_movimiento_transaccion`, `cantidad_modificada_transaccion`, `fecha_registro_salida_transaccion`, `id_venta`, `id_compra`)
+                   VALUES
+                   (@id_inventario, @id_inicio_sesion, @tipo_movimiento_transaccion, @cantidad_modificada_transaccion, @fecha_registro_salida_transaccion, @id_venta, @id_compra);";
 
                     using (var command = new MySqlCommand(sql, Conexion))
                     {
@@ -1402,16 +1434,53 @@ namespace LoginDeAbarrotech
                         command.Parameters.AddWithValue("@tipo_movimiento_transaccion", tipoTransacción);
                         command.Parameters.AddWithValue("@cantidad_modificada_transaccion", cantidadModificada);
                         command.Parameters.AddWithValue("@fecha_registro_salida_transaccion", fechaRegistro);
-                        command.Parameters.AddWithValue("@id_venta", idVenta);// Debemos considerar dejar uno nulo cuando hagamos las transacciones
-                        command.Parameters.AddWithValue("@id_compra", idCompra);// ...
+                        command.Parameters.AddWithValue("@id_venta", idVenta.HasValue ? (object)idVenta.Value : DBNull.Value);
+                        command.Parameters.AddWithValue("@id_compra", idCompra.HasValue ? (object)idCompra.Value : DBNull.Value);
+                        // El "HaValue" devuelve false si el valor es null y true si tiene un valor asignado
+                        // ? : es un operador ternario que funciona como un if else en una sola linea
+                        // (object)idVenta.Value : DBNull.Value = Si idVenta tiene valor, se asigna su valor, si no se asigna DBNull.Value, lo mismo con idCompra
+
 
                         int result = command.ExecuteNonQuery();
-                        return result > 0; // True si se registró la transacción
+                        return result > 0;
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error al registrar la transacción: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Llama al procedimiento almacenado RealizarVenta
+        /// </summary>
+        public bool RealizarVentaPorProcedure(long idProducto, int cantidad)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    using (var command = new MySqlCommand("RealizarVenta", Conexion))
+                    {
+                        // Indicar que es un Stored Procedure
+                        command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        // Agregar los parámetros del procedure
+                        command.Parameters.AddWithValue("@p_id_producto", idProducto);
+                        command.Parameters.AddWithValue("@p_cantidad", cantidad);
+
+                        // Ejecutar el procedure
+                        int result = command.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al ejecutar el procedimiento RealizarVenta: " + ex.Message);
                     return false;
                 }
             }

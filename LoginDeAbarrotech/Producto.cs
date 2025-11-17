@@ -4,7 +4,7 @@ namespace LoginDeAbarrotech
 {
     public class Producto
     {
-        public int id_producto { get; set; }
+        public long id_producto { get; set; }
         public string nombre_producto { get; set; }
         public string marca_producto { get; set; }
         public int presentacion_producto { get; set; }
@@ -13,11 +13,11 @@ namespace LoginDeAbarrotech
         public float precio_compra_producto { get; set; }
         public string estado_producto { get; set; }
         public string categoria_producto { get; set; }
-        public int id_proveedor_producto { get; set; }
+        public long id_proveedor_producto { get; set; }
 
         public Producto() { }
 
-        public Producto(int id_producto, string nombre_producto, string marca_producto, int presentacion_producto, string unidad_medida_producto, float precio_venta_producto, float precio_compra_producto, string estado_producto, string categoria_producto, int id_proveedor_producto)
+        public Producto(long id_producto, string nombre_producto, string marca_producto, int presentacion_producto, string unidad_medida_producto, float precio_venta_producto, float precio_compra_producto, string estado_producto, string categoria_producto, long id_proveedor_producto)
         {
             this.id_producto = id_producto;
             this.nombre_producto = nombre_producto;

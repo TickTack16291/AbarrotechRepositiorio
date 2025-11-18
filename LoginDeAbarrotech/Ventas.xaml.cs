@@ -24,8 +24,11 @@ namespace LoginDeAbarrotech
             InitializeComponent();
             CargarProductosDisponibles();
         }
-        public void MostrarMensaje()
+        public void MostrarMensaje(string mensaje = null)
         {
+            if(mensaje != null)
+                Lbl_mensaje.Content = mensaje;
+
             Lbl_mensaje.Visibility = Visibility.Visible;
             var animacion = new System.Windows.Media.Animation.ThicknessAnimation();
             animacion.Duration = TimeSpan.FromMilliseconds(100);
@@ -42,9 +45,7 @@ namespace LoginDeAbarrotech
             total = 0f;
             Txt_TotalVenta.Text = "0";
         }
-        /// <summary>
-        /// Clase para mostrar productos con su stock en la interfaz
-        /// </summary>
+
         /// <summary>
         /// Clase para mostrar productos con su stock en la interfaz
         /// </summary>
@@ -146,6 +147,8 @@ namespace LoginDeAbarrotech
         private void dg_ProductosDisponibles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var prseleccionado = dg_ProductosDisponibles.SelectedItem as Producto;
+            var prStock = dg_ProductosDisponibles.SelectedItem as ProductoConStock;
+
             if (prseleccionado == null) return;
 
             // Busca si ya se habia seleccionado ese producto
@@ -154,7 +157,7 @@ namespace LoginDeAbarrotech
                                                                                                                     // producto seleccionado y lo usa para
                                                                                                                     // comparar y devolver un valor boleano
 
-            if (existente == null)
+            if (existente == null)// No se habia seleccionado ese producto
             {
                 var prAux = new ProductoSeleccionadoVenta
                 {
@@ -172,8 +175,15 @@ namespace LoginDeAbarrotech
             }
             else
             {
-                existente.cantidad++;
-                total += existente.precio_venta_producto;
+                if (existente.cantidad < prStock.Stock)// Validamos que haya suficiente stock
+                {
+                    existente.cantidad++;
+                    total += existente.precio_venta_producto;
+                }
+                else
+                {
+                    MostrarMensaje("No hay suficiente stock del producto seleccionado");
+                }
             }
 
             Txt_TotalVenta.Text = total.ToString();

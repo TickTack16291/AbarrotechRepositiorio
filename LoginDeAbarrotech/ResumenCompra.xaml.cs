@@ -117,7 +117,7 @@ namespace LoginDeAbarrotech
 
                 // Limpiamos la lista de productos seleccionados para mas compras
                 Compras.productosSeleccionados.Clear();
-
+                
             }
             else
             {
@@ -170,11 +170,10 @@ namespace LoginDeAbarrotech
                 // Escribe todo el contenido del ticket en el archivo (sobrescribe si existe).
                 File.WriteAllText(fullPath, tiket);
 
-                MessageBox.Show($"¡Ticket creado con éxito en:\n{fullPath}", "Ticket creado", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al crear el ticket:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error al crear el ticket:\n{ex.Message}");
             }
         }
     }

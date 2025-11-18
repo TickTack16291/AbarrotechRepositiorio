@@ -88,13 +88,13 @@ namespace LoginDeAbarrotech
 
                 // Agregamos los detalles de la venta necesarios(1 producto)
                 foreach (var ps in Ventas.productosSeleccionados)
-                    conexion.AgregarDetalleVenta(long.Parse(conexion.ObtenerIdVenta()), ps.id_producto, ps.cantidad, ps.precio_venta_producto);
+                    conexion.AgregarDetalleVenta(conexion.ObtenerIdVenta(), ps.id_producto, ps.cantidad, ps.precio_venta_producto);
                 // falta hacer modificar el inventario y las trasnsacciones, pero debo hacer primero compras jaja que hueva
 
                 // Inventario y transacción
                 /// Campos de transacciones:
                 /// long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long idVenta, long idCompra
-                foreach (var ps in Compras.productosSeleccionados)
+                foreach (var ps in Ventas.productosSeleccionados)
                 {
                     // Modificamos el inventario con procedure
                     conexion.RealizarVentaPorProcedure(ps.id_producto, ps.cantidad);
@@ -104,10 +104,10 @@ namespace LoginDeAbarrotech
                     //Id del inventario recien agregado
                     long idInventario = conexion.ObtenerIdInventario();
                     //Id de la compra
-                    long idCompra = conexion.ObtenerIdCompra();
+                    long idVenta = conexion.ObtenerIdVenta();
 
                     // Agregamos la transacción
-                    conexion.RealizarTransaccion(idInventario, idSesion, "Venta", ps.cantidad, DateTime.Now, null, idCompra);
+                    conexion.RealizarTransaccion(idInventario, idSesion, "Venta", ps.cantidad, DateTime.Now, idVenta, null);
                 }
 
                 // Limpiamos la lista de productos seleccionados para mas ventas
@@ -126,7 +126,7 @@ namespace LoginDeAbarrotech
         private void CrearTicket()
         {
             ConexionBD conexion = new ConexionBD();
-            string idVenta = conexion.ObtenerIdVenta();// Obtiene el ID de la venta más reciente
+            long idVenta = conexion.ObtenerIdVenta();// Obtiene el ID de la venta más reciente
             venta.forma_pago_venta = cb_metodoPago.Text.Trim();
 
             // Contenido inicial del ticket
@@ -164,11 +164,10 @@ namespace LoginDeAbarrotech
                 // Escribe todo el contenido del ticket en el archivo (sobrescribe si existe).
                 File.WriteAllText(fullPath, tiket);
 
-                MessageBox.Show($"¡Ticket creado con éxito en:\n{fullPath}", "Ticket creado", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al crear el ticket:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error al crear el ticket:\n{ex.Message}");
             }
         }
     }

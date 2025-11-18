@@ -177,14 +177,14 @@
                                       ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="dg_ProductosDisponibles_SelectionChanged">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="No." Width="35" Binding="{Binding id_producto}"/>
-                                    <DataGridTextColumn Header="Nombre" Width="220" Binding="{Binding nombre_producto}"/>
-                                    <DataGridTextColumn Header="Categoría" Width="100" Binding="{Binding categoria_producto}"/>
-                                    <DataGridTextColumn Header="Precio" Width="83">
+                                    <DataGridTextColumn Header="Nombre" Width="225" Binding="{Binding nombre_producto}"/>
+                                    <DataGridTextColumn Header="Categoría" Width="105" Binding="{Binding categoria_producto}"/>
+                                    <DataGridTextColumn Header="Precio" Width="85">
                                         <DataGridTextColumn.Binding>
                                             <Binding Path="precio_venta_producto" StringFormat="C2"/>
                                         </DataGridTextColumn.Binding>
                                     </DataGridTextColumn>
-                                    <DataGridTextColumn Header="Stock" Width="80"/>
+                                    <DataGridTextColumn Header="Stock" Width="85" Binding="{Binding Stock}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>

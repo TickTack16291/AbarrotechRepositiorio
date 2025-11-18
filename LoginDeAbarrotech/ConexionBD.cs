@@ -2,6 +2,7 @@
 using Mysqlx.Crud;
 using Org.BouncyCastle.Ocsp;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection.PortableExecutable;
@@ -1086,28 +1087,31 @@ namespace LoginDeAbarrotech
             }
             return listaProductos;
         }
-        public string ObtenerIdVenta()
+        public long ObtenerIdVenta()
         {
             using (var Conexion = new MySqlConnection(conexionString))
             {
                 try
                 {
                     Conexion.Open();
-                    string sql = "SELECT id_venta FROM ventas ORDER BY fecha_venta DESC LIMIT 1";
+                    string sql = "SELECT id_venta FROM ventas ORDER BY id_venta DESC LIMIT 1";
 
                     using (var comando = new MySqlCommand(sql, Conexion))
                     {
-                        var resultado = comando.ExecuteScalar();
-                        if (resultado != null && resultado != DBNull.Value)
-                            return resultado.ToString();
-                        else
-                            return "0"; // No hay ventas registradas
+                        using (var reader = comando.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return reader.GetInt64("id_venta");
+                            }
+                        }
                     }
+                    return 0; // No encontrado
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error al obtener el id de la venta: {ex.Message}");
-                    return ""; // Indicar error
+                    return 0; // Indicar error
                 }
             }
         }
@@ -1220,7 +1224,7 @@ namespace LoginDeAbarrotech
                     //  Si @Patron es NULL, NO aplica filtro por nombre (se omite).
                     //  Si NO es NULL, aplica un LIKE con LOWER(nombre_producto) para coincidir sin distinguir mayúsculas/minúsculas.
                     string sql = @"
-                            SELECT * FROM productos WHERE id_proveedor_producto = @idProveedor 
+                            SELECT * FROM productos WHERE id_proveedor_producto = @idProveedor
                             AND estado_producto = 'Activo'
                             AND (@Patron IS NULL OR LOWER(nombre_producto) LIKE @Patron)";
                     // LiKE es para busquedas parciales, puedes colocar el unicio, final o un conjunto de letras para que haga esta busqueda 
@@ -1413,6 +1417,37 @@ namespace LoginDeAbarrotech
                     return 0; // Indicar error
                 }
             }
+        }
+        public Dictionary<long, int> ObtenerStockInventario()
+        {
+            Dictionary<long, int> stockProductos = new Dictionary<long, int>();
+
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+
+                    string sql = @"SELECT id_producto, SUM(cantidad_inventario) as stock_total 
+                                  FROM inventario 
+                                  WHERE cantidad_inventario > 0 
+                                  GROUP BY id_producto";
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            stockProductos[reader.GetInt64(0)] = reader.GetInt32(1);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al conectar a la base de datos: " + ex.Message);
+                }
+            }
+
+            return stockProductos;
         }
         public bool RealizarTransaccion(long idInventario, long idInicioSesion, string tipoTransacción, int cantidadModificada, DateTime fechaRegistro, long? idVenta, long? idCompra)
         {

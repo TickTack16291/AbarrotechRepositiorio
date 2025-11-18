@@ -42,28 +42,62 @@ namespace LoginDeAbarrotech
             total = 0f;
             Txt_TotalVenta.Text = "0";
         }
+        /// <summary>
+        /// Clase para mostrar productos con su stock en la interfaz
+        /// </summary>
+        /// <summary>
+        /// Clase para mostrar productos con su stock en la interfaz
+        /// </summary>
+        internal class ProductoConStock : Producto
+        {
+            public int Stock { get; set; }
+        }
+
+        /// <summary>
+        /// Método auxiliar para convertir productos a productos con stock
+        /// </summary>
+        private List<ProductoConStock> AgregarStockAProductos(List<Producto> productos)
+        {
+            ConexionBD conexion = new ConexionBD();
+            var stock = conexion.ObtenerStockInventario();
+
+            return productos.Select(p => new ProductoConStock
+            {
+                id_producto = p.id_producto,
+                nombre_producto = p.nombre_producto,
+                marca_producto = p.marca_producto,
+                presentacion_producto = p.presentacion_producto,
+                unidad_medida_producto = p.unidad_medida_producto,
+                precio_venta_producto = p.precio_venta_producto,
+                precio_compra_producto = p.precio_compra_producto,
+                estado_producto = p.estado_producto,
+                categoria_producto = p.categoria_producto,
+                id_proveedor_producto = p.id_proveedor_producto,
+                Stock = stock.ContainsKey(p.id_producto) ? stock[p.id_producto] : 0
+            }).ToList();
+        }
         public void CargarProductosDisponibles()
         {
             ConexionBD conexion = new ConexionBD();
-            var producto = conexion.ObtenerProductosDisponibles();
-            dg_ProductosDisponibles.ItemsSource = producto;
+            var productos = conexion.ObtenerProductosDisponibles();
+            dg_ProductosDisponibles.ItemsSource = AgregarStockAProductos(productos);
         }
         public void CargarProductosPorCategoria(string aux1, string aux2)
         {
             ConexionBD conexion = new ConexionBD();
-            List<Producto> producto;
+            List<Producto> productos;
             if (aux2 == string.Empty)
-                producto = conexion.ObtenerProductosPorCategoria(aux1, null);
+                productos = conexion.ObtenerProductosPorCategoria(aux1, null);
             else
-                producto = conexion.ObtenerProductosPorCategoria(aux1, aux2);
+                productos = conexion.ObtenerProductosPorCategoria(aux1, aux2);
 
-            dg_ProductosDisponibles.ItemsSource = producto;
+            dg_ProductosDisponibles.ItemsSource = AgregarStockAProductos(productos);
         }
         public void CargarProductosPorCoincidencia(string aux1)
         {
             ConexionBD conexion = new ConexionBD();
-            var producto = conexion.ObtenerProductosPorCoincidenciaActivos(aux1);
-            dg_ProductosDisponibles.ItemsSource = producto;
+            var productos = conexion.ObtenerProductosPorCoincidenciaActivos(aux1);
+            dg_ProductosDisponibles.ItemsSource = AgregarStockAProductos(productos);
         }
         private void btn_cancelar_Click_1(object sender, RoutedEventArgs e)
         {
@@ -160,6 +194,8 @@ namespace LoginDeAbarrotech
 
             if (!resumenVenta.cancelada)
                 VaciarTablaSeleccionados();// No se vacia si se cancelo, por que podria ser para seleccionar o quitar productos
+
+            CargarProductosDisponibles();
     }
         private void dg_ProductosSeleecionados_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -43,22 +43,53 @@ namespace LoginDeAbarrotech
             total = 0f;
             Txt_TotalCompra.Text = "0";
         }
-        public void CargarProductosPorProveedor(long aux1, string aux2)
-        {
-            ConexionBD conexion = new ConexionBD();
-            List<Producto> producto;
-            if (aux2 == string.Empty)
-                producto = conexion.ObtenerProductosPorProveedor(aux1, null);
-            else
-                producto = conexion.ObtenerProductosPorProveedor(aux1, aux2);
+        /// <summary>
+        /// Clase para mostrar productos con su stock en la interfaz
+        /// </summary>
+        internal class ProductoConStock : Producto
+{
+    public int Stock { get; set; }
+}
+        
+        /// <summary>
+        /// Método auxiliar para convertir productos a productos con stock
+        /// </summary>
+        private List<ProductoConStock> AgregarStockAProductos(List<Producto> productos)
+{
+    ConexionBD conexion = new ConexionBD();
+    var stock = conexion.ObtenerStockInventario();
 
-            dg_ProductosDisponibles.ItemsSource = producto;
-        }
+    return productos.Select(p => new ProductoConStock
+    {
+        id_producto = p.id_producto,
+        nombre_producto = p.nombre_producto,
+        marca_producto = p.marca_producto,
+        presentacion_producto = p.presentacion_producto,
+        unidad_medida_producto = p.unidad_medida_producto,
+        precio_venta_producto = p.precio_venta_producto,
+        precio_compra_producto = p.precio_compra_producto,
+        estado_producto = p.estado_producto,
+        categoria_producto = p.categoria_producto,
+        id_proveedor_producto = p.id_proveedor_producto,
+        Stock = stock.ContainsKey(p.id_producto) ? stock[p.id_producto] : 0
+    }).ToList();
+}
+        public void CargarProductosPorProveedor(long aux1, string aux2)
+{
+    ConexionBD conexion = new ConexionBD();
+    List<Producto> productos;
+    if (aux2 == string.Empty)
+        productos = conexion.ObtenerProductosPorProveedor(aux1, null);
+    else
+        productos = conexion.ObtenerProductosPorProveedor(aux1, aux2);
+
+    dg_ProductosDisponibles.ItemsSource = AgregarStockAProductos(productos);
+}
         public void CargarProductosPorCoincidencia(string aux1)
         {
             ConexionBD conexion = new ConexionBD();
-            var producto = conexion.ObtenerProductosPorCoincidenciaTodos(aux1);
-            dg_ProductosDisponibles.ItemsSource = producto;
+            var productos = conexion.ObtenerProductosPorCoincidenciaTodos(aux1);
+            dg_ProductosDisponibles.ItemsSource = AgregarStockAProductos(productos);
         }
         private void btn_filtrar_Click(object sender, RoutedEventArgs e)
         {
@@ -71,14 +102,17 @@ namespace LoginDeAbarrotech
                 CargarProductosPorProveedor(conexion.ObtenerIdProveedor(cb_proveedores.Text), txt_busqueda.Text);
             }
         }
-        private void btl_LimpiarFiltro_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void CargarProductos()
         {
             ConexionBD conexion = new ConexionBD();
-            dg_ProductosDisponibles.ItemsSource = conexion.ObtenerProductos();
+            var productos = conexion.ObtenerProductos();
+            dg_ProductosDisponibles.ItemsSource = AgregarStockAProductos(productos);
+        }
+        private void btl_LimpiarFiltro_Click(object sender, RoutedEventArgs e)
+        {
+            txt_busqueda.Text = string.Empty;
+            cb_proveedores.Text = "Todos";
+            CargarProductos();
         }
         private void CargarProveedores()
         {
@@ -127,7 +161,7 @@ namespace LoginDeAbarrotech
             var prseleccionado = dg_ProductosDisponibles.SelectedItem as Producto;
             if (prseleccionado == null) return;
 
-            // Busca si ya se habia seleccionado ese producto
+            // Busca si ya se había seleccionado ese producto
             // Se recorre la lista hasta encontrar la primer coincidencia o puede no encontrarla en dico caso devuelve un valor nulo
             var existente = productosSeleccionados.FirstOrDefault(p => p.id_producto == prseleccionado.id_producto);// Expresion lamda que toma p que es un
                                                                                                                     // producto seleccionado y lo usa para
@@ -173,7 +207,9 @@ namespace LoginDeAbarrotech
             resumenCompra.ShowDialog();
 
             if (!resumenCompra.cancelada)
-                VaciarTablaSeleccionados();// No se vacia si se cancelo, por que podria ser para seleccionar o quitar productos
+                VaciarTablaSeleccionados();
+
+            CargarProductos();
         }
         private void dg_ProductosSeleecionados_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
@@ -181,7 +217,7 @@ namespace LoginDeAbarrotech
             if (prod == null) return;
 
             // Disminuir en 1 la cantidad y ajustar total
-            total -= prod.precio_venta_producto;
+            total -= prod.precio_compra_producto;
             if (total < 0) total = 0f;
 
             prod.cantidad--;

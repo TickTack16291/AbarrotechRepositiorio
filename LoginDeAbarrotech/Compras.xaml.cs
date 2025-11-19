@@ -19,11 +19,13 @@ namespace LoginDeAbarrotech
     /// </summary>
     public partial class Compras : Window
     {
+        internal static List<ProductoSeleccionadoCompra> productosSeleccionados = new List<ProductoSeleccionadoCompra>();// Esta aqui para que no se reinicie cada que se llame el evento
         public Compras()
         {
             InitializeComponent();
             CargarProductos();
             CargarProveedores();
+            productosSeleccionados.Clear();
         }
         public void MostrarMensaje()
         {
@@ -158,7 +160,6 @@ namespace LoginDeAbarrotech
             public float Subtotal => cantidad * precio_compra_producto; // Usar precio_compra_producto en compras
         }
         float total = 0.0f;// Total de la compra
-        internal static List<ProductoSeleccionadoCompra> productosSeleccionados = new List<ProductoSeleccionadoCompra>();// Esta aqui para que no se reinicie cada que se llame el evento
         private void dg_ProductosDisponibles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var prseleccionado = dg_ProductosDisponibles.SelectedItem as Producto;

@@ -181,7 +181,7 @@ namespace LoginDeAbarrotech
             txt_PageTitle.Text = title;
             txt_PageSubtitle.Text = subtitle;
         }
-        private bool tieneAcceso(string Usuario)
+        private bool tieneAcceso()
         {
             ConexionBD conexion = new ConexionBD();
             string aux = conexion.ObtenerRolDeUsuario(LoginAbarrotech.UsuarioGlobal);
@@ -204,50 +204,73 @@ namespace LoginDeAbarrotech
         }
         private void btn_Productos_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePageTitle("Gestión de Productos", "Administrar inventario y catálogo");
-            // Abrir la ventana de productos
-            RegistroProductos registroProductos = new RegistroProductos();
-            registroProductos.Show();
-            this.Hide();
+            if (tieneAcceso()){
+                UpdatePageTitle("Gestión de Productos", "Administrar inventario y catálogo");
+                // Abrir la ventana de productos
+                RegistroProductos registroProductos = new RegistroProductos();
+                registroProductos.Show();
+                this.Hide();
+            } else
+            {
+                MessageBox.Show("No tienes permitido acceder a esta seccion");
+            }
         }
         private void btn_Compras_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePageTitle("Gestión de Compras", "Administrar compras y pedidos");
+            if (tieneAcceso()) { 
+                UpdatePageTitle("Gestión de Compras", "Administrar compras y pedidos");
 
-            Compras compras = new Compras();
-            compras.Show();
-            this.Hide();
-        }
+                Compras compras = new Compras();
+                compras.Show();
+                this.Hide();
+            } 
+            else
+            {
+                MessageBox.Show("No tienes permitido acceder a esta seccion");
+            }
+}
         private void btn_Proveedores_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePageTitle("Gestión de Proveedores", "Administrar información de proveedores");
-            RegistroProveedores registroProveedores = new RegistroProveedores();
-            registroProveedores.Show();
-            this.Hide();
+            if (tieneAcceso()) {
+                UpdatePageTitle("Gestión de Proveedores", "Administrar información de proveedores");
+                RegistroProveedores registroProveedores = new RegistroProveedores();
+                registroProveedores.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("No tienes permitido acceder a esta seccion");
+            }
         }
         private void btn_Empleados_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePageTitle("Gestión de Empleados", "Administrar personal de la empresa");
-            RegistroEmpleados registroEmpleados = new RegistroEmpleados();
-            registroEmpleados.Show();
-            this.Hide();
+            if (tieneAcceso()) {
+                UpdatePageTitle("Gestión de Empleados", "Administrar personal de la empresa");
+                RegistroEmpleados registroEmpleados = new RegistroEmpleados();
+                registroEmpleados.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("No tienes permitido acceder a esta seccion");
+            }
         }
         private void btn_Usuarios_Click(object sender, RoutedEventArgs e)
         {
             UpdatePageTitle("Gestión de Usuarios", "Administrar usuarios del sistema");
             // Verificar si el usuario tiene acceso de administrador
-            if (tieneAcceso(LoginAbarrotech.UsuarioGlobal))
+            if (tieneAcceso())
             {
                 RegistroUsuarios registroUsuarios = new RegistroUsuarios();
                 registroUsuarios.Show();
                 this.Hide();
-            }
+            
+            } 
             else
             {
-                MessageBox.Show("No tienes permisos para acceder a esta sección. Solo los administradores pueden gestionar usuarios.", 
-                               "Acceso Denegado", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("No tienes permitido acceder a esta seccion");
             }
-        }
+}
         private void btn_Salir_Click(object sender, RoutedEventArgs e)
         {
             // Operaciones necesarias para registrar el cierre de sesión
@@ -273,6 +296,19 @@ namespace LoginDeAbarrotech
         {
             Configuracion configuracion = new Configuracion();
             configuracion.ShowDialog();
+        }
+        private void btn_Administracion_Click(object sender, RoutedEventArgs e)
+        {
+            if (tieneAcceso())
+            {
+                UpdatePageTitle("Administracion de operaciones", "Visualizar las operaciones");
+                Administracion administracion = new Administracion();
+                administracion.Show();
+                this.Hide();
+            } else
+            {
+                MessageBox.Show("No tienes permitido acceder a esta seccion");
+            }
         }
     }
 }

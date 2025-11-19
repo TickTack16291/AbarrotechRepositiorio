@@ -98,6 +98,8 @@
                             <ComboBoxItem Content="Encargado de inventario"/>
                             <ComboBoxItem Content="Limpieza"/>
                             <ComboBoxItem Content="Seguridad"/>
+                            <ComboBoxItem Content="Mantenimiento"/>
+
                         </ComboBox>
                     </StackPanel>
 

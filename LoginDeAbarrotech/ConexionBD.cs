@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection.PortableExecutable;
+using System.Transactions;
 using System.Windows;
 
 
@@ -1611,6 +1612,149 @@ namespace LoginDeAbarrotech
                     return false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Operaciones para la ventana de Administración
+        /// </summary>
+        public List<Venta> ObtenerVentas()
+        {
+            List<Venta> listaVentas = new List<Venta>();
+
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = @"SELECT * FROM ventas ORDER BY fecha_venta DESC";
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Venta ventaAux = new Venta(
+                                reader.GetInt32(0),       // id_venta
+                                reader.GetInt32(1),       // id_usuario
+                                reader.GetDateTime(2),    // fecha_venta
+                                reader.GetFloat(3),       // total_venta
+                                reader.GetString(4),      // forma_pago_venta
+                                reader.GetInt32(5)        // caja
+                            );
+                            listaVentas.Add(ventaAux);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener ventas: " + ex.Message);
+                }
+            }
+            return listaVentas;
+        }
+        public List<Compra> ObtenerCompras()
+        {
+            List<Compra> listaCompras = new List<Compra>();
+
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = @"SELECT * FROM compras ORDER BY fecha_compra DESC";
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Compra compraAux = new Compra(
+                                reader.GetInt64(0),       // id_compra
+                                reader.GetInt64(1),       // id_usuario
+                                reader.GetDateTime(2),    // fecha_compra
+                                reader.GetFloat(3),       // total_compra
+                                reader.GetString(4),      // forma_pago_compra
+                                reader.GetInt32(5)        // caja
+                            );
+                            listaCompras.Add(compraAux);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener compras: " + ex.Message);
+                }
+            }
+            return listaCompras;
+        }
+        public List<Transaccion> ObtenerTransacciones()
+        {
+            List<Transaccion> listaTransacciones = new List<Transaccion>();
+
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = @"SELECT * FROM transacciones ORDER BY fecha_registro_salida_transaccion DESC";
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Transaccion transaccionAux = new Transaccion(
+                                reader.GetInt64(0),       // id_transaccion
+                                reader.GetInt64(1),       // id_inventario
+                                reader.GetInt64(2),       // id_inicio_sesion
+                                reader.GetString(3),      // tipo_movimiento_transaccion
+                                reader.GetInt32(4),       // cantidad_modificada_transaccion
+                                reader.GetDateTime(5),    // fecha_registro_salida_transaccion
+                                reader.IsDBNull(6) ? null : (long?)reader.GetInt64(6),  // id_venta
+                                reader.IsDBNull(7) ? null : (long?)reader.GetInt64(7)   // id_compra
+                            );
+                            listaTransacciones.Add(transaccionAux);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener transacciones: " + ex.Message);
+                }
+            }
+            return listaTransacciones;
+        }
+        public List<Inventario> ObtenerInventario()
+        {
+            List<Inventario> listaInventario = new List<Inventario>();
+
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    Conexion.Open();
+                    string sql = @"SELECT * FROM inventario WHERE cantidad_inventario > 0 ORDER BY fecha_caducidad ASC";
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Inventario inventarioAux = new Inventario(
+                                reader.GetInt64(0),       // id_inventario
+                                reader.GetInt64(1),       // id_producto
+                                reader.GetInt64(2),       // codigo_barras_inventario
+                                reader.GetInt32(3),       // cantidad_inventario
+                                reader.GetString(4),      // ubicacion_inventario
+                                reader.GetDateTime(5),    // fecha_elaboracion
+                                reader.GetDateTime(6)     // fecha_caducidad
+                            );
+                            listaInventario.Add(inventarioAux);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al obtener inventario: " + ex.Message);
+                }
+            }
+            return listaInventario;
         }
     }
 }

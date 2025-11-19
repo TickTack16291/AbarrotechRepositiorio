@@ -74,6 +74,9 @@ namespace LoginDeAbarrotech
         }
         private void btn_Guardar_Click(object sender, RoutedEventArgs e)
         {
+            List <string> roles = new List<string> {"Gerente", "Administrador", "Vendedor"};
+            bool valido = false;
+
             // Validar que los campos no estén vacíos
             if (string.IsNullOrWhiteSpace(ct_IdEmpleado.Text) ||
                 string.IsNullOrWhiteSpace(ct_Usuario.Text) ||
@@ -108,16 +111,31 @@ namespace LoginDeAbarrotech
                 ct_Contrasena.Password, 
                 rolAux
              );
+            // Validamos que el empleado no tenga usuario
             if (conexion.obtenerIdEmpleadoDeUsuarios(idEmpleado))
             {
                 MostrarMensaje("El empleado ya esta registrado como usuario");
                 return;
             }
+            // Validar el rol del usuario
+            foreach(var rol in roles)
+            {
+                if (conexion.ObtenerRolDeEmpleado(idEmpleado) == rol)
+                    valido = true;
+            }
+
+            if (!valido)
+            {
+                MostrarMensaje("El empleado no deberia tener usuario");
+                return;
+            }
+            // Validar usuarios repetidos
             if (ValidarUsuariosRepetidos(nuevoUsuario))
             {
                 MostrarMensaje("El usuario ya existe en la base de datos");
                 return;
             }
+            // Validar que el id de empleado exista en la base de datos de empleados
             if (!conexion.validarIdEmpleado(idEmpleado))
             {
                 MostrarMensaje("El id de empledado ingresado no corresponde a ningun empleado");

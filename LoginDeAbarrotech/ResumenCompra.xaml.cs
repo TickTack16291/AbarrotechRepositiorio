@@ -102,7 +102,8 @@ namespace LoginDeAbarrotech
                 foreach (var ps in Compras.productosSeleccionados)
                 {
                     // Agregamos el inventario
-                    conexion.AgregarInventario(ps.id_producto, 0, ps.cantidad, "Almacén", DateTime.Now, DateTime.Now.AddMonths(2));// Hay que checar lo de las fechas de elaboración y caducidad
+                    conexion.AgregarInventario(ps.id_producto, ps.codigoDeBarras, ps.cantidad, "Almacén", ps.fechaElaboracion, ps.fechaCaducidad);// Hay que checar lo de las fechas de elaboración y caducidad
+                                                                                                                                                  // Ya quedo, tuve que hacer una nueva GUI
 
                     // Id de la sesion más reciente
                     long idSesion = conexion.ObtenerIdSesionMasReciente(conexion.ObtenerIdUsuario(LoginAbarrotech.UsuarioGlobal));

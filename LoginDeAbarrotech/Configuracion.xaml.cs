@@ -19,7 +19,6 @@ namespace LoginDeAbarrotech
             usuarioActual = LoginAbarrotech.UsuarioGlobal;
             txt_CurrentUser.Text = $"Usuario: {usuarioActual}";
         }
-
         public void MostrarMensaje(string mensaje = null)
         {
             if (mensaje != null)
@@ -44,7 +43,6 @@ namespace LoginDeAbarrotech
             pwd_Nueva.Password = string.Empty;
             pwd_Confirmar.Password = string.Empty;
         }
-
         private void btn_GuardarCambios_Click(object sender, RoutedEventArgs e)
         {
             Lbl_mensaje.Visibility = Visibility.Collapsed;
@@ -134,7 +132,6 @@ namespace LoginDeAbarrotech
                 MessageBox.Show($"Error al guardar cambios: {ex.Message}");
             }
         }
-
         private void btn_Cancelar_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

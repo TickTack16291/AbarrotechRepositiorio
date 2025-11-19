@@ -152,6 +152,9 @@ namespace LoginDeAbarrotech
         internal class ProductoSeleccionadoCompra : Producto
         {
             public int cantidad { get; set; } = 0;
+            public long codigoDeBarras { get; set; }
+            public DateTime fechaCaducidad { get; set; }
+            public DateTime fechaElaboracion { get; set; }
             public float Subtotal => cantidad * precio_compra_producto; // Usar precio_compra_producto en compras
         }
         float total = 0.0f;// Total de la compra
@@ -162,31 +165,48 @@ namespace LoginDeAbarrotech
             if (prseleccionado == null) return;
 
             // Busca si ya se había seleccionado ese producto
-            // Se recorre la lista hasta encontrar la primer coincidencia o puede no encontrarla en dico caso devuelve un valor nulo
+            // Se recorre la lista hasta encontrar la primer coincidencia o puede no encontrarla en dicho caso devuelve un valor nulo
             var existente = productosSeleccionados.FirstOrDefault(p => p.id_producto == prseleccionado.id_producto);// Expresion lamda que toma p que es un
                                                                                                                     // producto seleccionado y lo usa para
-                                                                                                                    // comparar y devolver un valor boleano
+                                                                                                                    // comparar y devolver un valor bolean
 
             if (existente == null)
             {
+                // Abrimos la ventana de datos del producto
+                DatosProducto datosProducto = new DatosProducto(prseleccionado);
+                datosProducto.ShowDialog();
+
+                if (datosProducto.cancelado)
+                {
+                    dg_ProductosDisponibles.SelectedItem = null;
+                    return;
+                }
+
                 var prAux = new ProductoSeleccionadoCompra
                 {
                     id_producto = prseleccionado.id_producto,
                     nombre_producto = prseleccionado.nombre_producto,
                     id_proveedor_producto = prseleccionado.id_proveedor_producto,
-                    precio_compra_producto = prseleccionado.precio_compra_producto, // CORREGIDO: usar precio_compra_producto
-                    cantidad = 1
+                    precio_compra_producto = prseleccionado.precio_compra_producto,
+                    presentacion_producto = prseleccionado.presentacion_producto,
+                    unidad_medida_producto = prseleccionado.unidad_medida_producto,
+                    cantidad = 1,
+                    
+                    // Tomamos los datos de la ventana DatosProducto
+                    codigoDeBarras = datosProducto.codigoDeBarras,
+                    fechaElaboracion = datosProducto.fechaElaboracion,
+                    fechaCaducidad = datosProducto.fechaCaducidad
                 };
 
                 productosSeleccionados.Add(prAux);
                 dg_ProductosSeleecionados.Items.Add(prAux);
 
-                total += prAux.precio_compra_producto; // CORREGIDO: usar precio_compra_producto
+                total += prAux.precio_compra_producto;
             }
             else
             {
                 existente.cantidad++;
-                total += existente.precio_compra_producto; // CORREGIDO: usar precio_compra_producto
+                total += existente.precio_compra_producto;
             }
 
             Txt_TotalCompra.Text = total.ToString();
@@ -195,8 +215,6 @@ namespace LoginDeAbarrotech
         }
         private void btn_RealizarCompra_Click(object sender, RoutedEventArgs e)
         {
-            ConexionBD conexion = new ConexionBD();
-
             if (total == 0)
             {
                 MostrarMensaje();

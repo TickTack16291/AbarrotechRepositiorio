@@ -178,13 +178,15 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="No." Width="35" Binding="{Binding id_producto}"/>
                                     <DataGridTextColumn Header="Nombre" Width="225" Binding="{Binding nombre_producto}"/>
-                                    <DataGridTextColumn Header="Categoría" Width="105" Binding="{Binding categoria_producto}"/>
+                                    <DataGridTextColumn Header="Pr" Width="35" Binding="{Binding presentacion_producto}"/>
+                                    <DataGridTextColumn Header="Med" Width="35" Binding="{Binding unidad_medida_producto}"/>
+                                    <DataGridTextColumn Header="Proveedor" Width="80" Binding="{Binding id_proveedor_producto}"/>
                                     <DataGridTextColumn Header="Precio" Width="85">
                                         <DataGridTextColumn.Binding>
                                             <Binding Path="precio_venta_producto" StringFormat="C2"/>
                                         </DataGridTextColumn.Binding>
                                     </DataGridTextColumn>
-                                    <DataGridTextColumn Header="Stock" Width="85" Binding="{Binding Stock}"/>
+                                    <DataGridTextColumn Header="Stock" Width="50" Binding="{Binding Stock}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>
@@ -209,13 +211,15 @@
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="No." Width="35" Binding="{Binding id_producto}"/>
                                     <DataGridTextColumn Header="Nombre" Width="225" Binding="{Binding nombre_producto}"/>
-                                    <DataGridTextColumn Header="Categoría" Width="100" Binding="{Binding categoria_producto}"/>
+                                    <DataGridTextColumn Header="Pr" Width="35" Binding="{Binding presentacion_producto}"/>
+                                    <DataGridTextColumn Header="Med" Width="35" Binding="{Binding unidad_medida_producto}"/>
+                                    <DataGridTextColumn Header="Proveedor" Width="80" Binding="{Binding id_proveedor_producto}"/>
                                     <DataGridTextColumn Header="Precio" Width="85">
                                         <DataGridTextColumn.Binding>
                                             <Binding Path="precio_venta_producto" StringFormat="C2"/>
                                         </DataGridTextColumn.Binding>
                                     </DataGridTextColumn>
-                                    <DataGridTextColumn Header="Cant." Width="80" Binding="{Binding cantidad}"/>
+                                    <DataGridTextColumn Header="Cant." Width="50" Binding="{Binding cantidad}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </Grid>

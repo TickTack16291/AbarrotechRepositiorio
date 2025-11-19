@@ -165,6 +165,9 @@ namespace LoginDeAbarrotech
                     nombre_producto = prseleccionado.nombre_producto,
                     categoria_producto = prseleccionado.categoria_producto,
                     precio_venta_producto = prseleccionado.precio_venta_producto,
+                    id_proveedor_producto = prseleccionado.id_proveedor_producto,
+                    presentacion_producto = prseleccionado.presentacion_producto,
+                    unidad_medida_producto = prseleccionado.unidad_medida_producto,
                     cantidad = 1
                 };
 

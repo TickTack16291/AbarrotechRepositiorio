@@ -152,7 +152,7 @@ namespace LoginDeAbarrotech
                 cb_UnidadMedida.Text,
                 precioVenta,// La variable que se deberia haber guardado
                 precioCompra,//x2
-                "Activo", // estado
+                "Inactivo", // estado
                 cb_Categoria.Text,
                 idProAux
             );

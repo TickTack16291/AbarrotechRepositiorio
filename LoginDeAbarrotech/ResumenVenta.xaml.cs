@@ -83,8 +83,7 @@ namespace LoginDeAbarrotech
             if (conexion.RealizarVenta(venta))// Aqui se hace la venta y se agrega a la base de datos
             {
                 MessageBox.Show("¡Venta realizada correctamente!");
-                CrearTicket(); // Se guardan en -> "C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets"
-
+                CrearTicket();
 
                 // Agregamos los detalles de la venta necesarios(1 producto)
                 foreach (var ps in Ventas.productosSeleccionados)
@@ -147,8 +146,9 @@ namespace LoginDeAbarrotech
                            "---------------------------------------------------\n" +
                            "Productos:\n" + listaProductos;
 
-            // Ruta donde se guardarán los tickets, creo que deberiamos usar una general para que no falle en otros dispositivos
-            string targetDir = @"C:\Users\bjrf8\OneDrive\TrabajosICBI\6to semestre\BDD\Tickets\Ventas";
+            // Ruta genérica usando la carpeta de Documentos del usuario
+            string documentosPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string targetDir = Path.Combine(documentosPath, "Abarrotech", "Tickets", "Ventas");
 
             try
             {

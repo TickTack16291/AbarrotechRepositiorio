@@ -668,6 +668,98 @@ namespace LoginDeAbarrotech
                 }
             }
         }
+        public bool ValidarUsuario(string nombreUsuario)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    string sql = "SELECT COUNT(*) FROM usuarios WHERE usuario = @usuario";
+                    using (var command = new MySqlCommand(sql, conexion))
+                    {
+                        command.Parameters.AddWithValue("@usuario", nombreUsuario);
+
+                        int count = Convert.ToInt32(command.ExecuteScalar());
+                        return count > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al verificar si el usuario existe: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool ValidarContrasenaUsuario(string nombreUsuario, string contrasena)
+        {
+            using (var conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    conexion.Open();
+
+                    string sql = "SELECT COUNT(*) FROM usuarios WHERE usuario = @usuario AND contrasena = @contrasena";
+                    using (var command = new MySqlCommand(sql, conexion))
+                    {
+                        command.Parameters.AddWithValue("@usuario", nombreUsuario);
+                        command.Parameters.AddWithValue("@contrasena", contrasena);
+
+                        int count = Convert.ToInt32(command.ExecuteScalar());
+                        return count > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al validar la contraseña del usuario: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+        public bool ModificarUsuarioContrasena(long idUsuario, string usuario = null, string contrasena = null)
+        {
+            using (var Conexion = new MySqlConnection(conexionString))
+            {
+                try
+                {
+                    string sql = "";
+                    Conexion.Open();
+
+                    if (contrasena == null)
+                    {
+                        sql = @"UPDATE usuarios SET usuario = @usuario WHERE id_usuario = @idUsuario";
+                    }
+                    else if (usuario == null)
+                    {
+                        sql = @"UPDATE usuarios SET contrasena = @contrasena WHERE id_usuario = @idUsuario";
+                    }
+                    else
+                    {
+                        sql = @"UPDATE usuarios SET usuario = @usuario, contrasena = @contrasena WHERE id_usuario = @idUsuario";
+                    }
+
+                    using (var command = new MySqlCommand(sql, Conexion))
+                    {
+                        command.Parameters.AddWithValue("@idUsuario", idUsuario);
+                        
+                        if (usuario != null)
+                            command.Parameters.AddWithValue("@usuario", usuario);
+                        
+                        if (contrasena != null)
+                            command.Parameters.AddWithValue("@contrasena", contrasena);
+
+                        int result = command.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al modificar usuario/contrasena: " + ex.Message);
+                    return false;
+                }
+            }
+        }
 
         /// <summary>
         /// Limitacion de acceso a los usuarios

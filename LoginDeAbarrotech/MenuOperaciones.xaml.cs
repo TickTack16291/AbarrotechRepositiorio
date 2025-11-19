@@ -269,5 +269,10 @@ namespace LoginDeAbarrotech
             LoginAbarrotech login = new LoginAbarrotech();
             login.Show();
         }
+        private void btn_Configuracion_Click(object sender, RoutedEventArgs e)
+        {
+            Configuracion configuracion = new Configuracion();
+            configuracion.ShowDialog();
+        }
     }
 }

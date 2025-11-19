@@ -132,6 +132,7 @@
                     <Button x:Name="btn_Proveedores" Content="🏢 Proveedores" Style="{StaticResource MenuButtonStyle}" Click="btn_Proveedores_Click"/>
                     <Button x:Name="btn_Empleados" Content="👥 Empleados" Style="{StaticResource MenuButtonStyle}" Click="btn_Empleados_Click"/>
                     <Button x:Name="btn_Usuarios" Content="👤 Usuarios" Style="{StaticResource MenuButtonStyle}" Click="btn_Usuarios_Click"/>
+                    <Button x:Name="btn_Configuracion" Content="⚙️ Configuracion" Style="{StaticResource MenuButtonStyle}" Click="btn_Configuracion_Click"/>
                 </StackPanel>
 
                 <!-- Botón de salir -->
